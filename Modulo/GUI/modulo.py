@@ -300,17 +300,17 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
         # Crie um dicionário com os dados que você deseja enviar
         hardware_dados = {
             'Hardware': 'Nome',
-            'data_hora': str(datetime.now()),
+            'data_hora_cadastro': str(datetime.now()),
             'sistema_operacional': so,
             'nome_maquina': nome_maquina,
-            'tipo_maquina_wmi': tipo_hw_wmic,
-            'tipo_maquina_aferidor': tipo_hw_aferidor,
+            #'tipo_maquina_wmi': tipo_hw_wmic,
+            'tipo_aferidor': tipo_hw_aferidor,
             'placa_mae': motherboard_info,
             'cpu': cpu_completa,
             'ram': ram_gb_aprox,
             'hds': hds,
             'gpu': gpu,
-            'cd': cd
+            'drivers': cd
             #'gpu_completa': video_info
         }
 
@@ -341,6 +341,7 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
         write_line(f"------------------- HARDWARE_PC -------------------")
 
         enviar_dados(hardware_dados_json)
+
         for chave, valor in hardware_dados.items():
             write_line(f"\n{chave} - {valor}")
             
