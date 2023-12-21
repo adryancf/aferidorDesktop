@@ -1,0 +1,201 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+}
+
+#containerFlex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    gap: 70px;
+}
+
+.containerPrincipal {
+    
+    text-align: center;
+    
+    padding: 50px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+}
+
+
+.containerPrincipal h1{
+    color:#333;
+    font-weight: bold;
+    margin:20px;  
+}
+
+.containerPrincipal button {
+    padding: 8px 25px;
+    font-size: 18px;
+    margin: 2px;
+    background-color: navy;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.containerPrincipal button:hover {
+    background-color: rgba(0, 0, 128, 0.822);
+}
+
+#btn_form_envio{
+    padding: 8px 35px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: rgba(212, 212, 212, 0.507);
+    border-radius: 6px;
+    transition: transform 0.2s ease;
+    border:none;
+}
+
+#btn_form_envio:hover{
+    background-color: navy;
+    color: #fff;
+    cursor: pointer;
+    transform: scale(1.05);
+
+}
+
+#tabelaContainer {
+    display: none;
+    width: 55%; 
+    height: 75%;
+    overflow: auto; /* Adicionado para permitir rolar se houver muitos itens */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.th, td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.th {
+    background-color: #f2f2f2;
+}
+
+.tituloTabela {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.tabelaDadosRecebidos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-spacing: 2px;
+}
+
+
+.status-container {
+    position: fixed;
+    top: 0;
+    background-color: white;
+    color: #fff;
+    margin-top: 35px;
+    padding: 12px;
+    border-radius: 16px;
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    text-align: center;
+ 
+}
+
+.status-container i, .status-container span{
+    font-size: 14px;
+}
+
+.status-container:hover {
+	transform: scale(1.005);
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.status {
+    display: none;
+}
+
+#connected {
+    color: green;
+}
+
+#connecting {
+    color: orange;
+}
+
+#offline {
+    color: red;
+}
+
+#tab, #footer {
+    overflow: hidden;
+    border: 1px solid rgb(190, 190, 190);
+    background-color: #f1f1f1;
+    text-align: center;
+    position:sticky;
+}
+
+#tab{ top:0; }
+#footer{ bottom:0;}
+  
+#tabelaContainer button {
+    background-color: rgb(202, 202, 202);
+    float: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 35px;
+    margin: 12px 5px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s;
+    color:white;
+    border-radius: 10px;
+    
+    font-weight: bold;
+
+}
+  
+#tabelaContainer button:hover {
+    background-color:#00008091;
+    transform: scale(1.05);
+
+}
+  
+
+#tabelaContainer button.active {
+    background-color: navy;
+}
+  
+  /* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.tabcontent {
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+  }
+  
+  /* Go from zero to full opacity */
+  @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+
