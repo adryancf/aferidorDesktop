@@ -71,7 +71,7 @@
                                         <div class="input-group-text">@</div>
                                     </div>
 
-                                    <input type="text" id="email" placeholder="E-mail para contato" class="form-control" required>
+                                    <input type="text" id="email" onblur=validarEmail(this.value) placeholder="E-mail para contato" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,6 @@
 
     
     <div id="containerFlex">
-        <button type="button" id="btn_formulario" class="btn_formulario" data-toggle="modal" data-target="#formularioEnvioModal">Enviar</button>
 
         <div class="containerPrincipal">
             <h1>Aferidor Desktop</h1>
@@ -137,14 +136,11 @@
 
     </div>
 
-
-
-
-
-        
 </body>
 
-<script src="assets/conexao_app.js"></script>
+<script src="assets/js/tabelaDadosCliente.js"></script>
+<script src="assets/js/connectApp.js"></script>
+<script src="assets/js/formConfig.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>

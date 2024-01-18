@@ -1,5 +1,5 @@
 <?php
-require_once("../../includes/setores.class.php");
+require_once("../../../includes/setores.class.php");
 
 $setores = new Setores();
 //$q = strtolower($_GET["q"]);

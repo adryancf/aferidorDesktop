@@ -1,0 +1,112 @@
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once('../../../includes/functions.inc.php');
+require_once('../../../includes/conexao.class.php');
+
+function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor, 
+    $sql = "SELECT id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor FROM softwares_instalados WHERE fk_hardware = '$fk_hardware'";
+    $conexao = new ConBD;
+    $stmt = $conexao->processa($sql, 0);
+    if(!$stmt){
+        return;
+    }
+    else{
+        $softwares = array();
+        while ($row = mysql_fetch_object($stmt)) {
+            $softwares[] = $row;
+        }
+        return $softwares;
+    }
+}
+
+function obterSetorFuncionario($id_funcionario){
+    $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM padrao.funcionarios AS f INNER JOIN padrao.setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
+    
+    $conexao = new ConBD;
+    $stmt = $conexao->processa($sql, 0);
+    if(!$stmt){
+        return;
+    }
+    else{
+        /*
+        if(mysql_num_rows($stmt) == 1)
+            $setores = mysql_fetch_object($stmt);
+        else{
+            $setores = array();
+            while ($row = mysql_fetch_object($stmt)) {
+                $setores[] = $row;
+            }
+        }
+        */
+        return mysql_fetch_object($stmt);
+    }
+}
+
+function obterDadosMaquina($numero){
+    $sql = "SELECT * FROM hardwares_novo WHERE numero = '$numero'";
+    $conexao = new ConBD;
+    $stmt = $conexao->processa($sql, 0);
+    if(!$stmt){
+        return;
+    }
+    else{
+        $pcs = array();
+        while ($row = mysql_fetch_object($stmt)) {
+
+            //Obtendo os softwares instalados
+            $row->softwares = obterSotwaresInstalados($row->id_hardware);
+
+            //Obtendo o nome e cc do setor do funcionario
+            $setores = obterSetorFuncionario($row->fk_funcionario);
+            $row->fk_setor = $setores->fk_setor;
+            $row->nome_setor = $setores->nome_setor;
+            $row->cc = $setores->cc;
+
+            $row->nome_funcionario = $setores->nome_funcionario;
+
+            $pcs[] = $row;
+        }
+        return $pcs;
+    }
+}
+
+if($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+
+    //$sql = "SELECT * FROM aferidorDesktop_dadosRecebidos";
+    $sql = "SELECT * FROM aferidorDesktop_dadosRecebidos WHERE utilizado = '0'";
+
+    $conexao = new ConBD;
+    $stmt = $conexao->processa($sql, 1);
+    
+    if(!$stmt){
+        header('HTTP/1.1 500 Internal Server Error');
+        echo (mysql_error($conexao->conecta));
+    }
+    else{
+        header('HTTP/1.1 200 OK');
+        $registros = array();
+        
+        while ($row = mysql_fetch_object($stmt)) {
+            $row->dadosMaquinaAferidor = obterDadosMaquina($row->numero);
+            $registros[] = $row;  
+        }
+        echo json_encode($registros);
+       
+    }
+}
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
+}
+
+?>
+
+
