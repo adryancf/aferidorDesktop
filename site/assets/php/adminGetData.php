@@ -61,12 +61,12 @@ function obterDadosMaquina($numero){
             $row->softwares = obterSotwaresInstalados($row->id_hardware);
 
             //Obtendo o nome e cc do setor do funcionario
-            $setores = obterSetorFuncionario($row->fk_funcionario);
-            $row->fk_setor = $setores->fk_setor;
-            $row->nome_setor = $setores->nome_setor;
-            $row->cc = $setores->cc;
+            $setor = obterSetorFuncionario($row->fk_funcionario);
+            $row->fk_setor = $setor->fk_setor;
+            $row->nome_setor = $setor->nome_setor;
+            $row->cc = $setor->cc;
 
-            $row->nome_funcionario = $setores->nome_funcionario;
+            $row->nome_funcionario = $setor->nome_funcionario;
 
             $pcs[] = $row;
         }
@@ -93,20 +93,13 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         while ($row = mysql_fetch_object($stmt)) {
             $row->dadosMaquinaAferidor = obterDadosMaquina($row->numero);
+            $setor = obterSetorFuncionario($row->fk_funcionario);
+            $row->fk_setor_funcionario =$setor->fk_setor;
             $registros[] = $row;  
         }
         echo json_encode($registros);
        
     }
 }
-
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
-}
-
-?>
 
 

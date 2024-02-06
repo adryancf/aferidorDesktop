@@ -1,0 +1,17 @@
+{
+	"folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "Y:\\sistemas\\paginas\\programas\\aferidorDesktop"
+    },
+    {
+      "path": "Y:\\sistemas\\paginas\\programas"
+    }
+  ],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "aferidorDesktop",
+		"powershell.cwd": "c:\\Users\\0394\\Desktop\\Sistema_Auditoria\\aferidorDesktop"
+	}
+}

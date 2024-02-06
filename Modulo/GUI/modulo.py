@@ -305,11 +305,11 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
             'nome_maquina': nome_maquina,
             #'tipo_maquina_wmi': tipo_hw_wmic,
             'tipo_aferidor': tipo_hw_aferidor,
-            'placa_mae': motherboard_info,
-            'cpu': cpu_completa,
-            'ram': ram_gb_aprox,
-            'hds': hds,
-            'gpu': gpu,
+            'motherboard': motherboard_info,
+            'processador': cpu_completa,
+            'memoria_ram': ram_gb_aprox,
+            'hd': hds,
+            'placa_video': gpu,
             'drivers': cd
             #'gpu_completa': video_info
         }

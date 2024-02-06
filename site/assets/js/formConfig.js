@@ -74,12 +74,10 @@ $("#formularioEnvio").submit(function(event) {
         fk_funcionario: $("#fk_funcionario").val(),
         email: $("#email").val(),
         numero: $("#numero").val(),
-        tipo_formulario: $("#tipo").val(),
+        tipo: $("#tipo").val(),
         fk_setor: $("#setor").val(),
         obs: $("#obs").val()
     };
-
-    console.log(array_infos.nome);
 
     var jsonEnvio = {
         hardwares: array_hardwares,

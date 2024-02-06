@@ -1,0 +1,21 @@
+.tablinks button {
+    background-color: rgb(202, 202, 202);
+    float: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 35px;
+    margin: 12px 5px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s;
+    color:white;
+    border-radius: 10px;
+    
+    font-weight: bold;
+
+}
+
+.tablinks button:hover {
+    background-color:#00008091;
+    transform: scale(1.05);
+
+}
