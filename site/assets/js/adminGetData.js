@@ -46,8 +46,8 @@ function inicializarAutocompleteSoftware()
     placeHolder: "Insira o software aqui...",
     data: {
         src: arrayCompativel,
-        keys: ["label"],
-        cache: true,
+        keys: ["label"]
+        //cache: true,
     },
     
     resultsList: {
@@ -97,7 +97,7 @@ function InicializarFeatures()
             q: request.term
           },
           success: function(data) {
-            console.log(data);
+            //console.log(data);
             response(data);
           }
         });
@@ -114,25 +114,32 @@ function InicializarFeatures()
     },
   });
 
-
-  $.ajax({
-      type: "GET",
-      url: "assets/php/searchSetor.php",
-      dataType: "json",
-      success: function(response) {
-        var select = $("#new_setor");
-
-        // Preenche o select com as opções
-        $.each(response, function(index, option) {
-          select.append($("<option>")
-          .attr("value", option.value)
-          .text(option.label));
-        });
-      },
-      error: function(error) {
-        console.error("Erro no carregamento dos setores:", error);
-      }
-      
+  //Inicializar AutoComplete e Select
+  $("#add_usuario").autocomplete({
+    appendTo: "#card_hw_add",
+    source: function(request, response) {
+      $.ajax({
+        url: "assets/php/searchFuncionario.php",
+        dataType: "json",
+        data: {
+          q: request.term
+        },
+        success: function(data) {
+          //console.log(data);
+          response(data);
+        }
+      });
+    },
+    minLength: 0,
+    select: function (event, ui) {
+      // Set selection
+      $('#add_usuario').val(ui.item.label); // display the selected text
+      $('#add_fk_funcionario').val(ui.item.value); // save selected id to input
+      return false;
+    },
+    focus: function(event, ui){
+        return false;
+    },
   });
 
   toastr.options = {
@@ -257,9 +264,108 @@ $(document).ready(function () {
 
       // Adiciona o espaçamento
       $("#modalRegistro label").addClass("mb-2");
+      
+      //Mostra o botao de adcionar
+      if(registro.dadosMaquinaAferidor.length > 0)
+      {
+        $("#btnComparar").show();
+        $("#btnModalCadastro").hide();
+      }
+      else{
+        $("#btnComparar").hide();
+        $("#btnModalCadastro").show();
+
+        toastr.warning(" ", "Maquina não cadastrada", {
+          "positionClass": "toast-top-center",
+          "timeOut": "7000",
+          "tapToDismiss": true
+        });
+      }
 
       //Abre o modal
       $("#modalRegistro").modal('show');
+  });
+
+  $('#btnModalCadastro').on('click', function() {
+    var dados = registros[$("#btnComparar").data("href")];
+          
+    // Limpa os dados antigos
+    $("#modalCadastro input, select").val('');
+    
+    // Dados Novos
+    $("#add_usuario").attr("name", "nome_funcionario").val(dados.nome_funcionario);
+    $("#add_fk_funcionario").attr("name", "fk_funcionario").val(dados.fk_funcionario);
+    $("#add_tipo").attr("name", "tipo").val(dados.tipo);
+    $("#add_nome").attr("name", "nome_maquina").val(dados.nome_maquina);
+    $("#add_numero").attr("name", "numero").val(dados.numero);
+    $("#add_setor").val(dados.fk_setor);
+    $("#add_setor_funcionario").attr("name", "fk_setor_funcionario").val(setores[dados.fk_setor_funcionario]);
+    $("#add_cpu").attr("name", "processador").val(dados.processador);
+    $("#add_ram").attr("name", "memoria_ram").val(dados.memoria_ram);
+    $("#add_placaMae").attr("name", "motherboard").val(dados.motherboard);
+    $("#add_gpu").attr("name", "placa_video").val(dados.placa_video);
+    $("#add_hds").attr("name", "hd").val(dados.hd);
+    $("#add_drivers").attr("name", "drivers").val(dados.drivers);
+
+    $("#card_hw_add label").addClass("mb-2");
+ 
+
+    // --------------------------------- SOFTWARES --------------------------------- 
+
+    //Zerar as listas
+    $("#card_sfw_add #listaSoftware").empty();
+    $("#card_sfw_add .card-body").empty();
+
+
+    if(dados.softwares != null){
+      dados.sistema_operacional ? $("#card_sfw_add #so_add").val(dados.sistema_operacional) : $("#card_sfw_add #so_add").val("Não informado");
+
+      var lista_softwares_filtrados;
+      var lista_softwares = dados.softwares.split(", ");
+
+      //Esta condicional evita que a lista de softwares seja filtrada toda vez que o modal for aberto
+      if(dados.softwaresResumido == null){
+        var nomeSoftwaresCadastrados = softwaresCadastrados.map(software => software.nome);
+        lista_softwares_filtrados = filtrarSoftwares(lista_softwares, nomeSoftwaresCadastrados).map(software => ({ id: null, nome: software.trim() }));
+        dados.softwaresResumido = lista_softwares_filtrados;
+      }
+      else{
+        lista_softwares_filtrados = dados.softwaresResumido;
+      }
+
+      //Adciona os softwares no card (Programas instalados na Máquina)
+      var icone;
+      $("#card_sfw_add #listaSoftware").append(`
+          ${lista_softwares_filtrados.map(function(software) { 
+              icone = software.id == null ? '<span class="badge text-bg-warning rounded-pill">&#33;</span>' : '<span class="badge text-bg-success rounded-pill">&#10003;</span>';
+              
+              return (`<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
+                  <span>
+                    ${icone} 
+                    <span id="nome"> ${software.nome}</span>                        
+                  </span>
+                  <div class="btn-group" id="btnSoftware" style="display: none;">
+                    <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
+                      <i class="bi bi-file-earmark-plus-fill"></i>
+                    </button> 
+
+                    <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>    
+                  </div>                         
+                </li>`)
+          }).join('')}
+      `);
+      
+      //Adciona o collapse com todos os softwares
+      $("#collapseSoftwaresAdd .card-body").append(
+        `
+        <ul class="list-group">
+            ${lista_softwares.map(software => `<li class="list-group-item">${software}</li>`).join('')}
+        </ul>`
+      );
+
+    }          
   });
 
   $('#btnComparar').on('click', function() {
@@ -287,24 +393,11 @@ $(document).ready(function () {
           // Dados Novos
           $("#new_usuario").attr("name", "nome_funcionario").val(dados.nome_funcionario).addClass(compararDados("#new_usuario", dados.fk_funcionario, dados_bd.fk_funcionario));
           $("#new_fk_funcionario").attr("name", "fk_funcionario").val(dados.fk_funcionario).addClass(compararDados("#new_fk_funcionario", dados.fk_funcionario, dados_bd.fk_funcionario));
-          // $("#new_tipo").attr("name", "tipo").val(tipo[dados.tipo_formulario]).addClass(compararDados("#new_tipo", dados.tipo_formulario, dados_bd.tipo));
-          
-          let tipo_contrario = dados.tipo == "d" ? "n" : "d";
-          $("#new_tipo").attr("name", "tipo").append(
-            `<option selected value="${dados.tipo}">${tipo[dados.tipo]}</option>
-             <option value="${tipo_contrario}">${tipo[tipo_contrario]}</option> 
-            `
-          ).addClass(compararDados("#new_tipo", dados.tipo, dados_bd.tipo));
-          
+          $("#new_tipo").attr("name", "tipo").val(dados.tipo).addClass(compararDados("#new_tipo", dados.tipo, dados_bd.tipo));
           $("#new_nome").attr("name", "nome_maquina").val(dados.nome_maquina);
           $("#new_numero").attr("name", "numero").val(dados.numero).addClass(compararDados("#new_numero", dados.numero, dados_bd.numero));
-          
-          $("#new_setor").append(
-              `<option selected value="${dados.fk_setor}">${setores[dados.fk_setor]}</option>`
-          ).addClass(compararDados("#new_setor", dados.fk_setor, dados_bd.fk_setor));
-          
+          $("#new_setor").val(dados.fk_setor).addClass(compararDados("#new_setor", dados.fk_setor, dados_bd.fk_setor));
           $("#new_setor_funcionario").attr("name", "fk_setor_funcionario").val(setores[dados.fk_setor_funcionario]);
-
           $("#new_cpu").attr("name", "processador").val(dados.processador).addClass(compararDados("#new_cpu", dados.processador, dados_bd.processador));
           $("#new_ram").attr("name", "memoria_ram").val(dados.memoria_ram).addClass(compararDados("#new_ram", dados.memoria_ram, dados_bd.memoria_ram));
           $("#new_placaMae").attr("name", "motherboard").val(dados.motherboard).addClass(compararDados("#new_placaMae", dados.motherboard, dados_bd.motherboard));
@@ -314,6 +407,7 @@ $(document).ready(function () {
           
           // Dados BD
           $("#old_usuario").val(dados_bd.nome_funcionario);
+          $("#old_fk_funcionario").val(dados_bd.fk_funcionario);
           $("#old_tipo").append(`<option selected value="${dados_bd.tipo}">${tipo[dados_bd.tipo]}</option>`);
           $("#old_numero").val(dados_bd.numero);
           $("#old_setor_name").val(setores[dados_bd.fk_setor]);
@@ -326,7 +420,7 @@ $(document).ready(function () {
           $("#old_drivers").val(dados_bd.drivers);
 
           $("#containerComparacaoHW label").addClass("mb-2");
-          $("#containerComparacaoHW .row").not("#containerComparacaoHW .nao_add").addClass("my-2");
+          $("#containerComparacaoHW .row").not("#containerComparacaoHW .nao_add").addClass("my-3");
 
           quantificaErros();
 
@@ -356,23 +450,25 @@ $(document).ready(function () {
             
             //Adciona os softwares no card (Programas instalados na Máquina)
             $("#card_sfw_maquina #listaSoftware").append(`
-                ${lista_softwares_filtrados.map((software) => 
-                    `<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
-                        <span>
-                          <span class="badge text-bg-warning rounded-pill">&#33</span> 
-                          <span id="nome"> ${software.nome}</span>                        
-                        </span>
-                        <div class="btn-group" id="btnSoftware" style="display: none;">
-                          <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-file-earmark-plus-fill"></i>
-                          </button> 
+              ${lista_softwares_filtrados.map(function(software) { 
+                  icone = software.id == null ? '<span class="badge text-bg-warning rounded-pill">&#33;</span>' : '<span class="badge text-bg-success rounded-pill">&#10003;</span>';
+                  
+                  return (`<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
+                    <span>
+                      ${icone} 
+                      <span id="nome"> ${software.nome}</span>                        
+                    </span>
+                    <div class="btn-group" id="btnSoftware" style="display: none;">
+                      <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-file-earmark-plus-fill"></i>
+                      </button> 
 
-                          <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-trash-fill"></i>
-                          </button>    
-                        </div>                         
-                      </li>`
-                ).join('')}
+                      <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-trash-fill"></i>
+                      </button>    
+                    </div>                         
+                  </li>`)
+              }).join('')}
             `);
             
             //Adciona o collapse com todos os softwares
@@ -399,7 +495,7 @@ $(document).ready(function () {
       else
       {
           $("#modalComparacao").modal('hide');
-          toastr["warning"](" ", "Maquina não cadastrada");
+          console.log("Não cadastrado");
       }
 
       //Controle de exibição da notificação dos softwares (Exibe apenas uma vez em cada execução)
@@ -413,7 +509,8 @@ $(document).ready(function () {
     $("#containerComparacaoSW").show();
 
     //Alterar Botao
-    $("#alternarSW").html("Ir para Hardware");
+    $("#alternarSW span").html("Ir para Hardware");
+    $("#alternarSW i").toggleClass("bi-microsoft bi-gpu-card");
     $("#alternarSW").attr("id", "alternarHW");
 
     $("#tituloModalComparacao").html("Comparação - Softwares");
@@ -421,7 +518,7 @@ $(document).ready(function () {
     if(notificacao){
       toastr.warning('Para que os softwares sejam registrados na máquina, é importante que os adcione clicando no botão', 'Atenção!', {
         positionClass: "toast-top-right",
-        tapToDismiss: false,
+        tapToDismiss: true,
         "hideDuration": "7000"
 
       });
@@ -439,37 +536,69 @@ $(document).ready(function () {
       
 
       //Alterar Botao
-      $("#alternarHW").html("Ir para Software");
+      $("#alternarHW span").html("Ir para Software");
+      $("#alternarHW i").toggleClass("bi-microsoft bi-gpu-card");
+
       $("#alternarHW").attr("id", "alternarSW");
 
       $("#tituloModalComparacao").html("Comparação - Hardware");
 
   });
 
-  /* --------------------------------- EDITAR DADOS HARDWARE --------------------------------- */
+  /* --------------------------------- EDITAR DADOS HARDWARE--------------------------------- */
 
+  //VERIFICA SE O MODAL DE COMPARACAO ESTÁ ABERTO
+  function verificarModalCadastroAberto(){
+    return $("#modalCadastro").hasClass("show");
+  }
+
+  //Editar dados do hardware - COMPARAÇÃO
   $(document).on('click', '#btnEditarDados', function() {
       
       //tira o disabled dos campos
       $("#card_hw_new input, #card_hw_new select").not("#card_hw_new #new_setor_funcionario, #card_hw_new #new_nome").prop("disabled", false);
-      $("#containerComparacaoHW .row").not("#containerComparacaoHW .nao_add").addClass("my-2");
-
+ 
       //Alterar o botao editar para um botão de salvar
-      $(this).html("Salvar");
-      $("#btnCancelarMudancas").show();
-      $(this).removeClass("btn-outline-info").addClass("btn-outline-success").attr("id", "btnSalvarDados");
+      
+      $("#compare_btnCancelarMudancas").show();
+      $(this).removeClass("btn-primary").addClass("btn-success").attr("id", "btnSalvarDados");
+      $(this).find("i").toggleClass("bi-pencil-square bi-floppy2");
   });
 
-  function hiddenSalvar()
+  //Editar dados do hardware - CADASTRO
+  $(document).on('click', '#modalAdd_btnEditar', function() {
+      
+    //tira o disabled dos campos
+    $("#card_hw_add input, #card_hw_add select").not("#card_hw_add #add_setor_funcionario, #card_hw_add #add_nome").prop("disabled", false);
+
+    $("#add_btnCancelarMudancas").show();
+    $(this).removeClass("btn-primary").addClass("btn-success").attr("id", "btnSalvarDadosAdd");
+    $(this).find("i").toggleClass("bi-pencil-square bi-floppy2");
+  });
+
+  //Fecha o botão de salvar
+  function hiddenSalvar(cadastro)
   {
-    $("#card_hw_new input, #card_hw_new select").prop("disabled", true);
-    $("#btnCancelarMudancas").hide();
     alteracoes = {};
 
-    $("#btnSalvarDados").html("Editar");
-    $("#btnSalvarDados").removeClass("btn-outline-success").addClass("btn-outline-info").attr("id", "btnEditarDados");
+    if(!cadastro){
+      $("#card_hw_new input, #card_hw_new select").prop("disabled", true);
+      $("#compare_btnCancelarMudancas").hide();
+
+      $("#btnSalvarDados i").toggleClass("bi-pencil-square bi-floppy2");
+      $("#btnSalvarDados").removeClass("btn-success").addClass("btn-primary").attr("id", "btnEditarDados");
+    }
+    else{
+      $("#card_hw_add input, #card_hw_add select").prop("disabled", true);
+      $("#add_btnCancelarMudancas").hide();
+
+      //$("#btnSalvarDados").html("Editar");
+      $("#btnSalvarDadosAdd i").toggleClass("bi-pencil-square bi-floppy2");
+      $("#btnSalvarDadosAdd").removeClass("btn-success").addClass("btn-primary").attr("id", "modalAdd_btnEditar");
+    }
   }
 
+  //Retorna uma lista html atraves de um objeto (key: value)
   function listar(obj) {
     let listHtml = '<ul class="my-3 list-group fw-normal w-100">';
     for (const [key, value] of Object.entries(obj)) {
@@ -482,9 +611,19 @@ $(document).ready(function () {
     return listHtml;
   }
 
-  $(document).on('click', '#btnSalvarDados', function() {
+  $(document).on('click', '#btnSalvarDados, #btnSalvarDadosAdd', function() {
+    
     var index = $("#btnComparar").data("href")
     var registro = registros[index];
+    var id_btn = $(this).attr('id'); 
+    var cadastro;
+
+    if (id_btn === '#btnSalvarDados') {
+      cadastro = false;
+    } 
+    else if (id_btn === 'btnSalvarDadosAdd') {
+      cadastro = true;
+    }
     
 
     //Verifica quais campos forem alterados
@@ -519,7 +658,7 @@ $(document).ready(function () {
 
           //Envia os dados para o banco de dados
             $.ajax({
-              url: "assets/php/atualizarDados.php",
+              url: "assets/php/admin/atualizarDados.php",
               type: "POST",
               data: {dados: JSON.stringify(alteracoes),
                     id: registro.id},              
@@ -532,20 +671,18 @@ $(document).ready(function () {
             });
 
           console.log("Foram alterados os seguintes registros = ", alteracoes);
+
+          hiddenSalvar(cadastro);
         }
         else{
           console.log("Nenhuma alteração foi feita");
-          $('#btnCancelarMudancas').trigger('click');
-
-
+          calcelarMudancas(cadastro);                  
         }
-
-        hiddenSalvar();
       })   
     }
     else{
       console.log("Nenhuma alteração foi feita");
-      hiddenSalvar();
+      hiddenSalvar(cadastro);
     }
 
     //PRECISA TER DOIS hiddenSalvar por causa que o Swal.fire utiliza um evento assincrono
@@ -558,12 +695,22 @@ $(document).ready(function () {
   $("#card_hw_new input, #card_hw_new select").change(function() {
       
     //VERIFICAR QUANDO MUDA O CAMPO DE NOME, POIS NESTE CASO, TEM QUE ALTERAR O SETOR DO FUNCIONARIO
-
+    let nome = $(this).attr("name");
 
     //Registra a alteração (NOME DO CAMPO -> NOVO VALOR)
-    alteracoes[$(this).attr("name")] = $(this).val();
-    //console.log(alteracoes);
+    alteracoes[nome] = $(this).val();
+
+    //Obter o o fk_funcionario do registro
+    if(nome == "nome_funcionario"){
+      alteracoes["fk_funcionario"] = $("#card_hw_new #new_fk_funcionario").val();
+      //Fazer a comparaçao com o valor antigo
+      $("#new_fk_funcionario").addClass(compararDados("#new_fk_funcionario", $("#new_fk_funcionario").val(), $("#old_fk_funcionario").val()));
+
+      //alterar setor do funcionario
+    }
     
+    //console.log(alteracoes);
+  
     var id = $(this).attr("id");
     dado_antigo = "#old" + id.replace("new", ""); 
 
@@ -575,39 +722,94 @@ $(document).ready(function () {
 
   });
 
-  $(document).on('click', '#btnCancelarMudancas', function() {
-    
+  //Mudando o valor de um campo do formulário de cadastramento
+  $("#card_hw_add input, #card_hw_add select").change(function() {
+      
+    //VERIFICAR QUANDO MUDA O CAMPO DE NOME, POIS NESTE CASO, TEM QUE ALTERAR O SETOR DO FUNCIONARIO
+    let nome = $(this).attr("name");
+    alteracoes[nome] = $(this).val();
+    //Obter o o fk_funcionario do registro
+    if(nome == "nome_funcionario"){
+      alteracoes["fk_funcionario"] = $("#card_hw_add #add_fk_funcionario").val();
+      //alterar setor do funcionario
+    }
+    //console.log(alteracoes);
+
+  });
+
+  function calcelarMudancas(cadastro)
+  {
     //Reverte as alterações
     var registro = registros[$("#btnComparar").data("href")];
+    
+    var id_card;
+    cadastro ? id_card = "#card_hw_add" : id_card = "#card_hw_new";
 
     if(Object.keys(alteracoes).length){
       for(var campo in alteracoes) {
-        var elemento = $('input[name="'+ campo +'"], select[name="'+ campo +'"]');
+        var elemento = $(id_card).find('input[name="'+ campo +'"], select[name="'+ campo +'"]');
+        console.log(elemento);
         elemento.val(registro[campo]);
 
         //Comparação
-        var id = elemento.attr("id");
-        var dadosAntigos = $("#old" + id.replace("new", "")).val();
-        elemento.addClass(compararDados("#" + id, elemento.val(), dadosAntigos));
-        quantificaErros();
+        if(!cadastro){
+          var id = elemento.attr("id");
+          var dadosAntigos = $("#old" + id.replace("new", "")).val();
+          elemento.addClass(compararDados("#" + id, elemento.val(), dadosAntigos));
+          quantificaErros();
+        }
 
       }
       console.log("Foram alterados os seguintes registros = ", alteracoes);
     }
     else
-        console.log("Nenhuma alteração foi feita");
+      console.log("Nenhuma alteração foi feita");
 
-    hiddenSalvar();
+    hiddenSalvar(cadastro);
+  }
+
+  $(document).on('click', '#compare_btnCancelarMudancas, #add_btnCancelarMudancas', function() {
+    var id = $(this).attr('id'); 
+    id == 'compare_btnCancelarMudancas' ? cadastro = false : cadastro = true;
+    calcelarMudancas(cadastro);
+
+  });
+
+  $('#modalComparacao').on('hide.bs.modal', function () {
+    //Quando o modal é fechado, com o botao de salvar ativo, temos que fechar o botao e limpar as alterações
+    //Localizar se existe um id btnSalvarDados
+    if($("#btnSalvarDados").length){
+      //Cancela todas as mudanças
+      calcelarMudancas(false);
+
+      //Volta o botao de editar
+      hiddenSalvar(false);
+    }
+
+  });
+
+  $('#modalCadastro').on('hide.bs.modal', function () {
+    //Quando o modal é fechado, com o botao de salvar ativo, temos que fechar o botao e limpar as alterações
+    //Localizar se existe um id btnSalvarDados
+    if($("#btnSalvarDadosAdd").length){
+      //Cancela todas as mudanças
+      calcelarMudancas(true);
+
+      //Volta o botao de editar
+      hiddenSalvar(true);
+    }
 
   });
 
   /* --------------------------------- EDITAR SOFTWARES --------------------------------- */
 
   //EFEITO PARA MOSTRAR OS BOTÕES QUANDO SE PASSA O MOUSE | Localização = Dentro de cada elemento da lista de softwares
-  $(document).on('mouseenter mouseleave', '#card_sfw_maquina #listaSoftware li', function() {
+  $(document).on('mouseenter mouseleave', '#card_sfw_maquina #listaSoftware li, #card_sfw_add #listaSoftware li', function() {
+    
+    elemento = verificarModalCadastroAberto() ? "#card_sfw_add" : "#card_sfw_maquina";
     
     // Garante que nenhum outro botão esteja visível antes de começar a animação
-    $('#card_sfw_maquina #listaSoftware li #btnSoftware').not($(this).find("#btnSoftware")).hide();
+    $(elemento).find('#listaSoftware li #btnSoftware').not($(this).find("#btnSoftware")).hide();
 
     //O toggle altera o estado do elemento (Se estiver visivel ele esconde, se estiver escondido ele mostra)  
     $(this).find("#btnSoftware").stop().animate({
@@ -617,17 +819,21 @@ $(document).ready(function () {
   });
 
   //ABRE O MODAL PARA PESQUISA DE SOFTARE | Localização = Dentro de cada elemento da lista de softwares e no canto superior direito do card
-  $(document).on('click', '#btnSoftwareSearch, #Card_btnAdd', function() {
-    
+  $(document).on('click', '#btnSoftwareSearch, #card_btnAdd', function() {
+
     //fAZ COM QUE O MODAL DE PESQUISA FIQUE EM EVIDENCIA
-    $("#modalComparacao").addClass("modalSearch");
+    if(verificarModalCadastroAberto()){
+      $("#modalCadastro").addClass("modalSearch");
+    }else{
+      $("#modalComparacao").addClass("modalSearch");
+    }
+    
     $("#modalSearchSoftwares").modal('show');      
   });
 
   //REMOVE A CLASSE QUE FAZ COM QUE O MODAL DE PESQUISE FIQUE EM EVIDENCIA | Evento de quando o modal de pesquisa de softwares for fechado
   $('#modalSearchSoftwares').on('hide.bs.modal', function (e) {
-    // Seu código aqui
-    //console.log("Fechando");
+    $("#modalCadastro").removeClass("modalSearch");
     $("#modalComparacao").removeClass("modalSearch");
   });
 
@@ -641,8 +847,11 @@ $(document).ready(function () {
     //Adcionar no array de registros
     registros[$("#btnComparar").data('href')].softwaresResumido.push({id:id_software, nome:nome_software});
 
+    //Verifica se é a tela de cadastro ou a tela de comparação
+    var lista_sfw = verificarModalCadastroAberto() ? "#card_sfw_add #listaSoftware" : "#card_sfw_maquina #listaSoftware";
+    
     //Adiciona o software na lista
-    $("#card_sfw_maquina #listaSoftware").append(`
+    $(lista_sfw).append(`
       <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
         <span>
           <span class="badge text-bg-success rounded-pill">&#10003;</span> 
@@ -741,58 +950,79 @@ $(document).ready(function () {
     $("#modalEnvio #listaSW").append(`${sw}`);
   });
 
-  //ENVIA OS DADOS PARA O BANCO DE DADOS EM DEFINITIVO | Botão "confirmar envio" dentro do modal de envio
   $(document).on('click', '#btnEnviarAlteracoes', function() {
+    var data = new Date().toLocaleDateString();
+    var registro = registros[$("#btnComparar").data('href')];
+
+    function ajaxPost(url, data) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({
+          type: 'POST',
+          url: url,
+          contentType: 'json',
+          data: JSON.stringify(data),
+          success: resolve,
+          error: function(xhr, status, error) {
+            reject(xhr.responseText); // Rejeita com a resposta do servidor
+          }
+        });
+      });
+    }
     
-    data = new Date().toLocaleDateString();
-
-    //Atualização do hardware
-    let dados_hw = $("#btnEnviarModal").data('dadosHWTemporario');
-
-    dados_hw['data_atualizacao'] = data;
-    dados_hw['id_hardware'] = registros[$("#btnComparar").data('href')].dadosMaquinaAferidor[0].id_hardware;
-    dados_hw['numero'] = registros[$("#btnComparar").data('href')].numero;
+    function atualizarHardware(item_registro) {
+      var dados_hw = $("#btnEnviarModal").data('dadosHWTemporario');
+      dados_hw['data_atualizacao'] = data;
+      dados_hw['id_hardware'] = item_registro.dadosMaquinaAferidor[0].id_hardware;
+      dados_hw['numero'] = item_registro.numero;
     
-    //Colocando os dados em formato de url para o servidor php de cadastro interprete corretamente
-    //let dadosFormatados = $.param(dados_hw);
-
-    //console.log(dadosFormatados);
-
-    $.ajax({
-      type: 'POST',
-      url: '../includes/hardwares/cadastrar_aferidorDesktop.php',
-      contentType: 'json',
-      data: JSON.stringify(dados_hw),
-      success: function(response) {
-        console.log("Requisição bem-sucedida:", response);
-      },
-      error: function(error) {
-        console.error("Erro na requisição:", error);
-      },
-    });
-
+      return ajaxPost('../includes/hardwares/cadastrar_aferidorDesktop.php', dados_hw);
+    }
     
-
-    //Instalação de softwares
-    //Array ( [id_softwarefunc] => [fk_hardware] => 268 [fk_software] => 75 [data_instalacao] => 01/02/2024 )
-    let dados_sw = registros[$("#btnComparar").data('href')].softwaresResumido.map(function (item) {
-      if(item.id != null){
-        return {
-          fk_hardware: registros[$("#btnComparar").data('href')].dadosMaquinaAferidor[0].id_hardware,
-          fk_software: item.id,
-          data_instalacao: data
-        };
-      }
-    }).filter(Boolean); //Boolean(null) é false, então filter(Boolean) efetivamente remove todos os elementos que são avaliados como false
+    function instalarSoftwares(item_registro) {
+      var dados_sw = item_registro.softwaresResumido.map(function (item) {
+        if (item.id != null) {
+          return {
+            fk_hardware: item_registro.dadosMaquinaAferidor[0].id_hardware,
+            fk_software: item.id,
+            data_instalacao: data
+          };
+        }
+      }).filter(Boolean);
     
+      return ajaxPost('../includes/softwaresfunc/cadastrar_aferidorDesktop.php', dados_sw);
+    }
+   
+    atualizarHardware(registro)
+      .then(function() {
+        return instalarSoftwares(registro);
+      })
+      .then(function() {
+        console.log("Todas as operações foram concluídas com sucesso.");
 
+        //Alterar no banco de dados o atributo "enviado" para 1
+        ajaxPost('assets/php/admin/alterarEnviado.php', registro.id);
 
-    console.log("Dados de Hardware = ", dados_hw);
-    console.log("Dados de Software = ", dados_sw);
-
-    //Apos enviar mostrar um swal de sucesso e fechar o modal e dar um jeito de atualizar os dados na tela
-
-    
+        Swal.fire({
+          icon: 'success',
+          title: 'Envio concluído',
+          showConfirmButton: false,
+          showCancelButton: true,
+          cancelButtonText: 'Fechar'
+        }).then(function() {
+          //reload na pagaina
+          location.reload();
+          // $('#modalEnvio').modal('hide');
+          // $('#modalComparar').modal('hide');
+        });
+      })
+      .catch(function(error) {
+        console.error("Ocorreu um erro durante o processamento:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro no envio',
+            text: error
+        });           
+      });
   });
 });
 
@@ -817,10 +1047,15 @@ function atualizaDados() {
         dataType: "json",
         success: function(response) {
             //setores = response;
+
+            var selectComparacao = $("#new_setor");
+            var selectAdd = $("#add_setor");
+
             response.forEach(function(setor) {
                 setores[setor.value] = setor.label;
+                selectComparacao.append($("<option>").attr("value", setor.value).text(setor.label));
+                selectAdd.append($("<option>").attr("value", setor.value).text(setor.label));
             });
-
         },
         error: function(error) {
             console.error("Erro no carregamento dos setores:", error);
@@ -829,7 +1064,7 @@ function atualizaDados() {
 
     //Obter registros
     $.ajax({
-        url: 'assets/php/adminGetData.php',
+        url: 'assets/php/admin/adminGetData.php',
         method: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -940,7 +1175,7 @@ function atualizaDados() {
     //Obter softwares cadastrados
     $.ajax({
         type: "GET",
-        url: "assets/php/searchSoftwares.php",
+        url: "assets/php/admin/searchSoftwares.php",
         dataType: "json",
         success: function(response) {
             //console.log(response);

@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../includes/functions.inc.php');
-require_once('../../../includes/conexao.class.php');
+require_once('../../../../includes/functions.inc.php');
+require_once('../../../../includes/conexao.class.php');
 
 function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor, 
     $sql = "SELECT id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor FROM softwares_instalados WHERE fk_hardware = '$fk_hardware'";
@@ -24,26 +24,16 @@ function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, d
 }
 
 function obterSetorFuncionario($id_funcionario){
-    $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM padrao.funcionarios AS f INNER JOIN padrao.setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
+  $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM padrao.funcionarios AS f INNER JOIN padrao.setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
     
-    $conexao = new ConBD;
-    $stmt = $conexao->processa($sql, 0);
-    if(!$stmt){
-        return;
-    }
-    else{
-        /*
-        if(mysql_num_rows($stmt) == 1)
-            $setores = mysql_fetch_object($stmt);
-        else{
-            $setores = array();
-            while ($row = mysql_fetch_object($stmt)) {
-                $setores[] = $row;
-            }
-        }
-        */
-        return mysql_fetch_object($stmt);
-    }
+  $conexao = new ConBD;
+  $stmt = $conexao->processa($sql, 0);
+  if(!$stmt){
+    return;
+  }
+  else{
+    return mysql_fetch_object($stmt);
+  }
 }
 
 function obterDadosMaquina($numero){
@@ -78,7 +68,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 
     //$sql = "SELECT * FROM aferidorDesktop_dadosRecebidos";
-    $sql = "SELECT * FROM aferidorDesktop_dadosRecebidos WHERE utilizado = '0'";
+    $sql = "SELECT * FROM aferidorDesktop_dadosRecebidos WHERE enviado = '0'";
 
     $conexao = new ConBD;
     $stmt = $conexao->processa($sql, 1);

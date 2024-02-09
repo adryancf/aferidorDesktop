@@ -8,7 +8,8 @@ $items = $setores->array_();
 $results = array();
 
 foreach ($items as $key => $value) {
-    $results[] = array('label' => $key, 'value' => $value);
+  $results[] = array('label' => $key, 'value' => $value);
+    
 }
 
 header('Content-Type: application/json');
