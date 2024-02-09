@@ -33,27 +33,9 @@ class Funcionarios{
 		}else{
 			$items = array();
 			while($row = mysql_fetch_object($stmt)){
-				$items[$row->matricula."-".$row->nome_funcionario]=$row->id_funcionario;
-			}
-			return $items;
-		}
-	}
-
-  public function array_setor(){
-		$sql = "SELECT * from $this->tabela INNER JOIN padrao.setores AS s ON $this->tabela.fk_setor = s.id_setor WHERE status_funcionario = 'Ativo' order by nome_funcionario asc";
-    
-		$conexao = new ConBD;
-		$stmt = $conexao->processa($sql,0);
-		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
-		}else{
-			$items = array();
-			while($row = mysql_fetch_object($stmt)){
 				//$items[$row->matricula."-".$row->nome_funcionario]=$row->id_funcionario;
-        $items[$row->matricula . "-" . $row->nome_funcionario] = array(
-          'id_funcionario' => $row->id_funcionario,
-          'id_setor' => $row->id_setor
-        );
+				$items[$row->nome_funcionario]=$row->id_funcionario;
+
 			}
 			return $items;
 		}

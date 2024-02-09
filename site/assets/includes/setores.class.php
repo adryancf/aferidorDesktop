@@ -25,7 +25,7 @@ class Setores{
 	*/
 
 	public function array_(){
-		$sql = "Select * from $this->tabela order by cc asc";
+		$sql = "Select * from $this->tabela order by nome_setor asc";
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
