@@ -115,7 +115,7 @@ function InicializarFeatures()
   });
 
   //Inicializar AutoComplete e Select
-  $("#add_usuario").autocomplete({
+  $("#card_hw_add [name='nome_funcionario']").autocomplete({
     appendTo: "#card_hw_add",
     source: function(request, response) {
       $.ajax({
@@ -133,8 +133,8 @@ function InicializarFeatures()
     minLength: 0,
     select: function (event, ui) {
       // Set selection
-      $('#add_usuario').val(ui.item.label); // display the selected text
-      $('#add_fk_funcionario').val(ui.item.value); // save selected id to input
+      $('#card_hw_add').find('[name="nome_funcionario"]').val(ui.item.label); // display the selected text
+      $('#card_hw_add').find('[name="fk_funcionario"]').val(ui.item.value); // save selected id to input
       return false;
     },
     focus: function(event, ui){
@@ -247,20 +247,22 @@ $(document).ready(function () {
 
 
       $("#modalRegistro input, select, textarea").val('');
+      var elemento = $("#modalRegistro");
 
-      $("#nomeFormRegistro").val(registro.nome_funcionario);
-      $("#emailFormRegistro").val(registro.email);
-      $("#obsFormRegistro").val(registro.obs);
-      $("#numeroFormRegistro").val(registro.numero);
-      $("#nome_maquinaFormRegistro").val(registro.nome_maquina);
-      $("#tipoAferidorFormRegistro").val(tipo[registro.tipo_aferidor]);
-      $("#tipoFormularioFormRegistro").val(tipo[registro.tipo]);
-      $("#cpuFormRegistro").val(registro.processador);
-      $("#placaMaeFormRegistro").val(registro.motherboard);
-      $("#ramFormRegistro").val(registro.memoria_ram);
-      $("#gpuFormRegistro").val(registro.placa_video);
-      $("#hdFormRegistro").val(registro.hd);
-      $("#driversFormRegistro").val(registro.drivers);
+      elemento.find('[name="nome_funcionario"]').val(registro.nome_funcionario);
+      elemento.find('[name="email"]').val(registro.email);
+      elemento.find('[name="obs"]').val(registro.obs);
+      elemento.find('[name="numero"]').val(registro.numero);
+      elemento.find('[name="nome_maquina"]').val(registro.nome_maquina);
+      elemento.find('[name="tipo_aferidor"]').val(tipo[registro.tipo_aferidor]);
+      elemento.find('[name="tipo_formulario"]').val(tipo[registro.tipo]);
+      elemento.find('[name="processador"]').val(registro.processador);
+      elemento.find('[name="motherboard"]').val(registro.motherboard);
+      elemento.find('[name="memoria_ram"]').val(registro.memoria_ram);
+      elemento.find('[name="placa_video"]').val(registro.placa_video);
+      elemento.find('[name="hd"]').val(registro.hd);
+      elemento.find('[name="drivers"]').val(registro.drivers);
+
 
       // Adiciona o espaçamento
       $("#modalRegistro label").addClass("mb-2");
@@ -286,26 +288,32 @@ $(document).ready(function () {
       $("#modalRegistro").modal('show');
   });
 
+  function inserirDadosHWModal(local){
+    var dados = registros[$("#btnComparar").data("href")];
+    local.find('[name="nome_funcionario"]').val(dados.nome_funcionario);
+    local.find('[name="fk_funcionario"]').val(dados.fk_funcionario);
+    local.find('[name="tipo"]').val(dados.tipo);
+    local.find('[name="nome_maquina"]').val(dados.nome_maquina);
+    local.find('[name="numero"]').val(dados.numero);
+    local.find('[name="fk_setor"]').val(dados.fk_setor);
+    local.find('[name="fk_setor_funcionario"]').val(setores[dados.fk_setor_funcionario]);
+    local.find('[name="processador"]').val(dados.processador);
+    local.find('[name="memoria_ram"]').val(dados.memoria_ram);
+    local.find('[name="motherboard"]').val(dados.motherboard);
+    local.find('[name="placa_video"]').val(dados.placa_video);
+    local.find('[name="hd"]').val(dados.hd);
+    local.find('[name="drivers"]').val(dados.drivers);
+
+  }
+  
+
   $('#btnModalCadastro').on('click', function() {
     var dados = registros[$("#btnComparar").data("href")];
           
     // Limpa os dados antigos
     $("#modalCadastro input, select").val('');
-    
-    // Dados Novos
-    $("#add_usuario").attr("name", "nome_funcionario").val(dados.nome_funcionario);
-    $("#add_fk_funcionario").attr("name", "fk_funcionario").val(dados.fk_funcionario);
-    $("#add_tipo").attr("name", "tipo").val(dados.tipo);
-    $("#add_nome").attr("name", "nome_maquina").val(dados.nome_maquina);
-    $("#add_numero").attr("name", "numero").val(dados.numero);
-    $("#add_setor").val(dados.fk_setor);
-    $("#add_setor_funcionario").attr("name", "fk_setor_funcionario").val(setores[dados.fk_setor_funcionario]);
-    $("#add_cpu").attr("name", "processador").val(dados.processador);
-    $("#add_ram").attr("name", "memoria_ram").val(dados.memoria_ram);
-    $("#add_placaMae").attr("name", "motherboard").val(dados.motherboard);
-    $("#add_gpu").attr("name", "placa_video").val(dados.placa_video);
-    $("#add_hds").attr("name", "hd").val(dados.hd);
-    $("#add_drivers").attr("name", "drivers").val(dados.drivers);
+
+    inserirDadosHWModal($("#card_hw_add"));
 
     $("#card_hw_add label").addClass("mb-2");
  
@@ -898,7 +906,7 @@ $(document).ready(function () {
   /* --------------------------------- ENVIO --------------------------------- */
 
   //ABRE O MODAL DE ENVIO | Localização = Canto inferior direito do card de comparação
-  $(document).on('click', '#btnEnviarModal', function() {
+  $(document).on('click', '#btnEnviarModal, #btnCadastrar', function() {
 
     //Zerar a lista
     $("#modalEnvio #listaHW").empty();
@@ -909,17 +917,32 @@ $(document).ready(function () {
     //Declarando como um objeto para o envio como json
     let dados_hw = {};
 
+    //ESSA VERIFICAÇÃO NAO FUNCIONA PQ QUANDO ABRE O MODAL DE ENVIO E ADD FECHA  
+    var localDadosEnviados;
+    var id_btn = $(this).attr('id');
+
+    if(id_btn == "btnCadastrar"){
+      localDadosEnviados = $("#card_hw_add input, #card_hw_add select").not("[name='fk_setor'], [name='fk_setor_funcionario'], [name='nome_funcionario'], [name='nome_maquina']");
+      $("#btnCancelarEnvio").attr("data-bs-target", "#modalCadastro");
+      $("#modalEnvio .btn-close").attr("data-bs-target", "#modalCadastro");
+    }else
+    {
+      localDadosEnviados = $("#card_hw_new .is-invalid").not("#new_setor, #new_usuario, #new_setor_funcionario");
+      $("#btnCancelarEnvio").attr("data-bs-target", "#modalComparacao");
+      $("#modalEnvio .btn-close").attr("data-bs-target", "#modalComparacao");
+    } 
+    
     //Enviar so os dados que estao diferentes
-    $("#card_hw_new .is-invalid").not("#card_hw_new #new_setor,#card_hw_new #new_usuario").each(function() {
-      let nome = $(this).attr("name");
-      let valor = $(this).val();
-      nome == "tipo" ? valor = tipo[valor] : valor = valor;
+    localDadosEnviados.each(function() {
       dados_hw[$(this).attr("name")] = $(this).val();
     });
 
-    // Armazenando os dados no próprio botão que disparou o evento
-    $(this).data('dadosHWTemporario', dados_hw);
+    console.log(localDadosEnviados);
 
+    // Armazenando os dados no botão
+    $("#btnEnviarModal").data('dadosHWTemporario', dados_hw);
+
+    //Adicionando os dados no modal
     let hw = Object.entries(dados_hw).map(([index, item]) => 
       `<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">[${index}] - ${item}</li>`).join('');
 
@@ -961,7 +984,9 @@ $(document).ready(function () {
           url: url,
           contentType: 'json',
           data: JSON.stringify(data),
-          success: resolve,
+          success: function(response){
+            resolve(response);
+          },
           error: function(xhr, status, error) {
             reject(xhr.responseText); // Rejeita com a resposta do servidor
           }
@@ -969,20 +994,30 @@ $(document).ready(function () {
       });
     }
     
-    function atualizarHardware(item_registro) {
+    //Atualiza ou Cadastra hardware
+    function hardwareInstalarAtualizar(item_registro) {
       var dados_hw = $("#btnEnviarModal").data('dadosHWTemporario');
+      
       dados_hw['data_atualizacao'] = data;
-      dados_hw['id_hardware'] = item_registro.dadosMaquinaAferidor[0].id_hardware;
       dados_hw['numero'] = item_registro.numero;
+
+      if(item_registro.dadosMaquinaAferidor.length){
+        dados_hw['id_hardware'] = item_registro.dadosMaquinaAferidor[0].id_hardware;
+      }
+      else
+      {
+        dados_hw['fk_empresa'] = 1;
+        dados_hw['data_cadastro'] = data;
+      }
     
       return ajaxPost('../includes/hardwares/cadastrar_aferidorDesktop.php', dados_hw);
     }
     
-    function instalarSoftwares(item_registro) {
+    function instalarSoftwares(item_registro, id_hardware) {
       var dados_sw = item_registro.softwaresResumido.map(function (item) {
         if (item.id != null) {
           return {
-            fk_hardware: item_registro.dadosMaquinaAferidor[0].id_hardware,
+            fk_hardware: id_hardware,
             fk_software: item.id,
             data_instalacao: data
           };
@@ -992,9 +1027,10 @@ $(document).ready(function () {
       return ajaxPost('../includes/softwaresfunc/cadastrar_aferidorDesktop.php', dados_sw);
     }
    
-    atualizarHardware(registro)
-      .then(function() {
-        return instalarSoftwares(registro);
+    hardwareInstalarAtualizar(registro)
+      .then(function(id) {
+        console.log(id);
+        return instalarSoftwares(registro, id);
       })
       .then(function() {
         console.log("Todas as operações foram concluídas com sucesso.");
@@ -1049,7 +1085,7 @@ function atualizaDados() {
             //setores = response;
 
             var selectComparacao = $("#new_setor");
-            var selectAdd = $("#add_setor");
+            var selectAdd = $("#card_hw_add").find('[name="fk_setor"]');
 
             response.forEach(function(setor) {
                 setores[setor.value] = setor.label;

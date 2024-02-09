@@ -11,7 +11,7 @@ require_once('../../../../includes/conexao.class.php');
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
   //RECEBER ID DO REGISTRO
   $id = json_decode(file_get_contents('php://input'), true);
-  print_r($dados);
+  
   $sql = "UPDATE aferidorDesktop_dadosRecebidos SET enviado = '1' WHERE id = '$id'";
 
   $conexao = new ConBD;

@@ -112,12 +112,12 @@
           </div>
 
           <!-- ---------- MODAL DETALHES DA AFERIÇÃO ---------- -->
-          <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+          <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="TituloModalRegistro" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
                   <div class="modal-content">
 
                       <div class="modal-header">
-                          <h3 class="modal-title fw-bold" id="TituloModalCentralizado">Detalhes da Aferição</h3>
+                          <h3 class="modal-title fw-bold" id="TituloModalRegistro">Detalhes da Aferição</h3>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
 
@@ -128,18 +128,18 @@
                           <div class="row">
                               <div class="col">
                                   <label for="nome">Nome</label>
-                                  <input type="text" class="form-control" id="nomeFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="nome_funcionario" disabled>
                               </div>
                               <div class="col">
                                   <label for="email">Email</label>
-                                  <input type="text" class="form-control" id="emailFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="email" disabled>
                               </div>
                           </div>
 
                           <div class="row my-4">
                               <div class="col">
                                   <label for="obs">Observações</label>
-                                  <textarea class="form-control" id="obsFormRegistro" disabled></textarea>
+                                  <textarea class="form-control" name="obs" disabled></textarea>
                               </div>
                           </div>
               
@@ -150,17 +150,17 @@
                           <div class="row">
                               <div class="col-md-3">
                                   <label for="numero">Número</label>
-                                  <input type="text" class="form-control" id="numeroFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="numero" disabled>
                               </div>
                               <div class="col-md-6">
                                   <label for="nome_maquina">Nome da Máquina</label>
-                                  <input type="text" class="form-control" id="nome_maquinaFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="nome_maquina" disabled>
                               </div>
                               <div class="col">
                                   <label for="tipo">Tipo (APP/FORM)</label> 
                                   <div class="input-group">
-                                      <input type="text" class="form-control text-center" id="tipoAferidorFormRegistro" disabled>
-                                      <input type="text" class="form-control text-center" id="tipoFormularioFormRegistro" disabled>
+                                      <input type="text" class="form-control text-center" name="tipo_aferidor" disabled>
+                                      <input type="text" class="form-control text-center" name="tipo_formulario" disabled>
                                   </div>
                               </div>
                           </div>
@@ -168,16 +168,16 @@
                           <div class="row my-4">
                               <div class="col col-md-6">
                                   <label for="cpu">Processador</label>
-                                  <input type="text" class="form-control" id="cpuFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="processador" disabled>
                               </div>
                               <div class="col-md-5">
                                   <label for="placa_mae">Placa Mãe</label>
-                                  <input type="text" class="form-control" id="placaMaeFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="motherboard" disabled>
                               </div>
               
                               <div class="col text-center">
                                   <label for="ram">RAM</label>
-                                  <input type="text" class="form-control" id="ramFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="memoria_ram" disabled>
                               </div>
               
                           </div>
@@ -185,21 +185,21 @@
                           <div class="row my-4">
                               <div class="col">
                                   <label for="gpu">Placa de Vídeo</label>
-                                  <input type="text" class="form-control" id="gpuFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="placa_video" disabled>
                               </div>
                           </div>
               
                           <div class="row my-4">
                               <div class="col">
                                   <label for="hd">Disco Rígido</label>   
-                                  <input type="text" class="form-control overflow-auto" id="hdFormRegistro" disabled>
+                                  <input type="text" class="form-control overflow-auto" name="hd" disabled>
                               </div>
                           </div>
               
                           <div class="row my-4">
                               <div class="col">
                                   <label for="drivers">CD/DVD</label>
-                                  <input type="text" class="form-control" id="driversFormRegistro" disabled>
+                                  <input type="text" class="form-control" name="drivers" disabled>
                               </div>
                           </div>
 
@@ -253,15 +253,15 @@
                           <div class="row mb-2">
                               <div class="col-7">
                                   <label for="usuario">Usuário da Máquina</label>
-                                  <input type="text" id="add_usuario" class="form-control" disabled>
-                                  <input type="hidden" id="add_fk_funcionario">
+                                  <input type="text" name="nome_funcionario" class="form-control" disabled>
+                                  <input type="hidden" name="fk_funcionario">
                               </div>
               
                               <div class="col">
                                   <!-- USAR O TIPO DO FORMULARIO -->
                                   <label for="tipo_formulario">Tipo</label>
                                   <!-- <input type="text" id="new_tipo" class="form-control"disabled> -->
-                                  <select id="add_tipo" class="form-select" disabled>
+                                  <select name="tipo" class="form-select" disabled>
                                     <option value="d">Desktop</option>
                                     <option value="n">Notebook</option>
                                   </select>
@@ -271,57 +271,57 @@
                           <div class="row my-2">
                             <div class="col">
                                 <label for="nome_maquina">Nome</label>
-                                <input type="text" id="add_nome" class="form-control" disabled>
+                                <input type="text" name="nome_maquina" class="form-control" disabled>
                             </div>
                             <div class="col">
                                 <label for="numero_maquina">Numero</label>
-                                <input type="text" id="add_numero" class="form-control" disabled>
+                                <input type="text" name="numero" class="form-control" disabled>
                             </div>
                           </div>
 
                           <div class="row my-2">
                             <div class="col">
                                 <label for="setor">Setor</label>
-                                <select name="fk_setor" id="add_setor" class="form-select" disabled></select>
+                                <select name="fk_setor" class="form-select" disabled></select>
                             </div>
               
                             <div class="col">
                               <label for="setor">Setor Funcionário</label>
-                              <input type="text" id="add_setor_funcionario" class="form-control" disabled>
+                              <input type="text" name="fk_setor_funcionario" class="form-control" disabled>
                             </div>
                           </div>
               
                           <div class="row my-2">
                             <div class="col col-md-9">
                               <label for="cpu">Processador</label>
-                              <input type="text" id="add_cpu" class="form-control" disabled>
+                              <input type="text" name="processador" class="form-control" disabled>
                             </div>
                             <div class="col">
                               <label for="ram">RAM</label>
-                              <input type="text" id="add_ram" class="form-control" disabled>
+                              <input type="text" name="memoria_ram" class="form-control" disabled>
                             </div>
                           </div>
               
                           <div class="row my-2">
                             <div class="col">
                               <label for="placa_mae">Placa Mãe</label>
-                              <input type="text" id="add_placaMae" class="form-control" disabled>
+                              <input type="text" name="motherboard" class="form-control" disabled>
                             </div>
                             <div class="col">
                               <label for="gpu">Placa de Vídeo</label>
-                              <input type="text" id="add_gpu" class="form-control" disabled>
+                              <input type="text" name="placa_video" class="form-control" disabled>
                             </div>
                           </div>           
                 
                           <div class="row my-2 mb-3">
                             <div class="col">
                               <label for="hd">Disco Rígido</label>   
-                              <input type="text" id="add_hds" class="form-control overflow-auto" disabled>
+                              <input type="text" name="hd" class="form-control overflow-auto" disabled>
                             </div>
               
                             <div class="col">
                               <label for="drivers">CD/DVD</label>
-                              <input type="text" id="add_drivers" class="form-control" disabled>
+                              <input type="text" name="drivers" class="form-control" disabled>
                             </div>
                           </div>
                         </div>
@@ -368,7 +368,7 @@
                   </div> 
 
                   <div class="col text-center"> 
-                    <button type="button" id=btnCadastrar class="btn btn-outline-success w-50">
+                    <button type="button" id=btnCadastrar class="btn btn-outline-success w-50" data-bs-target="#modalEnvio" data-bs-toggle="modal">
                       <i class="bi bi-pc-display me-2 fs-5"></i>
                       <span class="fw-bold">Cadastrar</span>
                     </button>
@@ -677,7 +677,7 @@
                           </button>
                         </div>                                
                         <div class="col text-center">
-                          <button type="button" class="btn btn-outline-success fs-5 w-25" id="btnEnviarModal" data-bs-target="#modalEnvio" data-bs-toggle="modal">
+                          <button type="button" class="btn btn-outline-success fs-5" style="width: 40%!important" id="btnEnviarModal" data-bs-target="#modalEnvio" data-bs-toggle="modal">
                             <span>Enviar</span>
                             <i class="bi bi-send-plus ms-2"></i>
                           </button>
@@ -719,7 +719,7 @@
 
                     <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
                         <button type="button" id="btnEnviarAlteracoes" class="btn btn-primary">Confirmar Envio</button>
-                        <button type="button" data-bs-target="#modalComparacao" data-bs-toggle="modal" class="btn btn-secondary">Cancelar</button>
+                        <button type="button" id="btnCancelarEnvio" data-bs-target="#modalComparacao" data-bs-toggle="modal" class="btn btn-secondary">Cancelar</button>
                     </div>
                 </div>
             </div>
