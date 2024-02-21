@@ -9,7 +9,6 @@ import asyncio
 import modulo
 from servidorWebSocket import ServidorWebSocket
 
-
 class Main(QWidget, Ui_Principal):
     def __init__(self) -> None:
         super(Main, self).__init__()
