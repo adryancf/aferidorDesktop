@@ -35,7 +35,7 @@ class Main(QWidget, Ui_Principal):
         # Configurar a fonte
         font = QFont()
         font.setPointSize(12)  # Ajuste o tamanho da fonte conforme necessário
-        font.setBold(True)
+        #font.setBold(True)
         msg_box.setFont(font)
 
         msg_box.setText(result)

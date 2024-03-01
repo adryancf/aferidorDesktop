@@ -4,15 +4,15 @@ import subprocess
 import math
 import asyncio 
 import json
+import time;
 
 
 from datetime import datetime
 from servidorWebSocket import ServidorWebSocket
 
+
 def scan_aferidor(barra_progresso, websocket_server, loop = None):
     try:
-
-
         # Construa o caminho para a pasta de documentos e cria a pasta do programa
         doc = os.path.join(os.path.expanduser("~"), "Documents")
         path = os.path.join(doc, "AferidorDesktop")
@@ -222,9 +222,9 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
 
 
         # ******************************************** ETAPA 5 ******************************************** #
-
+        start_time = time.time()
         # Informações sobre dispositivos de armazenamento
-        storage_info = run_command('wmic path Win32_DiskDrive where MediaType="Fixed hard disk media" get caption,model,size,status /format:value')
+        storage_info = run_command('wmic path Win32_DiskDrive where MediaType="Fixed hard disk media" get caption,size,status /format:value')
         lista_hds = []
         if storage_info:
             # Dividir a saída em linhas
@@ -235,19 +235,18 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
                     key, value = parts
                     if key == "Caption":
                         caption = value.strip()
-                    elif key == "Model":
-                        model = value.strip()
                     elif key == "Size":
                         # Converter o tamanho para GB
                         size_bytes = int(value.strip())
                         size_gb = size_bytes / 1000000000  
-                        size_gb_real = size_bytes / (1024**3) # 1 GB = 1024^3 bytes
+                        #size_gb_real = size_bytes / (1024**3) # 1 GB = 1024^3 bytes
                     elif key == "Status":
                         status = value.strip()
                         hd_info = f"{caption} - {int(size_gb)} GB ({status})"
                         lista_hds.append(hd_info)
 
         #O metodo join concatena os elementos da lista em uma unica string, separadas pelo '/'
+
         hds = ' / '.join(lista_hds)
 
         if not lista_hds:
@@ -300,7 +299,7 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
         # Crie um dicionário com os dados que você deseja enviar
         hardware_dados = {
             'Hardware': 'Nome',
-            'data_hora_cadastro': str(datetime.now()),
+            'data_hora_cadastro': str(datetime.now().replace(microsecond=0)),
             'sistema_operacional': so,
             'nome_maquina': nome_maquina,
             #'tipo_maquina_wmi': tipo_hw_wmic,
@@ -360,5 +359,5 @@ def scan_aferidor(barra_progresso, websocket_server, loop = None):
     except Exception as e:
         return(f"Ocorreu um erro inesperado! {e}")
     
-    return(f"\n\nO arquivo de log foi salvo em {path}")
+    return(f"Va até o site para visualizar o resultado!\n\nO arquivo de log foi salvo em {path}.")
 

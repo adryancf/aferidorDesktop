@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
+
+      <title>Admin - Aferidor Desktop</title>
+
+      <!-- EXECUTA A VERIFICAÇÃO DE AUTENTICAÇÃO DO USUÁRIO -->
+      <script src="assets/js/login.js"></script>
+
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+      <link rel="stylesheet" href="assets/css/css_autoComplete/autoComplete.css">
+      <link rel="stylesheet" href="assets/css/style.css">
+      
+  </head>
+
+  <body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/autoComplete.min.js"></script>
+
+
+    <!-- NAVBAR -->
+    <header>
+      <nav class="navbar bg-light bg-gradient navbar-expand-sm shadow-sm">
+          <div class="container-fluid mx-4">
+              <a class="navbar-brand d-flex align-items-center" href="#">
+                  <img src="assets/img/logo.png" alt="LogoEsteio" width="30" height="30" class="d-inline-block align-text-top">
+                  <span class="ms-2 fw-medium navbar-collapse collapse fs-6">Administrador</span>
+                  <!-- EXIBIR O USUARIO LOGADO -->
+              </a>
+              <div class="justify-content-center">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="admin.html" id="novosRegistrosNav">Novos Registros</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="enviados.html" id="registrosEnviadosNav">Enviados</a>
+                  </li>
+                </ul>
+
+              </div>
+
+              <div class="justify-content-end">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a href="" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-person-circle fs-5"></i>
+                      <span class="card-text ms-2" id="nomeUsuarioNav"></span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                      <li><span class="dropdown-item" onclick="logout()">Logout</span></li>
+                      <li><a id="trocarSenhaUsuario" class="dropdown-item" href="../../login/redefinirSenha.html">Trocar Senha</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><span class="dropdown-item disabled" id="idUsuarioNav"></span></li>
+                    </ul>
+
+                  </li>
+                </ul>
+              </div>
+              
+              <!-- <div class="card">
+                <div class="card-body">
+                  <i class="bi bi-person-circle"></i>
+                  <spam class="card-text ms-1">Usuário</spam>
+                </div>
+              </div> -->
+          </div>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="row my-5">
+          <h1>Aferidor Desktop</h1>  
+
+      </div>
+
+      <div class="row">
+        <div class="container justify-content-center">
+            
+          <div class="card">
+              <div class="card-header"><h5>Resumo das Aferições</h5></div>
+              <div class="card-body">
+                  <div class="accordion" id="setoresAccordion"></div>
+              </div>
+          </div>
+
+          <!-- ---------- MODAL DETALHES DA AFERIÇÃO ---------- -->
+          <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="TituloModalRegistro" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+                  <div class="modal-content">
+
+                      <div class="modal-header">
+                          <h3 class="modal-title fw-bold" id="TituloModalRegistro">Detalhes da Aferição</h3>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <div class="modal-body">
+
+                          <h5 class="mb-3">Informações do Funcionário</h5>
+                          
+                          <div class="row">
+                              <div class="col">
+                                  <label for="nome">Nome</label>
+                                  <input type="text" class="form-control" name="nome_funcionario" disabled>
+                              </div>
+                              <div class="col">
+                                  <label for="email">Email</label>
+                                  <input type="text" class="form-control" name="email" disabled>
+                              </div>
+                          </div>
+
+                          <div class="row my-4">
+                              <div class="col">
+                                  <label for="obs">Observações</label>
+                                  <textarea class="form-control" name="obs" disabled></textarea>
+                              </div>
+                          </div>
+              
+                          <hr>
+
+                          <h5 class="mb-3">Dados Aferição</h5>
+              
+                          <div class="row">
+                              <div class="col-md-3">
+                                  <label for="numero">Número</label>
+                                  <input type="text" class="form-control" name="numero" disabled>
+                              </div>
+                              <div class="col-md-6">
+                                  <label for="nome_maquina">Nome da Máquina</label>
+                                  <input type="text" class="form-control" name="nome_maquina" disabled>
+                              </div>
+                              <div class="col">
+                                  <label for="tipo">Tipo (APP/FORM)</label> 
+                                  <div class="input-group">
+                                      <input type="text" class="form-control text-center" name="tipo_aferidor" disabled>
+                                      <input type="text" class="form-control text-center" name="tipo_formulario" disabled>
+                                  </div>
+                              </div>
+                          </div>
+              
+                          <div class="row my-4">
+                              <div class="col col-md-7">
+                                  <label for="cpu">Processador</label>
+                                  <input type="text" class="form-control" name="processador" disabled>
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="placa_mae">Placa Mãe</label>
+                                  <input type="text" class="form-control" name="motherboard" disabled>
+                              </div>
+              
+                              <div class="col text-center">
+                                  <label for="ram">RAM</label>
+                                  <input type="text" class="form-control" name="memoria_ram" disabled>
+                              </div>
+              
+                          </div>
+                          
+                          <div class="row my-4">
+                              <div class="col">
+                                  <label for="gpu">Placa de Vídeo</label>
+                                  <input type="text" class="form-control" name="placa_video" disabled>
+                              </div>
+                          </div>
+              
+                          <div class="row my-4">
+                              <div class="col">
+                                  <label for="hd">Disco Rígido</label>   
+                                  <input type="text" class="form-control overflow-auto" name="hd" disabled>
+                              </div>
+                          </div>
+              
+                          <div class="row my-4">
+                              <div class="col">
+                                  <label for="drivers">CD/DVD</label>
+                                  <input type="text" class="form-control" name="drivers" disabled>
+                              </div>
+                          </div>
+
+                          <hr>
+
+                          <div class="row my-4">
+                              <div class="col">
+                                  <div class="card">
+                                      <h5 class="card-header">Softwares</h5>
+                                      <div class="card-body">
+                                          <div class="d-grid">
+                                              <button data-bs-toggle="modal" data-bs-target="#modalSoftwares" class="btn btn-light">Lista completa de softwares instalados na máquina aferida</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+
+                      <!-- <div class="modal-footer">
+                          <button type="button" id=btnComparar class="btn btn-primary">Comparar dados</button>
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#modalCadastro" id=btnModalCadastro class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> Cadastrar máquina</button>
+                      </div> -->
+
+                      <div class="modal-footer justify-content-center">
+                      
+                        <div class="col text-center"> 
+                          <button type="button" id=btnComparar class="btn btn-outline-primary mx-2">
+                            <i class="bi bi-arrow-left-right me-1"></i>
+                            <span class="fw-bold">Comparar dados</span>
+                          </button>
+
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#modalCadastro" id=btnModalCadastro class="btn btn-outline-success">
+                            <i class="bi bi-database-add me-1"></i> 
+                            <span class="fw-bold">Cadastrar máquina</span>
+                          </button>
+
+                        </div>
+                               
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+
+          <!------------- MODAL CADASTRO MÁQUINA ------------->
+          <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3 class="modal-title fw-bold" id="TituloModalCentralizado">Cadastro da máquina</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body"> 
+                  <div class="row row-cols-2">
+                    <div class="col">
+                      <div class="card shadow">
+
+                        <div class="card-header text-center fw-bold">
+                          <p style="margin-bottom: 0px;" class="fs-3 fw-medium">Hardware</p>
+                        </div>
+
+                        <div class="card-body" id="card_hw_add">                    
+                                              
+                          <div class="row mb-2">
+                              <div class="col-7">
+                                  <label for="usuario">Usuário da Máquina</label>
+                                  <input type="text" name="nome_funcionario" class="form-control" disabled>
+                                  <input type="hidden" name="fk_funcionario">
+                              </div>
+              
+                              <div class="col">
+                                  <!-- USAR O TIPO DO FORMULARIO -->
+                                  <label for="tipo_formulario">Tipo</label>
+                                  <!-- <input type="text" id="new_tipo" class="form-control"disabled> -->
+                                  <select name="tipo" class="form-select" disabled>
+                                    <option value="d">Desktop</option>
+                                    <option value="n">Notebook</option>
+                                  </select>
+                              </div>
+                          </div>
+              
+                          <div class="row my-2">
+                            <div class="col">
+                                <label for="nome_maquina">Nome</label>
+                                <input type="text" name="nome_maquina" class="form-control" disabled>
+                            </div>
+                            <div class="col">
+                                <label for="numero_maquina">Numero</label>
+                                <input type="text" name="numero" class="form-control" disabled>
+                            </div>
+                          </div>
+
+                          <div class="row my-2">
+                            <div class="col">
+                                <label for="setor">Setor</label>
+                                <select name="fk_setor" class="form-select" disabled></select>
+                            </div>
+              
+                            <div class="col">
+                              <label for="setor">Setor Funcionário</label>
+                              <input type="text" name="fk_setor_funcionario" class="form-control" disabled>
+                            </div>
+                          </div>
+              
+                          <div class="row my-2">
+                            <div class="col col-md-9">
+                              <label for="cpu">Processador</label>
+                              <input type="text" name="processador" class="form-control" disabled>
+                            </div>
+                            <div class="col">
+                              <label for="ram">RAM</label>
+                              <input type="text" name="memoria_ram" class="form-control" disabled>
+                            </div>
+                          </div>
+              
+                          <div class="row my-2">
+                            <div class="col">
+                              <label for="placa_mae">Placa Mãe</label>
+                              <input type="text" name="motherboard" class="form-control" disabled>
+                            </div>
+                            <div class="col">
+                              <label for="gpu">Placa de Vídeo</label>
+                              <input type="text" name="placa_video" class="form-control" disabled>
+                            </div>
+                          </div>           
+                
+                          <div class="row my-2 mb-3">
+                            <div class="col">
+                              <label for="hd">Disco Rígido</label>   
+                              <input type="text" name="hd" class="form-control overflow-auto" disabled>
+                            </div>
+              
+                            <div class="col">
+                              <label for="drivers">CD/DVD</label>
+                              <input type="text" name="drivers" class="form-control" disabled>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>    
+
+                    <div class="col">                 
+                      <div class="card shadow">
+                        <div class="card-header text-center fw-bold"><p style="margin-bottom: 0px;" class="fs-3 fw-medium">Software</p></div>
+
+                        <div class="card-body" id="card_sfw_add">
+                                          
+                            <h6 class="fw-medium">Sistema Operacional</h6>
+                            <input type="text" id="so_add" class="mt-3 form-control" disabled>
+                          
+                            <hr>
+
+                            <div class="row row-cols-2 align-items-center justify-content-between">
+                              <p style="margin-bottom: 0px;" class="fw-medium">Programas</p>
+                              <a class="w-auto me-1" id="card_btnAdd" style="color:rgb(33, 92, 33)"><i class="bi bi-plus-circle-fill fs-5"></i></a>
+                            </div>
+                                                                      
+                            <ul class="mb-4 mt-3 list-group fw-normal w-100" id="listaSoftware"></ul>                                                
+
+                            <div class="row mx-5 my-2 justify-content-center">                                                     
+                              <button data-bs-toggle="collapse" href="#collapseSoftwaresAdd" arial-controls="collapseSoftwaresAdd" class="btn btn-secondary w-50">Lista completa</button>                              
+                            </div>
+
+                            <div class="collapse" id="collapseSoftwaresAdd">
+                              <div class="card-body"></div>
+                            </div>
+                          
+                        </div>
+                      </div>
+                    </div> 
+                  </div>    
+                    
+                                                                        
+                </div>
+
+                <div class="modal-footer d-flex align-items-center justify-content-center justify-content-md-between">
+                  <div class="col text-start">
+                    <div class="col text-start">
+                      <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+                        <i class="bi bi-arrow-return-left"></i>
+                      </button> 
+                    </div> 
+                  </div> 
+
+                  <div class="col text-center"> 
+                    <button type="button" id=btnCadastrar class="btn btn-outline-success w-50" data-bs-target="#modalEnvio" data-bs-toggle="modal">
+                      <i class="bi bi-pc-display me-2"></i>
+                      <span class="fw-bold">Cadastrar</span>
+                    </button>
+                  </div>
+
+                  <div class="col text-end">
+                    <button type="button" id=add_btnEditarDados class="btn btn-primary">
+                      <i id="iconeEdit" class="bi bi-pencil-square"></i>
+                      <span></span>
+                    </button> 
+                    <button type="button" id="add_btnCancelarMudancas" class="btn btn-danger" style="display: none;">
+                      <i class="bi bi-x-octagon"></i>
+                    </button> 
+                  </div>                          
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- SUBMODAL SOFTWARES ---------- -->
+
+          <div class="modal fade" id="modalSoftwares" tabindex="-1" aria-labelledby="tituloModalSoftware" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+                  <div class="modal-content">
+
+                      <div class="modal-header">
+                          <h3 class="modal-title fw-bold" id="tituloModalSoftware">Softwares Instalados</h3>
+                          <button type="button" class="btn-close" data-bs-target="#modalRegistro" data-bs-toggle="modal" aria-label="Close"></button>
+                      </div>
+
+                      <div class="modal-body"></div>
+
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-target="#modalRegistro" data-bs-toggle="modal">Voltar</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!------------- SUBMODAL COMPARAÇÃO ------------->
+
+          <div class="modal fade" id="modalComparacao" tabindex="-1" aria-labelledby="tituloModalComparacao" aria-hidden="true">
+              <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+                  <div class="modal-content">
+
+                      <div class="modal-header">
+                          <h3 class="modal-title fw-bold" id="tituloModalComparacao">Comparação - Hardware</h3>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      
+                      <div class="modal-body" id="modalBodyComparacao">
+                        <!-- QUNADO CLICAR NO BOTAO DEIXA ESSA DIV INVISIVEL -->
+                        <div id="containerComparacaoHW" class="container-fluid">
+                            
+                          <!-- <div class="row text-center mb-4">
+                              <h1 id="tituloHWCompare">Hardware</h1>
+                          </div>  -->
+
+                          <div class="row mx-5 nao_add">
+                            <!-- avisos -->
+                            <div class="alert alert-warning fade show" role="alert" id="avisos_hw">
+                              <span>.</span>
+                            </div>
+                          </div>
+                            
+                          <div class="row row-cols-2 g-4 mx-3 nao_add">
+                            <div class="col">
+                              <div class="card shadow">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                  <spam class="fw-bold">Dados Novos</spam>
+                                  <spam class="badge text-bg-danger fw-bold rounded-pill" id="badgeDiferente" style="font-family: 'Roboto Mono', sans-serif;"></spam> 
+                                </div>
+
+                                <div id="card_hw_new" class="card-body">
+                                    
+                                  <div class="row mb-2 nao_add">
+                                    <div class="col-xxl-9 col-lg-8">
+                                      <label for="usuario">Usuário da Máquina</label>
+                                      <input type="text" id="new_usuario" class="form-control" disabled>
+                                      <input type="hidden" id="new_fk_funcionario">
+                                    </div>
+
+                                    <div class="col">
+                                      <!-- USAR O TIPO DO FORMULARIO -->
+                                      <label for="tipo_formulario">Tipo</label>
+                                      <select id="new_tipo" class="form-select" disabled>
+                                        <option value="d">Desktop</option>
+                                        <option value="n">Notebook</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="row row-cols-xxl-4 row-cols-lg-2">
+                                    <div class="col">
+                                      <label for="nome_maquina">Nome</label>
+                                      <input type="text" id="new_nome" class="form-control" disabled>
+                                    </div>
+
+                                    <div class="col">
+                                      <label for="numero_maquina">Numero</label>
+                                      <input type="text" id="new_numero" class="form-control" disabled>
+                                    </div>
+
+                                    <div class="col">
+                                      <label for="setor">Setor</label>
+                                      <!-- <input type="text" id="new_setor" class="form-control" disabled> -->
+                                      <select name="fk_setor" id="new_setor" class="form-select" disabled></select>
+                                    </div>
+
+                                    <div class="col">
+                                      <label for="setor">Setor Funcionário</label>
+                                      <input type="text" id="new_setor_funcionario" class="form-control" disabled>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col col-md-10">
+                                      <label for="cpu">Processador</label>
+                                      <input type="text" id="new_cpu" class="form-control" disabled>
+                                    </div>
+                                    <div class="col">
+                                      <label for="ram">RAM</label>
+                                      <input type="text" id="new_ram" class="form-control" disabled>
+                                    </div>                       
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col">
+                                      <label for="placa_mae">Placa Mãe</label>
+                                      <input type="text" id="new_placaMae" class="form-control" disabled>
+                                    </div>
+                                  </div>           
+
+                                  <div class="row">
+                                    <div class="col">
+                                      <label for="gpu">Placa de Vídeo</label>
+                                      <input type="text" id="new_gpu" class="form-control" disabled>
+                                    </div>
+                                  </div>
+                        
+                                  <div class="row">
+                                    <div class="col">
+                                      <label for="hd">Disco Rígido</label>   
+                                      <input type="text" id="new_hds" class="form-control overflow-auto" disabled>
+                                    </div>
+                                  </div>
+                        
+                                  <div class="row">
+                                    <div class="col">
+                                      <label for="drivers">CD/DVD</label>
+                                      <input type="text" id="new_drivers" class="form-control" disabled>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="card shadow">
+                                    <div class="card-header"><spam class="fw-bold">Dados Cadastrados</spam></div>
+
+                                    <div id="card_hw_old"class="card-body">
+
+                                        <div class="row mb-2 nao_add">
+
+                                            <div class="col-xxl-9 col-lg-8">
+                                                <label for="usuario">Usuário da Máquina</label>
+                                                <input type="text" id="old_usuario" class="form-control" disabled>
+                                                <input type="hidden" id="old_fk_funcionario">
+                                            </div>
+
+                                            <div class="col">
+                                                <!-- USAR O TIPO DO FORMULARIO -->
+                                                <label for="tipo_formulario">Tipo</label>
+                                                <select id="old_tipo" class="form-select" disabled></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row row-cols-xxl-2 row-cols-sm-1">
+                                            <div class="col">
+                                                <label for="nome_maquina">Numero</label>
+                                                <input type="text" id="old_numero" class="form-control" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="setor">Setor do Funcionário</label>
+                                                <input type="text" id="old_setor_name" class="form-control" disabled>
+                                                <input type="hidden" id="old_setor">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col col-md-10">
+                                                <label for="cpu">Processador</label>
+                                                <input type="text" id="old_cpu" class="form-control" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="ram">RAM</label>
+                                                <input type="text" id="old_ram" class="form-control" disabled>
+                                            </div>
+                            
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="placa_mae">Placa Mãe</label>
+                                                <input type="text" id="old_placaMae" class="form-control" disabled>
+                                            </div>
+                                        </div>           
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="gpu">Placa de Vídeo</label>
+                                                <input type="text" id="old_gpu" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="hd">Disco Rígido</label>   
+                                                <input type="text" id="old_hds" class="form-control overflow-auto" disabled>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="drivers">CD/DVD</label>
+                                                <input type="text" id="old_drivers" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                            
+
+
+                        </div>
+                        
+                        <div id="containerComparacaoSW" class="container">
+                                                        
+                          <!-- <div class="row text-center mb-4">
+                              <h1 id="tituloHWCompare">Softwares</h1>
+                          </div>  -->
+                            
+                          <div class="row row-cols-2 g-4 mt-2">
+                            <div class="col">
+                              <div class="card shadow">
+                                <div class="card-header">Programas instalados na máquina</div>
+
+                                <div id="card_sfw_maquina" class="card-body">
+                                                  
+                                  <h6 class="fw-medium">Sistema Operacional</h6>
+                                  <input type="text" id="so_new" class="mt-3 form-control" disabled>
+                                
+                                  <hr>
+
+                                  <div class="row row-cols-2 align-items-center justify-content-between">
+                                    <p style="margin-bottom: 0px;" class="fw-medium">Programas</p>
+                                    <a class="w-auto me-1" id="card_btnAdd" style="color:rgb(33, 92, 33)"><i class="bi bi-plus-circle-fill fs-5"></i></a>
+                                  </div>
+                                                                              
+                                  <ul class="mb-4 mt-3 list-group fw-normal w-100" id="listaSoftware"></ul>                                                
+
+                                  <div class="row mx-5 my-2 justify-content-center">                                                     
+                                    <button data-bs-toggle="collapse" href="#collapseSoftwares" arial-controls="collapseSoftwares" class="btn btn-secondary w-50">Lista completa</button>                              
+                                  </div>
+
+                                  <div class="collapse" id="collapseSoftwares">
+                                    <div class="card-body"></div>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col">
+                              <div class="card shadow">
+                                <div class="card-header">Programas instalados no aferidor</div>
+
+                                <div id="card_sfw_aferidor"class="card-body">
+                                  <h6 class="fw-medium">Sistema Operacional</h6>
+                                  <input type="text" id="so_new" class="mt-3 form-control" disabled>
+                                  <hr>
+                                  <h6 class="fw-medium">Programas</h6>
+                                      
+                                  <ul class="my-4 list-group fw-normal" id="listaSoftware">
+                                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                      A list item
+                                      <span class="badge bg-primary rounded-pill">14</span>
+                                    </li>
+                                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center ">
+                                      A second list item
+                                      <span class="badge bg-primary rounded-pill">2</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div> 
+                        </div>
+                      </div>
+
+                      
+                      
+                      <div class="modal-footer d-flex align-items-center justify-content-center justify-content-md-between">
+                        <div class="col text-start">
+                          <button type="button" class="btn btn-outline-warning" id="alternarSW">
+                            <i class="bi bi-microsoft me-2"></i>
+                            Ir para Softwares
+                          </button>
+                        </div>                                
+                        <div class="col text-center">
+                          <button type="button" class="btn btn-outline-success fs-5" style="width: 40%!important" id="btnEnviarModal" data-bs-target="#modalEnvio" data-bs-toggle="modal">
+                            <span>Enviar</span>
+                            <i class="bi bi-send-plus ms-2"></i>
+                          </button>
+                        </div>
+                        <div class="col text-end">
+                          <button type="button" id="btnEditarDados" class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>
+                          <button type="button" id="compare_btnCancelarMudancas" class="btn btn-danger" style="display: none;"><i class="bi bi-x-octagon"></i></button> 
+                          <button type="button" class="btn btn-outline-secondary" data-bs-target="#modalRegistro" data-bs-toggle="modal"><i class="bi bi-arrow-return-left"></i></button>
+                        </div>                                                      
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+
+          <!------------- SUBMODAL ENVIO ------------->
+          <div class="modal fade" id="modalEnvio" tabindex="-1" aria-labelledby="tituloModalEnvio" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h3 class="modal-title fw-bold" id="tituloModalEnvio">Resumo do envio</h3>
+                        <button type="button" class="btn-close" data-bs-target="#modalComparacao" data-bs-toggle="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="alert alert-danger" role="alert">
+                        O envio registrará as mudanças no sistema, adcionando <strong>diretamente</strong> no banco de dados
+                      </div>
+                      <h2>Hardware</h2>
+                      <hr>
+                      <ul id="listaHW" class="my-4 list-group fw-normal"></ul>
+                      
+                      <h2>Software</h2>
+                      <hr>
+                      <ul id="listaSW" class="my-4 list-group fw-normal"></ul>
+
+                    </div>
+
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" id="btnEnviarAlteracoes" class="btn btn-primary">Confirmar Envio</button>
+                        <button type="button" id="btnCancelarEnvio" data-bs-target="#modalComparacao" data-bs-toggle="modal" class="btn btn-secondary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <!------------- SUBMODAL PESQUISA SOFTWARE ------------->
+          <div class="modal fade" id="modalSearchSoftwares" tabindex="-1" aria-labelledby="tituloModalSearchSoftwares" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="--bs-modal-width: 700px;">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                      <div class="container-fluid">                    
+                        <div class="row height d-flex justify-content-center align-items-center mx-2 my-4">
+                          
+                          <div class="col">
+                            <div class="form-group text-center">
+                              <input type="text" id="searchSoftware" class="form-control">  
+                              <input type="hidden" id="id_software">                          
+                            </div>
+                          </div>
+      
+                          <div class="col-1 btnA|d" style="width: 10%;">
+                            <div class="row height justify-content-center align-items-center">
+                              <button type="button" class="btn btn-outline-success rounded-pill" style="padding: 10px 10px;"><i class="bi bi-plus-lg"></i></button>
+                            </div>
+                          </div>
+      
+                        </div>                
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container" id="paginaHtml">
+    </div>
+
+    <script src="assets/js/adminGetData.js"></script>
+    <script src="assets/js/functions.js"></script>
+    <script src="../common_assets/js/functions.js"></script>
+
+  </body>
+
+</html>
+
+
+
+

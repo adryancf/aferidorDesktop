@@ -24,11 +24,11 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 ChangesAssociations=no
 DisableProgramGroupPage=yes
-InfoAfterFile=C:\Users\0394\Desktop\Sistema_Auditoria\Modulo\INSTALA플O\README.txt
+InfoAfterFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALA플O\README.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ; PrivilegesRequired=lowest
-OutputDir=C:\Users\0394\Desktop\Sistema_Auditoria\Modulo\INSTALA플O\InnoSetup
-OutputBaseFilename=Instaladaor AferidorDesktop
+OutputDir=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALA플O\InnoSetup
+OutputBaseFilename=Instalador AferidorDesktop
 SetupIconFile=C:\Users\0394\Downloads\EsteioRetrorrefletancia_logo.ico
 Compression=lzma
 SolidCompression=yes
@@ -41,7 +41,7 @@ Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\0394\Desktop\Sistema_Auditoria\Modulo\EXE\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\EXE\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -58,4 +58,6 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+
 

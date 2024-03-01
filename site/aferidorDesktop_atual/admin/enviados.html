@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
+
+    <title>Admin - Aferidor Desktop</title>
+
+    <!-- EXECUTA A VERIFICAÇÃO DE AUTENTICAÇÃO DO USUÁRIO -->
+    <script src="assets/js/login.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+
+  <body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- NAVBAR -->
+    <header>
+      <nav class="navbar bg-light bg-gradient navbar-expand-sm shadow-sm">
+          <div class="container-fluid mx-4">
+              <a class="navbar-brand d-flex align-items-center" href="#">
+                  <img src="assets/img/logo.png" alt="LogoEsteio" width="30" height="30" class="d-inline-block align-text-top">
+                  <span class="ms-2 fw-medium navbar-collapse collapse fs-6">Administrador</span>
+                  <!-- EXIBIR O USUARIO LOGADO -->
+              </a>
+              
+              <div class="justify-content-center">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="novosRegistrosNav" aria-current="page" href="admin.html">Novos Registros</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="registrosEnviadosNav" href="enviados.html">Enviados</a>
+                  </li>
+                </ul>
+
+              </div>
+
+              <div class="justify-content-end">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a href="" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-person-circle fs-5"></i>
+                      <span class="card-text ms-2" id="nomeUsuarioNav"></span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                      <li><span class="dropdown-item" onclick="logout()">Logout</span></li>
+                      <li><a id="trocarSenhaUsuario" class="dropdown-item" href="../../login/redefinirSenha.html">Trocar Senha</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><span class="dropdown-item disabled" id="idUsuarioNav"></span></li>
+                    </ul>
+
+                  </li>
+                </ul>
+              </div>
+          </div>
+      </nav>
+    </header>
+
+    <div class="container my-5">
+
+      <div class="row my-5 text-center">
+        <h3>Registros enviados para o banco de dados</h3>
+      </div>
+
+      <div class="row">
+        <div class="container justify-content-center">
+            
+          <div class="accordion" id="setoresAccordion"></div>        
+
+          <!-- ---------- MODAL DETALHES DA AFERIÇÃO ---------- -->
+          <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="TituloModalRegistro" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h3 class="modal-title fw-bold" id="TituloModalRegistro">Detalhes da Aferição</h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                  <div class="container-fluid">
+                    <div class="row row-cols-2 g-4 my-3">
+
+                      <div class="col-7">
+                        <div class="card" id="cardInfos">
+
+                          <div class="card-header">
+                            <h5>Informações</h5>
+                          </div>
+
+                          <div class="card-body">                                
+                            <div class="row">
+                              <div class="col">
+                                <label for="nome">Funcionário</label>
+                                <input type="text" class="form-control" name="nome_funcionario" disabled>
+                              </div>
+                              <div class="col">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="email" disabled>
+                              </div>
+                            </div>
+                  
+                            <div class="row my-4">
+                              <div class="col">
+                                <label for="obs">Observações</label>
+                                <textarea class="form-control" name="obs" disabled></textarea>
+                              </div>
+                            </div>
+                  
+                            <div class="row my-4">
+                              <div class="col">
+                                <label for="data_afericao">Data de Aferição</label>
+                                <input type="text" class="form-control" name="data_afericao" disabled>
+                              </div>
+                  
+                              <div class="col">
+                                <label for="data_envio">Data de Envio</label>
+                                <input type="text" class="form-control" name="data_envio" disabled>
+                              </div>
+                            </div>
+                  
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-5">
+                        <div class="card h-100" id="cardSFW">
+
+                          <div class="card-header">
+                            <h5>Softwares Instalados</h5>
+                          </div>
+
+                          <div class="card-body">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="card" id="cardHW">
+                          <div class="card-header">
+                            <h5>Dados Enviados</h5>
+                          </div>
+                          <div class="card-body">                      
+                            <div class="row">
+
+                              <div class="col-md-3">
+                                <label for="numero">Número</label>
+                                <input type="text" class="form-control" name="numero" disabled>
+                              </div>
+
+                              <div class="col-md-6">
+                                <label for="nome_maquina">Nome da Máquina</label>
+                                <input type="text" class="form-control" name="nome_maquina" disabled>
+                              </div>
+
+                              <div class="col">
+                                <label for="tipo">Tipo</label> 
+                                <input type="text" class="form-control text-center" name="tipo" disabled>
+                              </div>
+                            </div>
+                  
+                            <div class="row my-4">
+                              <div class="col col-md-7">
+                                <label for="cpu">Processador</label>
+                                <input type="text" class="form-control" name="processador" disabled>
+                              </div>            
+                              <div class="col text-center">
+                                <label for="ram">RAM</label>
+                                <input type="text" class="form-control" name="memoria_ram" disabled>
+                              </div>            
+                            </div>
+
+                            <div class="row my-">
+                              <div class="col">
+                                <label for="placa_mae">Placa Mãe</label>
+                                <input type="text" class="form-control" name="motherboard" disabled>
+                              </div>
+                            </div>
+                            
+                            <div class="row my-4">
+                              <div class="col">
+                                <label for="gpu">Placa de Vídeo</label>
+                                <input type="text" class="form-control" name="placa_video" disabled>
+                              </div>
+                            </div>
+                  
+                            <div class="row my-4">
+                              <div class="col">
+                                <label for="hd">Disco Rígido</label>   
+                                <input type="text" class="form-control overflow-auto" name="hd" disabled>
+                              </div>
+                            </div>
+                  
+                            <div class="row my-4">
+                              <div class="col">
+                                <label for="drivers">CD/DVD</label>
+                                <input type="text" class="form-control" name="drivers" disabled>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+    <script src="assets/js/getEnviados.js"></script>
+    <script src="assets/js/functions.js"></script>
+    <script src="../common_assets/js/functions.js"></script>
+
+
+
+
+  </body>
+</html>
+
+    
+
+
+
+
+

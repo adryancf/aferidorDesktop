@@ -1,0 +1,142 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="light" class="h-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
+
+  <title>Login - Aferidor Desktop</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+  <style>
+    .input-icon {
+      position: relative;
+    }
+
+    .icon-password {
+      display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 25px; /* Ajuste conforme necessário para a posição desejada */
+      pointer-events: none; /* Garante que o ícone não afete a interação do usuário com o input */
+    }
+
+    .icon-password i {
+      font-size: 1.1em;
+      z-index: 5 !important;
+
+    }
+
+  </style>
+</head>
+
+<body class="d-flex align-items-center py-4 bg-body-tertiary h-100">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/config.js"></script>
+
+
+  <!-- m-auto alinha ao centro -->
+  <main class="w-100 m-auto" style="max-width: 350px;">
+
+    <div class="card shadow-lg rounded-4 py-4">
+
+      <!------ ESTILO 1 ------>
+      <!-- <div class="row g-0">
+        <div class="col-7 rounded-start-4">
+          <img src="assets/img/2-novo.jpg" class="img-fluid rounded-start-4" id="img_login">
+        </div>
+
+        <div class="col my-auto">
+          <div class="card-body mx-3">
+            <form>              
+              <h4 class="fw-light fs-4 ms-1 mb-3 text-center">Admin AferidorDesktop</h5>
+              <p class="fs-6 ms-1 fw-regular mb-1">Insira seu login</p>
+              <img src="assets/logo.png"  class="d-block mx-auto" width="80px" height="80px">
+
+              <h4 class="fw-bold ms-1 my-4 text-center">Insira seu login</h4>
+
+              <div class="form-floating my-2">
+                <input type="usuario" class="form-control rounded-4" id="inputUsuario" placeholder=" " required>
+                <label for="floatingInput">Usuário</label>
+              </div>
+      
+              <div class="form-floating my-2">
+                <input type="password" class="form-control rounded-4" id="inputSenha" placeholder=" " required>
+                <label for="floatingInput">Senha</label>
+              </div>
+              
+
+              <a href="../../login/redefinirSenha.html" class="ms-1 mb-3" style="font-size: 0.8rem!important;">Esqueceu a senha?</a>
+              
+              
+              <div class="row justify-content-center mt-4">
+                <button class="btn btn-primary w-50 py-2 my-2 rounded-3">Conectar</button>
+              </div>
+
+
+            </form>  
+          </div>
+        </div>
+      </div> -->
+
+      <!------ ESTILO 2 ------>
+
+
+      <div class="card-body mx-4">
+        <form>
+          <img src="assets/img/logo.png" class="d-block mx-auto" width="80px" height="80px">
+                      
+            
+          <h4 class="fw-bold ms-1 my-4 text-center">Insira seu login</h4>
+  
+          <div class="form-floating my-2">
+            <input type="usuario" class="form-control rounded-4" id="inputUsuario" placeholder="teste" required>
+            <label for="inputUsuario">Usuário</label>
+          </div>
+  
+          <div class="form-floating my-2">
+            <input type="password" class="form-control rounded-4" id="inputSenha" placeholder="teste" required>
+            <label for="inputSenha">Senha</label>
+
+            <!-- <div class="icon-password">
+              <i class="bi bi-eye"></i>
+            </div> -->
+            
+          </div>
+          
+
+          <a href="../../login/redefinirSenha.html" id="linkRedefinir" class="ms-1 mb-3" style="font-size: 0.8rem!important;">Esqueceu a senha?</a>
+          
+          
+          <div class="row justify-content-center mt-4">
+            <button class="btn btn-primary w-50 py-1 my-2 rounded-3">Conectar</button>
+          </div>
+
+
+        </form>  
+      </div>
+          
+    </div>
+      
+  </main>
+
+  <script src="assets/js/envioCredenciais.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+</body>
+
+
+
+</html>
