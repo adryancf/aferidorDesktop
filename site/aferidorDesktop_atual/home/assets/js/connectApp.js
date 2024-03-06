@@ -59,96 +59,108 @@ document.getElementById('abrirApp').addEventListener('click', function() {
 
     // Define um temporizador para verificar se a tentativa de abrir foi bem-sucedida
     setTimeout(function() {
+      // Se a janela ainda estiver na página, significa que o protocolo não está registrado
+      if (document.hasFocus()) {
 
-        // Se a janela ainda estiver na página, significa que o protocolo não está registrado
-        if (document.hasFocus()) {
+        //Poupup de alerta (SweetAlert2) com botao de download do aplicativo
+        Swal.fire({
+          title: 'Aplicativo não encontrado!',
+          text: 'Clique no botão abaixo e baixe o nosso app.',
+          icon: 'warning',
+          confirmButtonText: '<i class="bi bi-download me-1"></i> Baixar',
+          confirmButtonColor: "#008000",
+        }).then((result) => {
+          if (result.isConfirmed) {
 
-          //Poupup de alerta (SweetAlert2) com botao de download do aplicativo
-          Swal.fire({
-            title: 'Aplicativo não encontrado!',
-            text: 'Clique no botão abaixo e baixe o nosso app.',
-            icon: 'warning',
-            confirmButtonText: '<i class="bi bi-download me-1"></i> Baixar',
-            confirmButtonColor: "#008000",
-          }).then((result) => {
-            if (result.isConfirmed) {
+            //Executar o download
+            var url = "../download/Instalador_AferidorDesktop.exe";
+            var link = $("<a>").attr('href', url).appendTo('body');
+            link[0].click();
 
-              //Executar o download
-              var url = "../download/Instalador_AferidorDesktop.exe";
-              var link = $("<a>").attr('href', url).appendTo('body');
-              link[0].click();
+            link.remove();
 
-              link.remove();
+            Swal.fire({
+              title: "Seu aplicativo já está sendo baixado!",
+              text:"Após finalizar o download, abra o instalador e faça a instalação. Em caso de dúvidas, clique no botão abaixo.",
+              showDenyButton: true,
+              confirmButtonText: "Saiba mais",
+              denyButtonText: `<i class="bi bi-arrow-clockwise"></i>`,
+              denyButtonColor: "gray",
+              confirmButtonColor: "navy",
+              icon: "success",
+              footer: 'Caso o instalador não abra, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
+              customClass: {
+                popup: 'custom-swal-width',
+              },
+            }).then((result)=> {
+              if(result.isConfirmed){
+                //Abrir modal de ajuda
+                $("#modalAjuda").modal("show");
+              }
+              else{
+                //Recarregar a página
+                location.reload();
+              }
+            });
+            
+          }
+        });
 
-              Swal.fire({
-                title: "Seu aplicativo já está sendo baixado!",
-                text:"Após finalizar o download, abra o instalador e faça a instalação. Em caso de dúvidas, clique no botão abaixo.",
-                showDenyButton: true,
-                confirmButtonText: "Saiba mais",
-                denyButtonText: `<i class="bi bi-arrow-clockwise"></i>`,
-                denyButtonColor: "gray",
-                confirmButtonColor: "navy",
-                icon: "success",
-                footer: 'Caso o download não tenha sido iniciado, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
-                customClass: {
-                  popup: 'custom-swal-width',
-                },
-              }).then((result)=> {
-                if(result.isConfirmed){
-                  //Abrir modal de ajuda
-                  $("#modalAjuda").modal("show");
-                }
-                else{
-                  //Recarregar a página
-                  location.reload();
-                }
-              });
-              
-            }
-          });
+      }
+      else
+      {   
+          loading = true;
 
-        }
-        else
-        {   
-            loading = true;
+          // O site tenta se conectar com o aplicativo por 30s
+          intervalId = setInterval(function() {
+              showConnecting();
 
-            // O site tenta se conectar com o aplicativo por 30s
-            intervalId = setInterval(function() {
-                showConnecting();
+              //Altero o timeout da notificação para nao ficar exibindo em loop
+              if (temporizador >= tempo_max_conexao) {
+                  console.log("Limite de tempo atingido. Não foi possível conectar.");
+                  
+                  loading = false;
+                  clearInterval(intervalId);
+                  temporizador = 0;
 
-                //Altero o timeout da notificação para nao ficar exibindo em loop
-                if (temporizador >= tempo_max_conexao) {
-                    console.log("Limite de tempo atingido. Não foi possível conectar.");
-                    
-                    loading = false;
-                    clearInterval(intervalId);
-                    temporizador = 0;
+                  Swal.fire({
+                      title: 'Não foi possível conectar!',
+                      text: 'Verifique se o aplicativo está instalado e aberto. Caso sim, reinicie o aplicativo e tente novamente.',
+                      icon: 'error',
+                      confirmButtonText: 'Tentar novamente',
+                  }).then((result) => {
+                      if (result.isConfirmed) {
+                          iniciarConexaoWebSocket();
+                      }
+                      else
+                      {
+                          showOffline();
+                      }
 
-                    Swal.fire({
-                        title: 'Não foi possível conectar!',
-                        text: 'Verifique se o aplicativo está instalado e aberto. Caso sim, reinicie o aplicativo e tente novamente.',
-                        icon: 'error',
-                        confirmButtonText: 'Tentar novamente',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            iniciarConexaoWebSocket();
-                        }
-                        else
-                        {
-                            showOffline();
-                        }
+                  });
+              } else {
+                  iniciarConexaoWebSocket();
+                  temporizador += intervalo_conexao;
+                  console.log(temporizador, " segundos");
+              }
+          }, intervalo_conexao);
 
-                    });
-                } else {
-                    iniciarConexaoWebSocket();
-                    temporizador += intervalo_conexao;
-                    console.log(temporizador, " segundos");
-                }
-            }, intervalo_conexao);
-
-            console.log("terminei");
-        }
+          console.log("terminei");
+      }
     }, 100);
+
+    //Talvez exibir um modal padrão de ajuda para todos os usuários
+
+
+    //Alterar os botões de acordo com o status da conexão
+    $("#abrirApp").hide();
+    $("#iniciarScanApp").show();
+    $("#conectarApp").show();
+
+});
+
+$("#iniciarScanApp").click(function() {
+  enviarMensagem("scan_system");
 });
 
 function iniciarConexaoWebSocket() {
@@ -237,6 +249,6 @@ function enviarMensagem(mensagem) {
     }
 }
 
-document.getElementById('conectarApp').addEventListener('click', function() {
-    setTimeout(iniciarConexaoWebSocket, 500);
-});
+// document.getElementById('conectarApp').addEventListener('click', function() {
+//     setTimeout(iniciarConexaoWebSocket, 500);
+// });

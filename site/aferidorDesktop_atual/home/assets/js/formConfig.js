@@ -93,17 +93,19 @@ $("#formularioEnvio").submit(function(event) {
         dataType: 'json',
         data: JSON.stringify(jsonEnvio),
         success: function(response) {
-            console.log("Requisição bem-sucedida:", response);
-            
-            Swal.fire({
-                title: 'Os dados foram enviados!',
-                text: 'Fique atento ao seu email. Em casos de dúvidas em relação aos dados, entraremos em contato!',
-                icon: 'success',
-                confirmButtonText: 'Continuar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                }
-            });
+          console.log("Requisição bem-sucedida:", response);
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'Obrigado pela sua colaboração!',
+            text: 'Para melhorar o nosso sistema, pedimos que avalie a sua experiência!',
+            confirmButtonText: 'Avaliar',
+            footer: 'Se o botão não funcionar, clique <a href="https://forms.gle/WBv5YuokVoCiceKL6" target="_blank">aqui</a>'
+          }).then((result)=>{
+            if(result.isConfirmed){
+              window.open('https://forms.gle/WBv5YuokVoCiceKL6', '_blank');
+            }
+          });
         },
         error: function(error) {
             console.error("Erro na requisição:", error);

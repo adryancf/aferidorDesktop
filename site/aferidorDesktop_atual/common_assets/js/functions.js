@@ -6,7 +6,6 @@ function formatarData(data, icone_data = '<i class="bi bi-calendar me-2"></i>', 
   const horas = String(data_teste.getHours()).padStart(2, '0');
   const minutos = String(data_teste.getMinutes()).padStart(2, '0');
   const segundos = String(data_teste.getSeconds()).padStart(2, '0');
-  console.log(icone_data, icone_hora);
   if(icone_data && icone_hora){
     return `<div class="d-flex justify-content-center">
       <span class="me-3">${icone_data}${dia}/${mes}/${ano}</span>

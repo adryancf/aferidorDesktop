@@ -66,6 +66,12 @@ body {
   background-color: rgba(0, 0, 128, 0.822);
 }
 
+.boxAcoes button:disabled {
+  background-color: #00008082; /* Cor de fundo para indicar desativado */
+  cursor: not-allowed; /* Cursor indicando que o botão está desativado */
+  color: #fff; /* Cor do texto para indicar desativado */
+}
+
 #btn_form_envio, .btnResultado{
   padding: 8px 35px;
   font-size: 16px;
@@ -153,4 +159,8 @@ body {
 
 .min-height{
   min-height: 220px;
+}
+
+.btn_hidden{
+  display: none;
 }

@@ -61,7 +61,9 @@
 
           <div class="d-flex justify-content-center">
             <button class="btn_aferidor" id="abrirApp" type="button" title="Abre o App e clique em SCAN">Comece já!</button>
-            <button class="btn_aferidor" id="conectar" type="button" style="display:none;">Conectar</button>
+            <button class="btn_aferidor btn_hidden" id="iniciarScanApp" type="button">Scan</button>
+            <button class="btn_aferidor btn_hidden" id="conectarApp" type="button">Conectar</button>
+            
           </div>
       </div>
       
@@ -83,7 +85,9 @@
         <li><button class="dropdown-item" data-bs-target="#modalAjuda" data-bs-toggle="modal"><i class="bi bi-book me-2"></i>Como usar?</button></li>
         <li><a class="dropdown-item" href="../download/Instaladaor_AferidorDesktop.exe"><i class="bi bi-download me-2"></i>Baixe o App</a></li>
         <li><button class="dropdown-item" id="conectarApp"><i class="bi bi-wifi me-2"></i>Conectar</button></li>
-        <li><a class="dropdown-item" href="sugestoes.html"><i class="bi bi-lightbulb me-2"></i>Sugestões</a></li>
+        <li><a class="dropdown-item" href="https://forms.gle/WBv5YuokVoCiceKL6"><i class="bi bi-lightbulb me-2"></i>Sugestões</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="../admin/admin.html"><i class="bi bi-gear me-2"></i>Admin</a></li>
       </ul>
 
     </div>
@@ -114,7 +118,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title fw-bold" id="tituloFormulario">Formulário de Envio</h3>
+            <h3 class="modal-title fw-bold">Formulário de Envio</h3>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
   
@@ -196,11 +200,11 @@
       <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title fw-bold" id="tituloFormulario">Guia de Uso - AferidorDesktop</h3>
+            <h3 class="modal-title fw-bold">Guia de Uso - AferidorDesktop</h3>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
   
-          <div class="modal-body mx-2" id="bodyFormularioEnvio">
+          <div class="modal-body mx-2">
             <div class="row">
               <!-- Passo 1 -->
               <div class="col mb-4">
@@ -312,6 +316,7 @@
         </div>
       </div>
     </div>
+
 
   </div>
 

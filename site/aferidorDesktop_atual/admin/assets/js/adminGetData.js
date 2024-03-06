@@ -26,22 +26,6 @@ function inserirNomeUsuarioNav()
 
 function inicializarAutocompleteSoftware()
 {
-  
-
-  // $("#searchSoftware").autocomplete({
-  //   appendTo: "#modalSearchSoftwares",
-  //   source: arrayCompativel,
-  //   minLength: 0,
-  //   select: function (event, ui) {
-  //     // Set selection
-  //     $('#searchSoftware').val(ui.item.label); // display the selected text
-  //     $('#fk_software').val(ui.item.value); // save selected id to input
-  //     return false;
-  //   },
-  //   focus: function(event, ui){
-  //       return false;
-  //   },
-  // });
 
   //Inicializar AutoComplete e Select
   var arrayCompativel = softwaresCadastrados.map(function(item) {
@@ -260,26 +244,22 @@ $(document).ready(function () {
   $("#novosRegistrosNav").find("a").attr("aria-current", "page");
 
   atualizaDados();
-  InicializarFeatures();
 
   let notificacao = false;
-
   function inserirDadosBtnComparar(index, type){
 
     $("#btnComparar").data("href", index);
     $("#btnComparar").data("type", type);
   }
 
-  
-
   //--------------------- EVENTOS ---------------------
 
   //Evento para deixar o login no sessionStorage e assim exibir na pagina de redefinição de senha
   $("#trocarSenhaUsuario").on("click", function() {
-    console.log("Clicou");
     sessionStorage.setItem("usuario", obterLogin());
   });
 
+  //Evento para abrir o modal de comparação diretamente da linha do registro
   $(document).on('click', '#btnAcao', function() {
     let index = $(this).closest("tr").data('href');
     let type = $(this).closest("tr").data('type');
@@ -295,6 +275,86 @@ $(document).ready(function () {
 
   });
 
+  //Evento para excluir um registro da tabela diretamente da linha
+  $(document).on('click', '#deletarRegistro', function() {
+    //Pegar o index do registro e depois o id
+    let row = $(this).closest("tr");
+
+    let accordion = row.closest(".accordion-body");
+    let numeroMaquinas = accordion.find(".maquinasAferidas");
+
+    let i = row.data('href');
+    let id = registros[i].id;
+    let id_setor = registros[i].fk_setor;
+
+
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não poderá reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, excluir!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Excluir o registro
+        $.ajax({
+          url: "assets/php/removerRegistro.php",
+          type: "POST",
+          data: {
+            id: id
+          },
+          success: function(data) {
+            //Atualiza os registros localmente
+            registros.splice(i, 1);
+
+            //Se tiver so um registro no accordion prefiro atualizar a página do que excluir todo accordion-item
+            if(numeroMaquinas.text() == "1"){
+              if(registros.length == 0){
+                location.reload();
+                return;
+              }
+
+              accordion.closest(".accordion-item").remove();
+              
+            }
+            else{
+              row.remove();
+
+              //Atualização do card de resumo dos registros
+              let badge = row.data('type') == "update" ? $("#badgeAtualizar" + id_setor) : $("#badgeCadastrar" + id_setor);
+              badge.text((parseInt(badge.text()) - 1));
+
+              numeroMaquinas.text((parseInt(numeroMaquinas.text()) - 1));
+            }
+            
+            toastr.success('Registro excluído com sucesso!', 'Sucesso', {
+              positionClass: "toast-top-right",
+              timeOut: 3000,
+              preventDuplicates: false,
+              progressBar: false
+            });
+
+          },
+          error: function(data) {
+            toastr.error(data.responseText, 'Erro', {
+              positionClass: "toast-top-right",
+              preventDuplicates: false,
+              timeOut: 3000,
+              progressBar: false
+            });
+          }
+        });
+      }
+    });
+
+    
+    
+
+  });
+
+  //Evento para abrir os detalhes do registro
   $(document).on('click', '.table tbody td.abrirModalDetalhes', function(event) {
 
       // Atualizar o modal
@@ -381,6 +441,7 @@ $(document).ready(function () {
 
   }  
 
+  //Evento para abrir o modal de cadastro
   $('#btnModalCadastro').on('click', function() {
     var dados = registros[$("#btnComparar").data("href")];
           
@@ -450,6 +511,7 @@ $(document).ready(function () {
     }          
   });
 
+  //Evento para abrir o modal de comparação
   $('#btnComparar').on('click', function() {
       
       $("#containerComparacaoSW").hide();
@@ -545,7 +607,7 @@ $(document).ready(function () {
 
             }
             else{
-              console.log("Softwares já salvos...");
+              //console.log("Softwares já salvos...");
               lista_softwares_filtrados = dados.softwaresResumido;
             }
             
@@ -604,8 +666,9 @@ $(document).ready(function () {
 
   });
 
+  //No modal de comparação, alternar entre Hardware e Software
   $(document).on('click', '#alternarSW', function() {
-    console.log("CLICANDO NO BOTAO ALTERNAR SW")
+    //console.log("CLICANDO NO BOTAO ALTERNAR SW")
     $("#containerComparacaoHW").hide();
     $("#containerComparacaoSW").show();
 
@@ -630,19 +693,19 @@ $(document).ready(function () {
   });
 
   $(document).on('click', '#alternarHW', function() {
-      console.log("CLICANDO NO BOTAO ALTERNAR HW")
+    //console.log("CLICANDO NO BOTAO ALTERNAR HW")
 
-      $("#containerComparacaoHW").show();
-      $("#containerComparacaoSW").hide();
-      
+    $("#containerComparacaoHW").show();
+    $("#containerComparacaoSW").hide();
+    
 
-      //Alterar Botao
-      $("#alternarHW span").html("Ir para Software");
-      $("#alternarHW i").toggleClass("bi-microsoft bi-gpu-card");
+    //Alterar Botao
+    $("#alternarHW span").html("Ir para Software");
+    $("#alternarHW i").toggleClass("bi-microsoft bi-gpu-card");
 
-      $("#alternarHW").attr("id", "alternarSW");
+    $("#alternarHW").attr("id", "alternarSW");
 
-      $("#tituloModalComparacao").html("Comparação - Hardware");
+    $("#tituloModalComparacao").html("Comparação - Hardware");
 
   });
 
@@ -651,7 +714,7 @@ $(document).ready(function () {
   //VERIFICA SE O MODAL DE COMPARACAO ESTÁ ABERTO
   function verificarModalCadastroAberto(){
     //return $("#modalCadastro").hasClass("show");
-    console.log($("#btnComparar").data('type') == 'register');
+    //console.log($("#btnComparar").data('type') == 'register');
     return ($("#btnComparar").data('type') == 'register');
   }
 
@@ -973,10 +1036,22 @@ $(document).ready(function () {
       data: {softwares: JSON.stringify(lista_softwares_filtrados),
             id: registro.id},              
       success: function(response) {
-        console.log("atualizarDados.php | Requisição bem-sucedida:", response);
+        //console.log("atualizarDados.php | Requisição bem-sucedida:", response);
+        toastr.success('Software inserido com sucesso!', 'Sucesso',{
+          positionClass: "toast-top-right",
+          progressBar: false,
+          timeOut: "2000",
+          preventDuplicates: false
+        });
       },
       error: function(error) {
         console.error("atualizarDados.php | Erro na requisição:", error);
+        toastr.error('Erro na inserção do novo software', 'Erro', {
+          positionClass: "toast-top-right",
+          progressBar: false,
+          timeOut: "2000",
+          preventDuplicates: false
+        });
       },
     });
 
@@ -1031,11 +1106,23 @@ $(document).ready(function () {
       data: {softwares: JSON.stringify(registro.softwaresResumido),
             id: registro.id},              
       success: function(response) {
-        console.log("atualizarDados.php | Requisição bem-sucedida:", response);
+        //console.log("atualizarDados.php | Requisição bem-sucedida:", response);
+        toastr.success('Software removido com sucesso!', 'Sucesso', {
+          positionClass: "toast-top-right",
+          progressBar: false,
+          timeOut: "2000",
+          preventDuplicates: false
+        });
       },
       error: function(error) {
         console.error("atualizarDados.php | Erro na requisição:", error);
-      },
+        toastr.error('Erro na remoção do software!', 'Erro', {
+          positionClass: "toast-top-right",
+          progressBar: false,
+          timeOut: "2000",
+          preventDuplicates: false
+        });
+      }
     });
 
     //Remover o elemento da lista
@@ -1280,11 +1367,9 @@ function atualizaDados() {
         dataType: 'json',
         success: function(data) {
             registros = data;
-            //console.log(registros);
-
             //Separar por setores
-            registros.forEach(function(valor, index) {
-                
+            if(registros.length > 0){
+              registros.forEach(function(valor, index) {                
                 //Verificar se o setor já existe no accordion
                 id_setor = valor.fk_setor;
 
@@ -1296,15 +1381,18 @@ function atualizaDados() {
                     
                   $("#tbody" + id_setor).append(dadosResumido(valor, index, atualizarMaquina));
 
-                  var cardQuantidadeRegistros = "#card" + id_setor + " #maquinasAferidas";
+                  var cardQuantidadeRegistros = "#card" + id_setor + " .maquinasAferidas";
                   var numeroMaquinas = $("#tbody" + id_setor + " tr").length;
 
                   $(cardQuantidadeRegistros).html(numeroMaquinas);
 
+                  var badgeAtualizar = $("#badgeAtualizar" + id_setor);
+                  var badgeCadastrar = $("#badgeCadastrar" + id_setor);
+
                   if(atualizarMaquina)
-                    $("#badgeAtualizar" + id_setor).html(parseInt(badgeAtualizar.html()) + 1);
+                    badgeAtualizar.html(parseInt(badgeAtualizar.html()) + 1);
                   else
-                    $("#badgeCadastrar" + id_setor).html(parseInt(badgeCadastrar.html()) + 1);               
+                    badgeCadastrar.html(parseInt(badgeCadastrar.html()) + 1);         
                 }
                 else{                                   
                   //Criar um item no accordion
@@ -1327,7 +1415,7 @@ function atualizaDados() {
                                 <div class="row align-items-center">
                                   <div class="col-3">
                                     <h4>Máquinas Aferidas</h4>
-                                    <p id="maquinasAferidas" class="display-1">1</p>
+                                    <p class="display-1 maquinasAferidas">1</p>
                                   </div>
           
                                   <div class="col">
@@ -1379,16 +1467,28 @@ function atualizaDados() {
 
                   atualizarMaquina ? $("#badgeAtualizar" + id_setor).html(1) : $("#badgeCadastrar" + id_setor).html(1);
                 }   
-                
-            });
+              });
+
+              InicializarFeatures();
+              obterSoftwares();
+            }
+            else
+            {
+              var row = $("#containerPrincipal").closest(".row");
+              $("#containerPrincipal").remove();
+
+              row.append(`<div class="alert alert-danger my-2 fw-bold text-center w-75" role="alert">Não há novos registros</div>`);
+              row.addClass("justify-content-center");
+            }
         },
         error: function(xhr, status, error) {
             console.error('Erro na atualização dos dados:', status, error);
         }
     });
 
-    //Obter softwares cadastrados
-    $.ajax({
+    function obterSoftwares(){
+      //Obter softwares cadastrados
+      $.ajax({
         type: "GET",
         url: "assets/php/searchSoftwares.php",
         dataType: "json",
@@ -1401,5 +1501,9 @@ function atualizaDados() {
         error: function(error) {
             console.error("Erro no carregamento dos softwares:", error);
         }
-    });
+      });
+    }
+
+    
+
 }
