@@ -11,7 +11,7 @@ from datetime import datetime
 from servidorWebSocket import ServidorWebSocket
 
 
-def scan_aferidor(barra_progresso, websocket_server, loop = None):
+def scan_system(barra_progresso, websocket_server, loop = None):
     try:
         # Construa o caminho para a pasta de documentos e cria a pasta do programa
         doc = os.path.join(os.path.expanduser("~"), "Documents")

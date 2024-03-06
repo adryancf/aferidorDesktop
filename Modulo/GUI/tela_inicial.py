@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Principal.ui'
+## Form generated from reading UI file 'Principal2.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -17,7 +17,7 @@ class Ui_Principal(object):
     def setupUi(self, Principal):
         if not Principal.objectName():
             Principal.setObjectName(u"Principal")
-        Principal.resize(610, 235)
+        Principal.resize(800, 190)
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -56,7 +56,7 @@ class Ui_Principal(object):
 
         self.verticalLayout_2.addWidget(self.Titulo)
 
-        self.verticalSpacer = QSpacerItem(20, 15, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer = QSpacerItem(20, 5, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
@@ -66,35 +66,13 @@ class Ui_Principal(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.btn_scanner = QPushButton(self.frame)
-        self.btn_scanner.setObjectName(u"btn_scanner")
-        self.btn_scanner.setEnabled(True)
-        sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-        sizePolicy2.setHorizontalStretch(150)
-        sizePolicy2.setVerticalStretch(50)
-        sizePolicy2.setHeightForWidth(self.btn_scanner.sizePolicy().hasHeightForWidth())
-        self.btn_scanner.setSizePolicy(sizePolicy2)
-        self.btn_scanner.setMinimumSize(QSize(230, 60))
+        self.textCentral = QLabel(self.frame)
+        self.textCentral.setObjectName(u"textCentral")
         font1 = QFont()
-        font1.setFamily(u"Aharoni")
-        font1.setPointSize(15)
-        font1.setBold(True)
-        font1.setWeight(75)
-        self.btn_scanner.setFont(font1)
-        self.btn_scanner.setStyleSheet(u"QPushButton{\n"
-"	background-color: rgb(28, 4, 149);\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius:5px;\n"
-"\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"	background-color: rgb(6, 64, 255);\n"
-"\n"
-"\n"
-"}")
+        font1.setPointSize(16)
+        self.textCentral.setFont(font1)
 
-        self.horizontalLayout.addWidget(self.btn_scanner)
+        self.horizontalLayout.addWidget(self.textCentral)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -159,7 +137,7 @@ class Ui_Principal(object):
 
     def retranslateUi(self, Principal):
         Principal.setWindowTitle(QCoreApplication.translate("Principal", u"Form", None))
-        self.Titulo.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p align=\"center\"><span style=\" font-size:32pt; font-weight:600;\">AFERIDOR DE SOFTWARE</span></p></body></html>", None))
-        self.btn_scanner.setText(QCoreApplication.translate("Principal", u"Scan", None))
+        self.Titulo.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p align=\"center\"><span style=\" font-size:52pt; font-weight:600;\">AFERIDOR DESKTOP</span></p></body></html>", None))
+        self.textCentral.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p><span style=\" font-size:18pt;\">V\u00e1 at\u00e9 o site e inicie o processo de análise do sistema</span></p></body></html>", None))
     # retranslateUi
 

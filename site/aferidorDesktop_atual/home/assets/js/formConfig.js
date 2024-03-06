@@ -99,7 +99,7 @@ $("#formularioEnvio").submit(function(event) {
                 title: 'Os dados foram enviados!',
                 text: 'Fique atento ao seu email. Em casos de dúvidas em relação aos dados, entraremos em contato!',
                 icon: 'success',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Continuar',
             }).then((result) => {
                 if (result.isConfirmed) {
                 }

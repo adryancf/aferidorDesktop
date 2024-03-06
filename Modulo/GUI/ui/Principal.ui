@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>248</height>
+    <width>800</width>
+    <height>190</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -64,7 +64,7 @@
            </font>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:32pt; font-weight:600;&quot;&gt;AFERIDOR DE SOFTWARE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:42pt; font-weight:600;&quot;&gt;AFERIDOR DE SOFTWARE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -85,7 +85,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>15</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>
@@ -106,46 +106,14 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="btn_scanner">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-              <horstretch>150</horstretch>
-              <verstretch>50</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>230</width>
-              <height>60</height>
-             </size>
-            </property>
+           <widget class="QLabel" name="textCentral">
             <property name="font">
              <font>
-              <family>Aharoni</family>
-              <pointsize>15</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
+              <pointsize>16</pointsize>
              </font>
             </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton{
-	background-color: rgb(28, 4, 149);
-	color: rgb(255, 255, 255);
-	border-radius:5px;
-
-}
-
-QPushButton:hover{
-	background-color: rgb(6, 64, 255);
-
-
-}</string>
-            </property>
             <property name="text">
-             <string>Scan</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size18pt; font-weight:600;&quot;&gt;Vá até o site e inicie o processo de scan do sistema&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
