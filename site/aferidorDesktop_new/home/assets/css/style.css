@@ -30,15 +30,15 @@ body {
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
-#connected {
+.connected {
   color: green;
 }
 
-#connecting {
+.connecting {
   color: orange;
 }
 
-#offline {
+.offline {
   color: red;
 }
 
@@ -154,7 +154,21 @@ body {
 }
 
 .custom-swal-width{
-  width: 800px !important;
+  width: 1000px !important;
+}
+
+.swal-falhaConexao{
+  width: 750px !important;
+}
+
+.conexaoManual{
+  margin-right: 10rem!important;
+  margin-left: 10rem!important;
+  margin-bottom: 3rem!important;
+}
+
+.conexaoManualStatus{
+  scale: 1.2;
 }
 
 .min-height{

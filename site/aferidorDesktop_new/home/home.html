@@ -32,18 +32,18 @@
   <div class="container h-100">
     <!-- BADGE (CONECTADO) -->
     <div class="row justify-content-center align-items-start mt-4" style="height: 8vh; margin-top:4vh!important;">
-      <div id="status-container" class="status-container text-center" style="width: 15%;">
-        <div id="connected" class="status">
+      <div class="status-container text-center" style="width: 15%;">
+        <div class="status connected">
           <i class="bi bi-wifi me-1"></i>
           <span>Conectado</span>
         </div>
         
-        <div id="connecting" class="status">
+        <div class="status connecting">
           <i class="fa-solid fa-spinner fa-spin-pulse me-1"></i> 
           <span>Conectando</span>
         </div>
     
-        <div id="offline" class="status">
+        <div class="status offline">
           <i class="bi bi-cloud-slash me-1"></i>
           <span>Desconectado</span>
         </div>
@@ -60,22 +60,28 @@
           </div>
 
           <div class="d-flex justify-content-center">
-            <button class="btn_aferidor" id="abrirApp" type="button" title="Abre o App e clique em SCAN">Comece já!</button>
-            <button class="btn_aferidor btn_hidden" id="iniciarScanApp" type="button">Scan</button>
+            <button class="btn_aferidor" id="abrirApp" type="button" title="Abre o aplicativo no seu computador">Comece já!</button>
+            
+            <button class="btn_aferidor btn_hidden" id="scanApp" type="button">Scan</button>
             <button class="btn_aferidor btn_hidden" id="conectarApp" type="button">Conectar</button>
+
             
           </div>
       </div>
+
+      <!-- <button type="button" class="btnResultado" data-bs-toggle="modal" data-bs-target="#modalInicio">Enviar</button> -->
+
       
     </div>
 
+    <!-- AREA DE RESULTADOS -->
     <div class="row justify-content-center align-items-end" style="height: 10vh;">
       <button class="btn-visualizar-resultado shadow-sm" data-bs-target="#modalResultado" data-bs-toggle="modal">
         Visualize o resultado aqui!
-        <!-- <span class="ms-2 badge text-bg-success">New</span> -->
       </button>
     </div>
 
+    <!-- ICONE DE AJUDA -->
     <div class="dropdown">
       <button class="floating-help-button" data-bs-toggle="dropdown">
         <i class="bi bi-question-lg"></i>
@@ -317,6 +323,70 @@
       </div>
     </div>
 
+    <!-- MODAL INICIO CONEXAO -->
+    <div class="modal fade" id=modalInicio tabindex="-1" role="dialog" aria-labelledby="tituloModalInicio" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <!-- <h3 class="modal-title fw-bold" id="tituloModalInicio"></h3> -->
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <div class="modal-body">
+            <div class="text-center">
+              <h1 class="fw-bold" id="tituloModalInicio">Abrindo o programa no seu computador...</h1>
+
+              <!-- adcionar uma imagem -->
+              <!-- <img src="assets/img/img_clique.png" alt="Clique neste botão para abrir" class="img-fluid mt-2" style="scale: 80%"> -->
+
+              <h5 class="mt-5 mb-4" id="instrucaoModalInicio">Clique em "Abrir" e aguarde enquanto o programa inicia e estabelecemos a conexão com ele.</h5>
+
+              <div class="row justify-content-center mt-4 mb-5">
+                <div class="status-container text-center" style="width: 35%;">
+                  <div class="status connected">
+                    <i class="bi bi-wifi me-1"></i>
+                    <span>Conectado</span>
+                  </div>
+                  
+                  <div class="status connecting fw-semibold">
+                    <i class="fa-solid fa-spinner fa-spin-pulse me-2"></i> 
+                    <span>Conectando ao aplicativo</span>
+                  </div>
+              
+                  <div class="status offline">
+                    <i class="bi bi-cloud-slash me-1"></i>
+                    <span>Desconectado</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="justify-content-center d-flex my-4">
+                <div id="aviso_conexao" class="alert alert-warning mb-0" role="alert" style="width: 85%;">
+                  Se <strong>não aparecer a mensagem</strong> solicitando a abertura ou o programa <strong>não iniciar automaticamente</strong> , por favor, clique no botão "Download" para baixar o programa.
+                </div>
+
+                <div id="sucesso_conexao" class="alert alert-success mb-0" role="alert" style="width: 75%; display: none;">
+                  <h5><b>Sucesso!</b> O programa foi iniciado e estamos conectados com ele.</h5>
+                  <p class="mb-0">Clique em continuar para dar continuidade ao processo</p>
+                </div>
+
+                <div id="aviso_download" class="alert alert-info mb-0" role="alert" style="width: 85%; display: none;">
+                  Se você <strong>não tem o programa</strong>, por favor, clique no botão "Download" abaixo para baixar e instalar.
+                </div>
+              </div>
+
+            </div>
+          </div>
+          
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-primary" id="continuarModalAbertura" data-bs-dismiss="modal" arial-label="Close">Continuar</button>
+            <button type="button" class="btn btn-secondary" id="btnDonwload" data-bs-dismiss="modal" aria-modal="Close"><i class="bi bi-download me-2"></i>Download</button>
+            <button type="button" class="btn btn-outline-success" id="btnConectarModal"><i class="bi bi-broadcast-pin me-2"></i>Conectar</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
