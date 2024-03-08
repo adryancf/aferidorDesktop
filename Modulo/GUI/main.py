@@ -1,5 +1,7 @@
-from PySide2.QtWidgets import QApplication, QWidget, QMessageBox
+from PySide2.QtWidgets import QApplication, QWidget, QMessageBox, QProgressDialog
 from PySide2.QtGui import QFont, QIcon
+from PySide2.QtCore import QTimer
+
 from tela_inicial import Ui_Principal
 import sys
 import threading
@@ -19,7 +21,7 @@ class Main(QWidget, Ui_Principal):
     self.setupUi(self)
     self.setWindowTitle("Aferidor Desktop")
     self.setFixedSize(800,190)
-    self.setWindowIcon(QIcon('assets/logo.ico'))
+    self.setWindowIcon(QIcon('logo.ico'))
     self.barra_progresso.setVisible(False)
 
     # Iniciar o servidor WebSocket em uma nova thread
@@ -46,6 +48,10 @@ class Main(QWidget, Ui_Principal):
     finally:
       self.loop_websocket.close()
 
+  def encerrar_app_cliente(self):
+    print("Encerrando programa por meio de uma mensagem do cliente...")
+    self.close()
+
   def closeEvent(self, event):
     # Encerrar o servidor WebSocket quando a janela fechar
     if(self.loop_websocket.is_running()):
@@ -53,15 +59,32 @@ class Main(QWidget, Ui_Principal):
     else:
       print("Servidor WebSocket já encerrado!")
     
+    print("Encerrando programa...")
     event.accept()
 
-if __name__ == "__main__":
+def exibir_mensagem_erro():
   # QMessageBox.critical(None, "Aferidor Desktop", "Já existe uma instância do Aferidor Desktop em execução.")
-  
-  # Garantir que apenas uma instância do programa seja executada
-  me = singleton.SingleInstance()
+  msg_box = QMessageBox()
+  msg_box.setWindowTitle("Aferidor Desktop")
+  msg_box.setText("O programa já está aberto no seu computador.")
+  msg_box.setIcon(QMessageBox.Critical)
+  msg_box.setWindowIcon(QIcon('assets/logo.ico'))
+  QTimer.singleShot(2000, msg_box.accept)
+  msg_box.exec_()
 
+
+if __name__ == "__main__":
+  
   app = QApplication(sys.argv)
+  # Garantir que apenas uma instância do programa seja executada
+  try:
+    me = singleton.SingleInstance()
+  except singleton.SingleInstanceException:
+    print(f"Não pode ser aberto duas instâncias do aferidorDesktop.")
+    exibir_mensagem_erro()
+    sys.exit(1)
+
+  
   window = Main()
   window.show()
   sys.exit(app.exec_())

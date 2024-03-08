@@ -21,6 +21,7 @@ class ServidorWebSocket:
         #A execução fica parada nesta linha até receber uma mensagem do cliente
         msg = await websocket.recv()
         print(f"Recebido do cliente {endereco_cliente}: {msg}")
+
         if msg == "scan_system":
 
           #Atualiza a interface
@@ -30,15 +31,16 @@ class ServidorWebSocket:
 
           #Analise
           result = modulo.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
-
           #self.main.resultado(result)
 
           #Envia a mensagem de resultado para o usuario
           self.main.barra_progresso.setVisible(False)
           self.main.textCentral.setText("Análise concluída! Verifique o resultado no seu navegador.")
+        
+        elif msg == "close_app":
+          self.main.encerrar_app_cliente()
 
 
-              
     except websockets.exceptions.ConnectionClosedError as e:
       print(f"Conexão WebSocket fechada pelo cliente: {e}")
     except Exception as e:
@@ -64,7 +66,11 @@ class ServidorWebSocket:
       #Encerra todas as conexões ativas
       for websocket in set(self.servidor.websockets):
         print(f"Encerrando conexão com cliente {websocket.remote_address}")
-        await websocket.close()
+        try:
+          await websocket.close()
+          print(f"Conexão encerrada com sucesso para {websocket.remote_address}")
+        except Exception as e:
+          print(f"Erro ao encerrar conexão com {websocket.remote_address}: {e}")
         
       #Encerra o servidor
       self.servidor.close()
