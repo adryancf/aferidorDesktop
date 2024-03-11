@@ -1,15 +1,14 @@
 import os
 import platform
 import subprocess
-import math
+from math import ceil
 import asyncio 
 import json
-import time;
-
 
 from datetime import datetime
 from servidorWebSocket import ServidorWebSocket
 
+data_hr_atual = str(datetime.now().replace(microsecond=0))
 
 def scan_system(barra_progresso, websocket_server, loop = None):
     try:
@@ -19,10 +18,14 @@ def scan_system(barra_progresso, websocket_server, loop = None):
 
         # Crie a pasta se ela não existir
         if not os.path.exists(path):
-            os.makedirs(path)
+          os.makedirs(path)
 
-        txt_path = os.path.join(path, "LOG_AferidorDesktop.txt")
-        output_file = txt_path
+        result_log_path = os.path.join(path, "RESULT_AferidorDesktop.txt")
+        error_log_path = os.path.join(path, "ERROR_AferidorDesktop.txt")
+
+        # Limpar o arquivo de saída (caso já exista)
+        if os.path.exists(result_log_path):
+          os.remove(result_log_path)
 
         '''
         Links Uteis
@@ -93,13 +96,9 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         }
 
         # Função para escrever uma linha no arquivo de saída
-        def write_line(line):
-            with open(output_file, "a") as file:
+        def write_line(line, file):
+            with open(file, "a") as file:
                 file.write(line + "\n")
-
-        # Limpar o arquivo de saída (caso já exista)
-        if os.path.exists(output_file):
-            os.remove(output_file)
 
         # Função para extrair o valor após o '='
         def extract_value(data):
@@ -214,7 +213,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         ram = run_command('wmic path Win32_ComputerSystem get TotalPhysicalMemory /format:value')
         if ram:
             ram_gb = int(extract_value(ram))/(1024 ** 3)
-            ram_gb_aprox = f"{math.ceil(ram_gb)} GB"
+            ram_gb_aprox = f"{ceil(ram_gb)} GB"
         else:
             ram_gb_aprox = "Memória RAM não encontrada!"
 
@@ -222,7 +221,6 @@ def scan_system(barra_progresso, websocket_server, loop = None):
 
 
         # ******************************************** ETAPA 5 ******************************************** #
-        start_time = time.time()
         # Informações sobre dispositivos de armazenamento
         storage_info = run_command('wmic path Win32_DiskDrive where MediaType="Fixed hard disk media" get caption,size,status /format:value')
         lista_hds = []
@@ -295,11 +293,10 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         else:
             cd = "A maquina não tem uma unidade de CD/DVD instalado!"
 
-
         # Crie um dicionário com os dados que você deseja enviar
         hardware_dados = {
             'Hardware': 'Nome',
-            'data_hora_cadastro': str(datetime.now().replace(microsecond=0)),
+            'data_hora_cadastro': data_hr_atual,
             'sistema_operacional': so,
             'nome_maquina': nome_maquina,
             #'tipo_maquina_wmi': tipo_hw_wmic,
@@ -337,19 +334,20 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         # ******************************************** ETAPA 10 ******************************************** #
         
         #Envio das informações
-        write_line(f"------------------- HARDWARE_PC -------------------")
+        write_line(f"------------------- HARDWARE_PC -------------------", result_log_path)
 
         enviar_dados(hardware_dados_json)
 
         for chave, valor in hardware_dados.items():
-            write_line(f"\n{chave} - {valor}")
+            write_line(f"\n{chave} - {valor}", result_log_path)
             
-        write_line(f"\n\n------------------- SOFTWARE -------------------")
+        write_line(f"\n\n------------------- SOFTWARE -------------------", result_log_path)
         
         for app in lista_resumido:
-            write_line(app)
+            write_line(app, result_log_path)
+
         for app in lista_completa:
-            write_line(app)
+            write_line(app, result_log_path)
 
         enviar_dados(lista_resumido_json)
         enviar_dados(lista_completa_json)
@@ -357,7 +355,10 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         barra_progresso.setValue(100)
 
     except Exception as e:
-        return(f"Ocorreu um erro inesperado! {e}")
+        write_line(f"[{data_hr_atual}] - ERRO: {e}", error_log_path)
+        enviar_dados(f"ERRO: {str(e)}")
+        return(f"Ocorreu um erro inesperado! Reinicie o programa e tente novamente.")
+        
     
-    return(f"Va até o site para visualizar o resultado!\n\nO arquivo de log foi salvo em {path}.")
+    return(f"Análise concluída! Verifique o resultado no seu navegador.")
 

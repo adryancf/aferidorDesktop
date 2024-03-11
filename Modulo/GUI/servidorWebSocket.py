@@ -31,11 +31,12 @@ class ServidorWebSocket:
 
           #Analise
           result = modulo.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
+          print(result)
           #self.main.resultado(result)
 
           #Envia a mensagem de resultado para o usuario
           self.main.barra_progresso.setVisible(False)
-          self.main.textCentral.setText("Análise concluída! Verifique o resultado no seu navegador.")
+          self.main.textCentral.setText(result)
         
         elif msg == "close_app":
           self.main.encerrar_app_cliente()
