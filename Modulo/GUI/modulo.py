@@ -8,10 +8,58 @@ import json
 from datetime import datetime
 from servidorWebSocket import ServidorWebSocket
 
-data_hr_atual = str(datetime.now().replace(microsecond=0))
+# Função para escrever uma linha no arquivo de saída
+def write_line(line, file):
+  with open(file, "a") as file:
+    file.write(line + "\n")
+
+# Função para extrair o valor após o '='
+def extract_value(data):
+  return data.split('=')[1].strip()
+
+# Função para executar um comando e capturar a saída
+def run_command(command):
+  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+  return result.stdout.strip()
+
+# Função para executar um comando no powershell e capturar a saída
+def run_powershell_command(command):
+  result = subprocess.run(['powershell', '-Command', command], stdout=subprocess.PIPE, text=True)
+  return result.stdout
+
+# Lista os softwares obtidos
+def lista_softwares(softwares, completo = False):
+  lista = []
+
+  #Extrair as linhas da resposta
+  linhas = softwares.split('\n')
+  if not completo:
+    lista.append("Software")
+  else:
+    lista.append("Sofware - COMPLETO")
+
+  #Colocar cada linha na lista final
+  for linha in linhas:
+    if(linha != ""):    
+      lista.append(linha)
+
+  return lista
 
 def scan_system(barra_progresso, websocket_server, loop = None):
     try:
+        def atualizar_barra_progresso(valor):
+          if barra_progresso:
+            barra_progresso.setValue(valor)
+            #enviar_dados(f"status_progresso: {valor}")
+
+        #Envia os dados pelo servidor websocket para todos os clientes conectados
+        def enviar_dados(dados):
+          #Com run_coroutine_threadsafe, garanto que essa ação vai ser executada no loop correto de eventos
+          if loop:
+            asyncio.run_coroutine_threadsafe(websocket_server.enviar_msg(dados), loop)
+          else:
+            print("Loop não foi passado como parâmetro")
+              
         # Construa o caminho para a pasta de documentos e cria a pasta do programa
         doc = os.path.join(os.path.expanduser("~"), "Documents")
         path = os.path.join(doc, "AferidorDesktop")
@@ -94,51 +142,6 @@ def scan_system(barra_progresso, websocket_server, loop = None):
             31: 'notebook',
             32: 'notebook'
         }
-
-        # Função para escrever uma linha no arquivo de saída
-        def write_line(line, file):
-            with open(file, "a") as file:
-                file.write(line + "\n")
-
-        # Função para extrair o valor após o '='
-        def extract_value(data):
-            return data.split('=')[1].strip()
-
-        # Função para executar um comando e capturar a saída
-        def run_command(command):
-            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
-            return result.stdout.strip()
-
-        # Função para executar um comando no powershell e capturar a saída
-        def run_powershell_command(command):
-            result = subprocess.run(['powershell', '-Command', command], stdout=subprocess.PIPE, text=True)
-            return result.stdout
-
-        # Lista os softwares obtidos
-        def lista_softwares(softwares, completo = False):
-            lista = []
-
-            #Extrair as linhas da resposta
-            linhas = softwares.split('\n')
-            if not completo:
-                lista.append("Software")
-            else:
-                lista.append("Sofware - COMPLETO")
-
-            #Colocar cada linha na lista final
-            for linha in linhas:
-                if(linha != ""):    
-                    lista.append(linha)
-            return lista
-
-        #Envia os dados pelo servidor websocket para todos os clientes conectados
-        def enviar_dados(dados):
-
-            #Com run_coroutine_threadsafe, garanto que essa ação vai ser executada no loop correto de eventos
-            if loop:
-                asyncio.run_coroutine_threadsafe(websocket_server.enviar_msg(dados), loop)
-            else:
-                print("Loop não foi passado como parâmetro")
             
         # ******************************************** ETAPA 1 ******************************************** #
 
@@ -157,21 +160,22 @@ def scan_system(barra_progresso, websocket_server, loop = None):
 
         if tipo:
 
-            num_tipo = int((extract_value(tipo)).strip('{}'))
-            tipo_hw_wmic_full = modelos_hardware.get(num_tipo)
-            tipo_hw_aferidor_full = modelos_hardware_aferidor.get(num_tipo)
+          num_tipo = int((extract_value(tipo)).strip('{}'))
+          tipo_hw_wmic_full = modelos_hardware.get(num_tipo)
+          tipo_hw_aferidor_full = modelos_hardware_aferidor.get(num_tipo)
 
-            if tipo_hw_aferidor_full and tipo_hw_wmic_full:
-                tipo_hw_wmic = f"{tipo_hw_wmic_full} ({num_tipo})"
-                tipo_hw_aferidor = f"{tipo_hw_aferidor_full}"
+          if tipo_hw_aferidor_full and tipo_hw_wmic_full:
+            tipo_hw_wmic = f"{tipo_hw_wmic_full} ({num_tipo})"
+            tipo_hw_aferidor = f"{tipo_hw_aferidor_full}"
 
-            else:
-                tipo_hw_wmic = tipo_hw_aferidor = "Tipo de dispositivo não foi localizado na tabela"
+          else:
+            tipo_hw_wmic = tipo_hw_aferidor = "Tipo de dispositivo não foi localizado na tabela"
+
         else:
-            tipo_hw_wmic = tipo_hw_aferidor = "Tipo de dispositivo não foi localizado pelo wmi"
+          tipo_hw_wmic = tipo_hw_aferidor = "Tipo de dispositivo não foi localizado pelo wmi"
         
 
-        barra_progresso.setValue(10)
+        atualizar_barra_progresso(10)
         
         # ******************************************** ETAPA 2 ******************************************** #
 
@@ -181,16 +185,16 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         motherboard_info =""
 
         if manufacturer_info and product_info:
-            motherboard_info = f"{extract_value(manufacturer_info)} {extract_value(product_info)}"
+          motherboard_info = f"{extract_value(manufacturer_info)} {extract_value(product_info)}"
         elif manufacturer_info:
-            motherboard_info = f"{extract_value(manufacturer_info)}"
+          motherboard_info = f"{extract_value(manufacturer_info)}"
         elif product_info:
-            motherboard_info = f"{extract_value(product_info)}"
+          motherboard_info = f"{extract_value(product_info)}"
 
         if not motherboard_info:
-            motherboard_info = "Placa mãe não foi localizada!"
+          motherboard_info = "Placa mãe não foi localizada!"
 
-        barra_progresso.setValue(20)
+        atualizar_barra_progresso(20)
 
         # ******************************************** ETAPA 3 ******************************************** #
 
@@ -203,7 +207,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         else:
             cpu_completa = "CPU não foi localizada!"
 
-        barra_progresso.setValue(30)
+        atualizar_barra_progresso(30)
 
 
         # ******************************************** ETAPA 4 ******************************************** #
@@ -217,7 +221,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         else:
             ram_gb_aprox = "Memória RAM não encontrada!"
 
-        barra_progresso.setValue(40)
+        atualizar_barra_progresso(40)
 
 
         # ******************************************** ETAPA 5 ******************************************** #
@@ -250,7 +254,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         if not lista_hds:
             hds = "A ferramenta não localizou nenhum dispostivo de armazenamento"
 
-        barra_progresso.setValue(50)
+        atualizar_barra_progresso(50)
             
         # ******************************************** ETAPA 6 ******************************************** #
         # Informações sobre adaptadores de vídeo
@@ -278,7 +282,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         else:
             gpu = "Informações incompletas ou não encontradas."
 
-        barra_progresso.setValue(60)
+        atualizar_barra_progresso(60)
 
 
         # ******************************************** ETAPA 7 ******************************************** #
@@ -296,7 +300,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         # Crie um dicionário com os dados que você deseja enviar
         hardware_dados = {
             'Hardware': 'Nome',
-            'data_hora_cadastro': data_hr_atual,
+            'data_hora_cadastro': str(datetime.now().replace(microsecond=0)),
             'sistema_operacional': so,
             'nome_maquina': nome_maquina,
             #'tipo_maquina_wmi': tipo_hw_wmic,
@@ -312,7 +316,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
 
         #Coloca os dados de hardware em um arquivo json
         hardware_dados_json = json.dumps(hardware_dados)
-        barra_progresso.setValue(70)
+        atualizar_barra_progresso(70)
 
         # ******************************************** ETAPA 8 ******************************************** #
 
@@ -321,14 +325,14 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         resumido = run_powershell_command("foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -and $Product.SystemComponent -ne 1){$Product.DisplayName}}}")
         lista_resumido = lista_softwares(resumido)
         lista_resumido_json = json.dumps(lista_resumido)
-        barra_progresso.setValue(80)
+        atualizar_barra_progresso(80)
 
         # ******************************************** ETAPA 9 ******************************************** #
 
         completo = run_powershell_command("foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -ne 1){$Product.DisplayName}}}")
         lista_completa = lista_softwares(completo, True)
         lista_completa_json = json.dumps(lista_completa)
-        barra_progresso.setValue(90)
+        atualizar_barra_progresso(90)
 
 
         # ******************************************** ETAPA 10 ******************************************** #
@@ -352,12 +356,12 @@ def scan_system(barra_progresso, websocket_server, loop = None):
         enviar_dados(lista_resumido_json)
         enviar_dados(lista_completa_json)
         enviar_dados("FIM")
-        barra_progresso.setValue(100)
+        atualizar_barra_progresso(100)
 
     except Exception as e:
-        write_line(f"[{data_hr_atual}] - ERRO: {e}", error_log_path)
-        enviar_dados(f"ERRO: {str(e)}")
-        return(f"Ocorreu um erro inesperado! Reinicie o programa e tente novamente.")
+      write_line(f"[{str(datetime.now().replace(microsecond=0))}] - ERRO: {e}", error_log_path)
+      enviar_dados(f"ERRO: {str(e)}")
+      return(f"Ocorreu um erro inesperado! Reinicie o programa e tente novamente.")
         
     
     return(f"Análise concluída! Verifique o resultado no seu navegador.")

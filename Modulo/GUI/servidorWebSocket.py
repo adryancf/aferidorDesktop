@@ -26,7 +26,7 @@ class ServidorWebSocket:
 
           #Atualiza a interface
           self.main.textCentral.setText("Analisando a máquina...")
-          self.main.barra_progresso.setValue(20)
+          self.main.barra_progresso.setValue(0)
           self.main.barra_progresso.setVisible(True)
 
           #Analise
@@ -50,14 +50,14 @@ class ServidorWebSocket:
       print("Conexão WebSocket encerrada")
 
   async def iniciar_servidor(self):
-      try:
-        self.servidor = await websockets.serve(self.servidor_websocket, self.ip, self.porta)
-        print("Servidor WebSocket iniciado localmente... (URL = ws://localhost:8181)")
-        #Serve para manter o servidor rodando até que o servidor seja encerrado
-        await self.servidor.wait_closed()
-      
-      except Exception as e:
-        print(f"Ocorreu um erro inesperado! {e}")
+    try:
+      self.servidor = await websockets.serve(self.servidor_websocket, self.ip, self.porta)
+      print("Servidor WebSocket iniciado localmente... (URL = ws://localhost:8181)")
+      #Serve para manter o servidor rodando até que o servidor seja encerrado
+      await self.servidor.wait_closed()
+    
+    except Exception as e:
+      print(f"Ocorreu um erro inesperado! {e}")
 
 
   async def encerrar_servidor(self):

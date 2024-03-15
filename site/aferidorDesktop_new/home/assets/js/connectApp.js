@@ -4,6 +4,7 @@ var intervalId;
 
 var loading = false;
 var cliqueInicio = true;
+var fecharApp = true;
 
 const intervalo_conexao = 2000;
 
@@ -19,6 +20,7 @@ function showConnected() {
 
   //Card de ações do usuário
   $("#abrirApp").hide();
+  $("#continuarModalAbertura").attr("disabled", false);
   $("#scanApp").show();
   //$("#conectarApp").show();
 
@@ -38,6 +40,8 @@ function showConnecting() {
 
   //Começa o loading e desativa o botao de abrir, pois o usuario ja clicou
   loading = true;
+  $("#continuarModalAbertura").attr("disabled", true);
+  $("#abrirApp").text("Abrindo o aplicativo...");
   $("#abrirApp").attr("disabled", true);
 }
 
@@ -47,6 +51,7 @@ function showOffline() {
   $('.offline').show();
 
   loading = false;
+  $("#continuarModalAbertura").attr("disabled", false);
   
   //Quando essa função for chamada após o primeiro clique, o card volta ao estado inicial, porem, com o texto do botão alterado
   if(!cliqueInicio){
@@ -59,12 +64,20 @@ function showOffline() {
 
     //Btn para conectar manualmente (nao sei se vai ser mt util)
   }
+  else{
+    $("#abrirApp").text("Comece já!");
+  }
 
   
   //Configuração de abertura do aplicativo
   $("#aviso_conexao").show();
   $("#sucesso_conexao").hide();
   $("#btnDonwload").show();
+}
+
+function recarregarPagina(){
+  fecharApp = true;
+  location.reload();
 }
 
 $(document).ready(function(){
@@ -90,7 +103,20 @@ $(document).ready(function(){
   showOffline();
   $("#btnConectarModal").hide();
 
+  $(window).on('beforeunload', function() {
+    if(fecharApp){
+      // Sua ação a ser executada antes de recarregar ou fechar a página
+      console.log("Chamando fecharApp");
+      fecharApp();
+    }
+  });
+
 });
+
+function fecharApp(){
+  //Fecha o app
+  enviarMensagem("close_app");
+}
 
 //Aparencia do modal de inicio no modo em que o sistema abre o aplicativo automaticamente (modo padrão)
 function modalInicio_modoAberturaAutomatica(){
@@ -149,7 +175,7 @@ function tentandoConectarAppPorTempoDeterminado(tempo_max_conexao){
           customClass: {
             confirmButton: 'btn btn-primary',
             denyButton: 'btn btn-outline-secondary',
-            popup: 'swal-falhaConexao'
+            popup: 'width-auto'
           }
 
         }).then((result) => {
@@ -187,10 +213,6 @@ function tentandoConectarAppPorTempoDeterminado(tempo_max_conexao){
 
 }
 
-function abrirApp(){
-  
-}
-
 //ABERTURA DO MODULO NO COMPUTADOR DO CLIETNE
 $("#abrirApp").click(function() {
   
@@ -212,89 +234,28 @@ $("#abrirApp").click(function() {
   modalInicio_modoAberturaAutomatica();
   $("#modalInicio").modal("show");
 
+  fecharApp = false;
   window.location.href = 'aferidordesktop://open';
   tentandoConectarAppPorTempoDeterminado(20000);
 
   if(cliqueInicio){
     cliqueInicio = false;
-    //Alterar o texto do botão
-    $("#abrirApp").text("Abrir aplicativo");
-
   }
-  
-  // Define um temporizador para verificar se a tentativa de abrir foi bem-sucedida
-  // setTimeout(function() {
-  //   // Se a janela ainda estiver na página, PODE SER QUE protocolo não está registrado
-  //   if (document.hasFocus()) {
-
-  //     //Poupup de alerta (SweetAlert2) com botao de download do aplicativo
-  //     Swal.fire({
-  //       title: 'Aplicativo não encontrado!',
-  //       text: 'Clique no botão abaixo e baixe o nosso app.',
-  //       icon: 'warning',
-  //       confirmButtonText: '<i class="bi bi-download me-1"></i> Baixar',
-  //       confirmButtonColor: "#008000",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-
-  //         //Executar o download
-  //         var url = "../download/Instalador_AferidorDesktop.exe";
-  //         var link = $("<a>").attr('href', url).appendTo('body');
-  //         link[0].click();
-
-  //         link.remove();
-
-  //         Swal.fire({
-  //           title: "Seu aplicativo já está sendo baixado!",
-  //           text:"Após finalizar o download, abra o instalador e faça a instalação. Em caso de dúvidas, clique no botão abaixo.",
-  //           showDenyButton: true,
-  //           confirmButtonText: "Saiba mais",
-  //           denyButtonText: `<i class="bi bi-arrow-clockwise"></i>`,
-  //           denyButtonColor: "gray",
-  //           confirmButtonColor: "navy",
-  //           icon: "success",
-  //           footer: 'Caso o instalador não abra, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
-  //           customClass: {
-  //             popup: 'custom-swal-width',
-  //           },
-  //         }).then((result)=> {
-  //           if(result.isConfirmed){
-  //             //Abrir modal de ajuda
-  //             $("#modalAjuda").modal("show");
-  //           }
-  //           else{
-  //             //Recarregar a página
-  //             location.reload();
-  //           }
-  //         });
-          
-  //       }
-  //     });
-
-      
-
-  //   }
-  //   else
-  //   {   
-  //     tentandoConectarAppPorTempoDeterminado();
-  //   }
-  // }, 100);
-
-  //Talvez exibir um modal padrão de ajuda para todos os usuários
-
-
-  //Alterar os botões de acordo com o status da conexão
-  
-  
-
-});
-
-$("#continuarModalAbertura").click(function() {
-  //Se clicado sem ter conectado, nao deixar fechar o modal
 
 });
 
 $("#btnDonwload").click(function() {
+
+  //Para as tentativas de conexão
+  clearInterval(intervalId);
+
+  //Colocar um delay para deixar offline
+  setTimeout(function(){
+    showOffline();
+  }, 500);
+
+
+  $("#modalInicio").modal("hide");
 
   // Executar o download
   var url = "../download/Instalador_AferidorDesktop.exe";
@@ -327,34 +288,32 @@ $("#btnDonwload").click(function() {
     denyButtonColor: "gray",
     confirmButtonColor: "navy",
     icon: "success",
-    footer: 'Caso o instalador não abra, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
-    customClass: {
-      popup: 'custom-swal-width',
-    },
+    footer: 'Caso o donwload não inicie, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
+    width: "80%"
   }).then((result)=> {
     if(result.isConfirmed){
       //Abrir modal de ajuda
       $("#modalAjuda").modal("show");
     }
-    else{
-      //Recarregar a página
-      location.reload();
+    else if(result.isDenied){
+      recarregarPagina();
     }
   });
 });
 
-
-$("#iniciarScanApp").click(function() {
-  //enviarMensagem("scan_system");
-  iniciarConexaoWebSocket();
+$("#scanApp").click(function() {
+  enviarMensagem("scan_system");
 });
-
+  
 function iniciarConexaoWebSocket() {
 
     console.log("Iniciando conexão WebSocket...");
 
     const servidorWebSocketURL = 'ws://localhost:8181';
     socket = new WebSocket(servidorWebSocketURL);
+
+    //Posso fazer uma pilha para gerenciar as tentativas de conexão
+    //Enquanto tiver um item na pilha, não deixar conectar
 
     socket.onopen = function(event) {
       console.log('Conexão WebSocket aberta:', event);
@@ -389,7 +348,24 @@ function iniciarConexaoWebSocket() {
         criarTabela(json_recebido);
       }
       catch{
-        console.log('CATCH | Mensagem Recebida = ', event.data);
+        if((event.data).includes("ERRO"))
+        {
+          Swal.fire({
+            title: "Erro na análise do aferidorDesktop!",
+            html: `<p class="mb-0">Por favor, tente realizar o procedimento <b>novamente</b> ou entre em contato com o departamento de T.I.</p>`,
+            icon: "error",
+            confirmButtonText: "Tente Novamente",
+            confirmButtonColor: "navy",
+            footer: 'O log do erro foi salvo na pasta documentos do seu computador.',
+            width:  '50%'
+          }).then((result)=> {
+            if(result.isConfirmed){
+              //Recarregar a página
+              recarregarPagina();
+            }
+          });
+        }
+        console.log('Mensagem Recebida = ', event.data);
       }
         
     };
@@ -398,7 +374,7 @@ function iniciarConexaoWebSocket() {
       if (!loading){
         toastr.clear();
         setTimeout(function() {
-          toastr.error('Verifique se o aplicativo está aberto, clique no botão de ajuda e em "Conectar". Caso não funcione, feche o programa, reinicie a página e faça o processo novamente!', 'Falha na conexão com o aplicativo!', {
+          toastr.error('Verifique se o aplicativo está aberto. Caso não, clique em "Abrir aplicativo" na página inicial!', 'Falha na conexão com o aplicativo!', {
             positionClass: "toast-bottom-full-width",
             preventDuplicates: true,
             timeOut: 10000,
@@ -432,8 +408,3 @@ function enviarMensagem(mensagem) {
         console.error('A conexão com o aplicativo não está aberta.');
     }
 }
-
-document.getElementById('conectarApp').addEventListener('click', function() {
-    //setTimeout(iniciarConexaoWebSocket, 500);
-    enviarMensagem("close_app");
-});

@@ -72,6 +72,24 @@ body {
   color: #fff; /* Cor do texto para indicar desativado */
 }
 
+.btn-primary{
+  --bs-btn-color: #fff;
+  --bs-btn-bg: navy;
+  --bs-btn-border-color: navy;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #000080c2;
+  --bs-btn-hover-border-color: #000080c2;
+  --bs-btn-focus-shadow-rgb: 49,132,253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #000080c2;
+  --bs-btn-active-border-color: #000080c2;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: navy;
+  --bs-btn-disabled-border-color: navy;
+}
+
+
 #btn_form_envio, .btnResultado{
   padding: 8px 35px;
   font-size: 16px;
@@ -153,12 +171,8 @@ body {
   border: none;
 }
 
-.custom-swal-width{
-  width: 1000px !important;
-}
-
-.swal-falhaConexao{
-  width: 750px !important;
+.width-auto{
+  width: auto !important;
 }
 
 .conexaoManual{

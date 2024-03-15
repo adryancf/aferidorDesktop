@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+} 
+
+.ui-autocomplete{
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 30%;
+}
+
+/* SERVE PARA PERMITIR COM QUE O MODAL DE PESQUISA DE SOFTWARE SOBREPONHA O DE COMPARAÇÃO*/
+.modalSearch{
+  --bs-modal-zindex:1!important;
+}
+
+.nav-link.active
+{
+  font-weight: bold!important;
+}
+.nav-link:hover{
+  color: #00000096!important;
+}

@@ -3,56 +3,121 @@
 $(document).ready(function(){
 
     
-    //INICIALIZA O TOOLTIP
-    $('[data-bs-toggle="tooltip"]').tooltip();
+  //INICIALIZA O TOOLTIP
+  $('[data-bs-toggle="tooltip"]').tooltip();
 
-    //INICIALIZA O AUTOCOMPLETE DO NOME DO FUNCIONARIO
-    $("#fk_funcionario_text").autocomplete({
-        appendTo: "#bodyFormularioEnvio",
-        source: function(request, response) {
-            $.ajax({
-                url: "../common_assets/php/searchFuncionario.php",
-                dataType: "json",
-                data: {
-                    q: request.term
-                },
-                success: function(data) {
-                    response(data);
-                }
-            });
-        },
-        minLength: 0,
-        select: function (event, ui) {
-            // Set selection
-            $('#fk_funcionario_text').val(ui.item.label); // display the selected text
-            $('#fk_funcionario').val(ui.item.value); // save selected id to input
-            return false;
-       },
-       focus: function(event, ui){
-            return false;
-       },
+  var array;
 
-    });
+  $.ajax({
+    type: "GET",
+    url: "../common_assets/php/getFuncionarios.php",
+    dataType: "json",
+    success: function(response) {
+      //console.log(response);
+      var array = response.map(function(item) {
+        return {label:item.nome_funcionario, value:item.id_funcionario};
+      });
+      console.log(array);
+    },
+    error: function(error) {
+      console.error("Erro no carregamento dos funcionários:", error);
+    }
+  });
 
-    //INICIALIZA O SELECT DOS SETORES
-    $.ajax({
-        type: "GET",
-        url: "../common_assets/php/searchSetor.php",
-        dataType: "json",
-        success: function(response) {
-            var select = $("#setor");
+  //Inicializar AutoComplete e Select
+  // var array = arrayFuncionarios.map(function(item) {
+  //   return {label:item.nome_funcionario, value:item.id_funcionario};
+  // });
+  // console.log(array);
+
+  const autoCompleteJS = new autoComplete({ 
+    selector: "#fk_funcionario_text",
+    wrapper: true,
+    placeHolder: "Insira o seu nome aqui...",
+    data: {
+      src: array,
+      keys: ["label"]
+      //cache: true,
+    },
     
-            // Preenche o select com as opções
-            $.each(response, function(index, option) {
-                select.append($("<option>")
-                .attr("value", option.value)
-                .text(option.label));
-            });
-        },
-        error: function(error) {
-            console.error("Erro no carregamento dos setores:", error);
+    resultsList: {
+      element: (list, data) => {
+        if (!data.results.length) {
+          // Create "No Results" message element
+          const message = document.createElement("div");
+          // Add class to the created element
+          message.setAttribute("class", "no_result");
+          // Add message text content
+          message.innerHTML = `<span>Não foi encontrado nenhum resultado para: "${data.query}"</span>`;
+          // Append message element to the results list
+          list.prepend(message);
         }
-    });
+      },
+      noResults: true,
+      maxResults: 10,
+    },
+    resultItem: {
+      highlight: true,
+    },
+    events: {
+      input: {
+        selection: (event) => {
+          //console.log(event);
+          const selection = event.detail.selection.value;
+          autoCompleteJS.input.value = selection.label;
+          $('#fk_funcionario').val(selection.value);
+        }
+      }
+    }
+  });
+
+  // //INICIALIZA O AUTOCOMPLETE DO NOME DO FUNCIONARIO
+  // $("#fk_funcionario_text").autocomplete({
+  //   appendTo: "#bodyFormularioEnvio",
+  //   source: function(request, response) {
+  //     $.ajax({
+  //       url: "../common_assets/php/searchFuncionario.php",
+  //       dataType: "json",
+  //       data: {
+  //         q: request.term
+  //       },
+  //       success: function(data) {
+  //         response(data);
+  //       }
+  //     });
+  //   },
+  //   minLength: 0,
+  //   select: function (event, ui) {
+  //     // Set selection
+  //     $('#fk_funcionario_text').val(ui.item.label); // display the selected text
+  //     $('#fk_funcionario').val(ui.item.value); // save selected id to input
+  //     return false;
+  //   },
+  //   focus: function(event, ui){
+  //     return false;
+  //   },
+
+  // });
+
+  //INICIALIZA O SELECT DOS SETORES
+  $.ajax({
+      type: "GET",
+      url: "../common_assets/php/searchSetor.php",
+      dataType: "json",
+      success: function(response) {
+          var select = $("#setor");
+  
+          // Preenche o select com as opções
+          $.each(response, function(index, option) {
+              select.append($("<option>")
+              .attr("value", option.value)
+              .text(option.label));
+          });
+      },
+      error: function(error) {
+          console.error("Erro no carregamento dos setores:", error);
+      }
+  });
 
 });
 
