@@ -112,7 +112,7 @@ function atualizaDados() {
     //Obter setores_enviados
     $.ajax({
       type: "GET",
-      url: "../common_assets/php/searchSetor.php",
+      url: "../common_assets/php/getSetoresAdmin.php",
       dataType: "json",
       success: function(response) {
           //setores_enviados = response;

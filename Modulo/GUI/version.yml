@@ -1,4 +1,4 @@
-Version: 1.1.0.0
+Version: 1.0.0.0
 CompanyName: ESTEIO Engenharia e Aerolevantamentos S.A.
 FileDescription: Programa de aferição de hardware e software para controle de lincenças de uso.
 LegalCopyright: © 2024 ESTEIO Engenharia e Aerolevantamentos S.A.
@@ -7,5 +7,5 @@ ProductName: Aferidor Desktop
 Translation:
   - langID: 0
     charsetID: 1200
-  - langID: 1033
+  - langID: 1046
     charsetID: 1252

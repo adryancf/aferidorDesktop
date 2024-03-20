@@ -10,7 +10,6 @@ import asyncio
 # Módulos para garantir que apenas uma instância do programa seja executada
 from tendo import singleton
 
-
 # Arquivos adicionais
 import modulo
 from servidorWebSocket import ServidorWebSocket
@@ -21,7 +20,7 @@ class Main(QWidget, Ui_Principal):
     self.setupUi(self)
     self.setWindowTitle("Aferidor Desktop")
     self.setFixedSize(800,190)
-    self.setWindowIcon(QIcon('logo.ico'))
+    self.setWindowIcon(QIcon('favicon.ico'))
     self.barra_progresso.setVisible(False)
 
     # Iniciar o servidor WebSocket em uma nova thread

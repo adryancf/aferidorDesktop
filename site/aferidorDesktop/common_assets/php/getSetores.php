@@ -1,4 +1,6 @@
 <?php
+////Uma maneira diferente de obter os setores (SETOR [CC])
+
 require_once("../../../includes/setores.class.php");
 
 ini_set('display_errors', 1);

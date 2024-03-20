@@ -3,7 +3,7 @@
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
+      <link rel="shortcut icon" type="image/x-icon" href="../common_assets/logo.ico" />
 
       <title>Admin - Aferidor Desktop</title>
 
@@ -11,10 +11,10 @@
       <script src="assets/js/login.js"></script>
 
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="../common_assets/includes/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-      <link rel="stylesheet" href="../common_assets/css/css_autoComplete/autoComplete.css">
+      <link rel="stylesheet" href="../common_assets/includes/autoComplete.js-10.2.7/dist/css/autoComplete.css">
       <link rel="stylesheet" href="assets/css/style.css">
       
   </head>
@@ -26,7 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/autoComplete.min.js"></script>
+    <script src="../common_assets/includes/autoComplete.js-10.2.7/dist/autoComplete.min.js"></script>
 
 
     <!-- NAVBAR -->
@@ -34,7 +34,7 @@
       <nav class="navbar bg-light bg-gradient navbar-expand-sm shadow-sm">
           <div class="container-fluid mx-4">
               <a class="navbar-brand d-flex align-items-center" href="#">
-                  <img src="assets/img/logo.png" alt="LogoEsteio" width="30" height="30" class="d-inline-block align-text-top">
+                  <img src="../common_assets/img/logo_novo.png" alt="LogoEsteio" width="20" height="20" class="d-inline-block align-text-top">
                   <span class="ms-2 fw-medium navbar-collapse collapse fs-6">Administrador</span>
                   <!-- EXIBIR O USUARIO LOGADO -->
               </a>
@@ -445,7 +445,7 @@
                               <div class="card shadow">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                   <spam class="fw-bold">Dados Novos</spam>
-                                  <spam class="badge text-bg-danger fw-bold rounded-pill" id="badgeDiferente" style="font-family: 'Roboto Mono', sans-serif;"></spam> 
+                                  <spam class="badge text-bg-danger fw-bold rounded-pill" id="badgeDiferente"></spam> 
                                 </div>
 
                                 <div id="card_hw_new" class="card-body">
@@ -678,14 +678,12 @@
                           </div> 
                         </div>
                       </div>
-
-                      
                       
                       <div class="modal-footer d-flex align-items-center justify-content-center justify-content-md-between">
                         <div class="col text-start">
                           <button type="button" class="btn btn-outline-warning" id="alternarSW">
                             <i class="bi bi-microsoft me-2"></i>
-                            Ir para Softwares
+                            <span>Ir para Softwares</span>
                           </button>
                         </div>                                
                         <div class="col text-center">

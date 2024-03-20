@@ -8,7 +8,7 @@ var fecharApp = true;
 
 const intervalo_conexao = 2000;
 
-const time_noticacao = 600;
+const time_noticacao = 500;
 
 
 function showConnected() {
@@ -22,13 +22,17 @@ function showConnected() {
   $("#abrirApp").hide();
   $("#continuarModalAbertura").attr("disabled", false);
   $("#scanApp").show();
-  //$("#conectarApp").show();
 
-  //Configuração de abertura do aplicativo
+  //Configuração do modal de inicio
   $("#aviso_conexao").hide();
   $("#sucesso_conexao").show();
   $("#btnDonwload").hide();
   $("#btnConectarModal").hide();
+
+  //Fechar todos os modais do SweetAlert abertos
+  while(Swal.isVisible()){
+    Swal.close();
+  }
 
 
 }
@@ -51,7 +55,6 @@ function showOffline() {
   $('.offline').show();
 
   loading = false;
-  $("#continuarModalAbertura").attr("disabled", false);
   
   //Quando essa função for chamada após o primeiro clique, o card volta ao estado inicial, porem, com o texto do botão alterado
   if(!cliqueInicio){
@@ -61,15 +64,13 @@ function showOffline() {
     $("#abrirApp").text("Abrir aplicativo");
     $("#abrirApp").attr("disabled", false);
     $("#abrirApp").show();
-
-    //Btn para conectar manualmente (nao sei se vai ser mt util)
   }
   else{
     $("#abrirApp").text("Comece já!");
   }
 
-  
-  //Configuração de abertura do aplicativo
+  //Configuração modal Inicio (padrão)
+  $("#continuarModalAbertura").attr("disabled", false);
   $("#aviso_conexao").show();
   $("#sucesso_conexao").hide();
   $("#btnDonwload").show();
@@ -99,6 +100,13 @@ $(document).ready(function(){
     "hideMethod": "fadeOut",
     "tapToDismiss": false
   }
+  
+  //Exibir a mensagem de boas vindas
+  if(!Cookies.get('naoMostrarMsgBoasVindas')){
+    $("#modalBoasVindas").modal('show');
+    //$("#toast-BoasVindas").toast('show');
+  }
+
 
   showOffline();
   $("#btnConectarModal").hide();
@@ -123,6 +131,7 @@ function modalInicio_modoAberturaAutomatica(){
   $(".status-container").removeClass("conexaoManualStatus")
   $("#tituloModalInicio").text("Abrindo o programa no seu computador...");
   $("#btnDonwload").show();
+  $("#continuarModalAbertura").text("Continuar");
 }
 
 //Aparencia do modal de inicio no modo em que o usuario escohe abrir o aplicativo
@@ -132,6 +141,7 @@ function modalInicio_modoAberturaManual(){
   $("#tituloModalInicio").text("Abra o programa no seu computador");
   $("#aviso_conexao").hide();
   $("#btnDonwload").hide();
+  $("#continuarModalAbertura").text("Continuar");
 }
 
 //Aparencia do modal de inicio quando o usuario sai/fecha o poup-up de falha na conexao 
@@ -142,6 +152,25 @@ function modalInicio_modoSemConexao(){
   $("#aviso_conexao").hide();
   $("#aviso_download").show();
   $("#btnDonwload").show();
+  $("#continuarModalAbertura").text("Continuar");
+
+}
+
+//Aparencia do modal de inicio quando o usuario perde a conexao com o aplicativo e o modal de inicio esta aberto
+//Caso: A pessoa fez o processo de abertura, conectou-se ao app, mas ai fechou o app sem clicar em continuar e sair do modal de inicio
+function modalInicio_modoPerdaConexao(){
+  $("#tituloModalInicio").text("Perdemos a conexão com o programa...");
+  $("#instrucaoModalInicio").html("Parece que você perdeu a conexão com o programa. Por favor, feche esta tela e clique em <b>Abrir aplicativo</b> para iniciar o processo novamente").addClass("conexaoManual");
+  $(".status-container").addClass("conexaoManualStatus");
+  $("#aviso_conexao").hide();
+  $("#aviso_download").hide();
+  $("#btnDonwload").hide();
+  $("#continuarModalAbertura").text("Fechar");
+}
+
+function finalizarTentivasConexao(){
+  clearInterval(intervalId);
+  temporizador = 0;
 }
 
 function tentandoConectarAppPorTempoDeterminado(tempo_max_conexao){
@@ -155,8 +184,7 @@ function tentandoConectarAppPorTempoDeterminado(tempo_max_conexao){
         console.log("Limite de tempo atingido. Não foi possível conectar.");
         
         // Atualiza o estado de carregamento e limpa o intervalo
-        clearInterval(intervalId);
-        temporizador = 0;
+        finalizarTentivasConexao();
 
         // Exibe uma mensagem de erro ao usuário
         Swal.fire({
@@ -243,7 +271,7 @@ $("#abrirApp").click(function() {
 $("#btnDonwload").click(function() {
 
   //Para as tentativas de conexão
-  clearInterval(intervalId);
+  finalizarTentivasConexao();
 
   //Colocar um delay para deixar offline
   setTimeout(function(){
@@ -264,19 +292,19 @@ $("#btnDonwload").click(function() {
     title: "Seu aplicativo já está sendo baixado!",
     html: `
     <div class="mx-4">
-      <span>Após concluir o download, abra o instalador e prossiga com a instalação. Ao finalizar, atualize o site e inicie novamente.</span>
+      <span>Após concluir o download, abra o instalador e prossiga com a instalação. Ao finalizar, <b>atualize o site e inicie novamente</b>.</span>
       
       <div class="justify-content-center d-flex my-4 gap-2 fs-6">
-        <div class="alert alert-warning shadow d-flex align-items-center">
+        <div class="alert alert-warning shadow d-flex align-items-center col-6">
           <span class="">Se um aviso informando que a <b>transferência é insegura</b> ou algo semelhante aparecer, clique em <b>"Manter"</b> para concluir o download.</span>
         </div>
 
-        <div class="alert alert-warning shadow d-flex align-items-center">
-          <span class="">Durante a instalação, se aparecer "O Windows protegeu o computador", clique em <b>"Mais informações"</b> e, em seguida, clique em <b>"Executar mesmo assim"</b>.</span>
+        <div class="alert alert-warning shadow d-flex align-items-center col-6">
+          <span class="">Durante a instalação, se você ver uma mensagem dizendo <b>"O Windows protegeu o computador"</b>, clique em <b>"Mais informações"</b>. Em seguida, clique em <b>"Executar mesmo assim"</b> para continuar.</span>
         </div>
       </div>
 
-      <span class="fw-bold mb-0 mt-5">Em caso de dúvidas, clique no botão abaixo.</span>
+      <span class="fw-bold mb-0 mt-5">Em caso de dúvidas, clique no Saiba Mais para ter acesso a um passo a passo completo.</span>
     </div>`,
     showDenyButton: true,
     confirmButtonText: "Saiba mais",
@@ -302,6 +330,57 @@ $("#scanApp").click(function() {
   $(this).attr("disabled", true);
   enviarMensagem("scan_system");
 });
+
+$("#btnInicioTuor, #refazerTuorInicio").click(function(){
+  console.log("Iniciar");
+  $("#modalBoasVindas").modal("hide");
+
+  //Recolher o modal/toast
+  $("#toast-BoasVindas").toast('hide');
+
+  //TOUR
+  introJs().setOptions({
+    nextLabel: 'Próximo',
+    prevLabel: 'Anterior',
+    doneLabel: 'Finalizar tour',
+    overlayOpacity: 0.3,
+    // dontShowAgain: true,
+    // dontShowAgainLabel: 'Não mostrar novamente',
+    steps: [{
+      title: 'Bem-vindo!',
+      intro: '<p>Olá! Seja bem-vindo ao <b>Aferidor Desktop</b>.<p> <span>Vamos fazer um tour para que você conheça as funcionalidades do sistema.</span>'
+    },
+    {
+      title: 'Botão de Inicio',
+      element: $("#abrirApp")[0],
+      intro: '<p>Ao clicar neste botão, você <b>começará</b> o processo de aferição.</p><span>Este botão <b>abre</b> o aplicativo necessário para iniciar o processo.</span>'
+    },
+    {
+      title: 'Status de Conexão',
+      element: $(".status-container")[0],
+      intro: '<p>Neste local, você poderá acompanhar o status da conexão com o aplicativo.</p><span>O processo só funcionará quando indicar <b>"Conectado"</b>.</span>'
+    },
+    {
+      title: 'Ajuda',
+      element: $(".floating-help-button")[0],
+      intro: '<p>Este botão oferece acesso a recursos úteis para você!</p> Aqui, você encontrará um <b>guia de uso completo</b>, o link direto para <b>baixar nosso programa</b>, um link para nossa <b>pesquisa de satisfação</b> e a possibilidade de refazer este tuor.</p>'
+    },
+    {
+      title: 'Obrigado!',
+      intro: '<p>Esperamos que você tenha uma ótima experiência com o <b>Aferidor Desktop</b>.</p> <span>Se precisar de ajuda com o processo, <b>acesse o guia</b> através do botão de ajuda.</span>'
+    }
+  ]
+  }).start();
+
+
+});
+
+$("#naoMostrarMsgBoasVindas").click(function(){
+  
+  //Adcionar um cookie para não mostrar mais
+  Cookies.set('naoMostrarMsgBoasVindas', 'true', { expires: 365 });
+  $("#modalBoasVindas").modal("hide");
+});
   
 //Gerencia a conexao com o WebSocket
 function conexaoWebSocket() {
@@ -318,13 +397,18 @@ function conexaoWebSocket() {
       console.log('Conexão WebSocket aberta:', event);
       socket.send("Cliente conectado!");
       fecharApp = true;
+
+      //Criar um sessioStorage para a hora da conexão
+      var data = new Date();
+      sessionStorage.setItem("conectado", data.getTime());
+
       showConnected();
 
       toastr.clear();
       setTimeout(function() {
 
         // Exiba o pop-up personalizado
-        toastr.success('Vá para o aplicativo e inicie o processo', 'Você está conectado!', {
+        toastr.success('Clique no botão Scan e inicie o processo!', 'Você está conectado!', {
           positionClass: "toast-top-right",
           tapToDismiss: true,
           "preventDuplicates": true
@@ -334,7 +418,7 @@ function conexaoWebSocket() {
       }, time_noticacao);
 
       //Para as tentativas de conexão
-      clearInterval(intervalId);
+      finalizarTentivasConexao();
     };
 
     socket.onmessage = function(event) {
@@ -379,6 +463,22 @@ function conexaoWebSocket() {
 
     socket.onclose = function(event) {
       if (!loading){
+
+        // Atualiza o estado de carregamento e limpa o intervalo
+        finalizarTentivasConexao();
+        showOffline();
+
+        //Isso indica que a pessoa perdeu a conexão com o aplicativo ja tendo feito a conexão antes
+        if(sessionStorage.getItem("conectado") != null){
+          console.log("Conexão perdida com o aplicativo!");
+          sessionStorage.removeItem("conectado");
+
+          if($("#modalInicio").hasClass("show")){
+            //Se o modal estiver aberto, entao precisa mostrar a mensagem no modal
+            modalInicio_modoPerdaConexao();
+          }
+        }    
+
         toastr.clear();
         setTimeout(function() {
           toastr.error('Verifique se o aplicativo está aberto. Caso não, clique em "Abrir aplicativo" na página inicial!', 'Falha na conexão com o aplicativo!', {
@@ -389,7 +489,6 @@ function conexaoWebSocket() {
                   
           });
         }, time_noticacao);
-        showOffline();
       }
       else{
         console.log("Tentativa de conexão falhou. Tentando novamente em " + (intervalo_conexao/1000) + " segundos...");

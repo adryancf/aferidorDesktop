@@ -6,30 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
-
+    <link rel="shortcut icon" type="image/x-icon" href="../common_assets/logo.ico" />
 
     <title>Aferidor Desktop</title>
 
-    
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../common_assets/includes/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/intro.js@7.2/minified/introjs.min.css" rel="stylesheet">  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" /> 
-    <link rel="stylesheet" href="../common_assets/css/css_autoComplete/autoComplete.02.css">
+    <link rel="stylesheet" href="../common_assets/includes/autoComplete.js-10.2.7/dist/css/autoComplete.02.css">
 
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/intro.js@7.2/intro.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/autoComplete.min.js"></script>
+  <script src="../common_assets/includes/autoComplete.js-10.2.7/dist/autoComplete.min.js"></script>
+  
+  <!-- Eu defini as funções para manipulacões de cookies no ../common_assets/js/function.js porem, essa biblioteca fornece mais compatibilidade com uma variedade de navegadores -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 
   <div class="container h-100">
 
@@ -42,7 +41,8 @@
         </div>
         
         <div class="status connecting">
-          <i class="fa-solid fa-spinner fa-spin-pulse me-1"></i> 
+          <!-- <i class="fa-solid fa-spinner fa-spin-pulse me-1"></i>  FONTAWESOME (DEIXEI DE USAR POIS TAVA IMPORTANTO A BIBLIOTECA TODA SO PARA ISSO)-->
+          <div class="spinner-border spinner-border-sm me-2" role="status"></div>
           <span>Conectando</span>
         </div>
     
@@ -78,7 +78,6 @@
     </div>
 
     
-
     <!-- AREA DE RESULTADOS -->
     <div class="row justify-content-center align-items-end" style="height: 10vh;">
       <button class="btn-visualizar-resultado shadow-sm" data-bs-target="#modalResultado" data-bs-toggle="modal">
@@ -95,8 +94,9 @@
       <ul class="dropdown-menu">
         <li><button class="dropdown-item" data-bs-target="#modalAjuda" data-bs-toggle="modal"><i class="bi bi-book me-2"></i>Como usar?</button></li>
         <li><a class="dropdown-item" href="../download/Instaladaor_AferidorDesktop.exe"><i class="bi bi-download me-2"></i>Baixe o App</a></li>
-        <li><button class="dropdown-item" id="conectarApp"><i class="bi bi-wifi me-2"></i>Conectar</button></li>
+        <!-- <li><button class="dropdown-item" id="conectarApp"><i class="bi bi-wifi me-2"></i>Conectar</button></li> -->
         <li><a class="dropdown-item" href="https://forms.gle/WBv5YuokVoCiceKL6"><i class="bi bi-lightbulb me-2"></i>Sugestões</a></li>
+        <li><button class="dropdown-item" id="refazerTuorInicio"><i class="bi bi-play-circle me-2"></i>Tuor de Boas-Vindas</button></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="../admin/admin.html"><i class="bi bi-gear me-2"></i>Admin</a></li>
       </ul>
@@ -173,6 +173,7 @@
                 <div class="col-md-6">
                   <label for="numero" class="form-label fw-bold">Número da máquina</label>
                   <input type="text" id="numero" name="numero" placeholder="Ex: 394" class="form-control" required>
+                  <div class="invalid-feedback"></div>
                 </div>
   
                 <div class="col-md-6">
@@ -241,6 +242,9 @@
                       Após o download, abra o arquivo baixado e siga as instruções na tela para instalar o programa. 
                     </p>
                     <p class="card-text">
+                      Se aparecer algo como <b>"Windows protegeu o PC"</b>, clique em <b>"Mais informações"</b> e <b>"Executar assim mesmo"</b>.
+                    </p>
+                    <p class="card-text">
                       Aguarde a conclusão da instalação.
                     </p>
                   </div>
@@ -255,8 +259,9 @@
                     <p class="card-text">
                       Após a instalação, garanta que o aplicativo esteja fechado. Isso garante o fluxo correto do programa.
                     </p>
+
                     <p class="card-text">
-                     Se você não quiser <strong>abrir pelo site</strong>, você pode abrir o programa manualmente e conectar clicando no ícone de ajuda e em <strong>"Conectar"</strong>.
+                      Caso o programa esteja aberto, clique com o botão direito no ícone do programa na barra de tarefas e clique em <b>"Fechar janela"</b>.
                     </p>
                   </div>
                 </div>
@@ -269,11 +274,11 @@
                   <h5 class="card-header">3. Abertura e Conexão <i class="bi bi-wifi ms-2"></i></h5>
                   <div class="card-body">
                     <p class="card-text">
-                      Atualize o site, aperte no botão "Começar Já" e clique em <strong>"Abrir URL:aferidorDesktop"</strong>. Aguarde o programa abrir e a mensagem "Conectado" aparecer na tela.
+                      Atualize o site, aperte no botão <b>"Começar Já"</b> ou <b>"Abrir aplicativo"</b> e clique em <b>"Abrir URL:aferidorDesktop"</b>.
                     </p>
           
                     <p class="card-text">
-                      O programa deve estar <strong>fechado</strong> antes de fazer esta etapa.
+                      Aguarde o programa abrir e a mensagem <b>"Conectado"</b> aparecer na tela.
                     </p>
                   </div>
                 </div>
@@ -284,13 +289,13 @@
               <!-- Passo 4 -->
               <div class="col mb-4">
                 <div class="card shadow min-height">
-                  <h5 class="card-header">4. Iniciar Scanner no Aplicativo <i class="bi bi-play-circle ms-2"></i></h5>
+                  <h5 class="card-header">4. Iniciar Análise<i class="bi bi-play-circle ms-2"></i></h5>
                   <div class="card-body">
                     <p class="card-text">
-                      De volta ao aplicativo, clique no botão <strong>Scan</strong>.
+                      Clique em <b>Continuar</b> e depois em <b>Scan</b>.
                     </p>
                     <p class="card-text">
-                      Aguarde até que o programa analise o software e hardware do seu dispositivo.
+                      Por favor, aguarde enquanto o programa analisa o software e hardware do seu dispositivo.
                     </p>
                   </div>
                 </div>
@@ -303,11 +308,11 @@
                   <h5 class="card-header">5. Dados no Site <i class="bi bi-clipboard-data ms-2"></i></h5>
                   <div class="card-body">
                     <p class="card-text">
-                      Ao final da análise, volte ao navegador e observe os dados obtidos.
+                      Após a conclusão da análise, os dados serão <b>automaticamente</b> exibidos na tela.
                     </p>
           
-                    <p class="card-text fw-semibold">
-                      Se não aparecer, certifique-se de que o ícone em cima do site está como "Conectado".
+                    <p class="card-text">
+                      Se os dados não aparecerem, por favor, certifique-se de que o ícone localizado na parte superior do site está indicando "Conectado" e tente <b>"Scanear Novamente"</b>.
                     </p>
                   </div>
                 </div>
@@ -319,25 +324,30 @@
                   <h5 class="card-header">6. Envio dos Dados <i class="bi bi-send ms-2"></i> </h5>
                   <div class="card-body">
                     <p class="card-text">
-                      No site, clique no botão <strong>"Enviar"</strong> e um formulário será exibido.
+                      Clique no botão <b>"Enviar"</b> e um formulário será exibido.
                     </p>
                     <p class="card-text">
-                      Preencha-o e clique no botão <strong>"Enviar em Definitivo"</strong> para concluir o processo.
+                      Preencha-o e clique no botão <b>"Enviar em Definitivo"</b> para concluir o processo.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
                     
-            <!-- Passo 7 -->
-            <div class="row justify-content-center mt-3">
+            <!-- Card de agradecimento -->
+            <!-- <div class="row justify-content-center mt-3">
               <div class="alert alert-success text-center w-75">
                 <p class="fs-5">
-                  O processo foi <strong style="color: green;">concluído com sucesso!</strong> Agora você pode fechar o aplicativo e o site.
+                  Pronto! O processo foi <strong style="color: green;">concluído com sucesso!</strong> Agora você pode fechar o site.
                 </p>
                 <span>O departamento de T.I da Esteio agradece sua colaboração!</span>
               </div>
-            </div>
+            </div> -->
+            
+          </div>
+
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Entendi, vamos começar!</button>
           </div>
         </div>
       </div>
@@ -369,7 +379,7 @@
                   </div>
                   
                   <div class="status connecting fw-semibold">
-                    <i class="fa-solid fa-spinner fa-spin-pulse me-2"></i> 
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
                     <span>Conectando ao aplicativo</span>
                   </div>
               
@@ -382,7 +392,7 @@
 
               <div class="justify-content-center d-flex my-4">
                 <div id="aviso_conexao" class="alert alert-warning mb-0" role="alert" style="width: 85%;">
-                  Se <strong>não aparecer a mensagem</strong> solicitando a abertura ou o programa <strong>não iniciar automaticamente</strong> , por favor, verifique se o programa está instaldo. Caso não, clique no botão "Download" para baixar o programa.
+                  Se <b>não aparecer a mensagem</b> solicitando a abertura ou o programa <b>não iniciar automaticamente</b> , por favor, verifique se o programa está instaldo. Caso não, clique no botão "Download" para baixar o programa.
                 </div>
 
                 <div id="sucesso_conexao" class="alert alert-success mb-0" role="alert" style="width: 75%; display: none;">
@@ -391,7 +401,7 @@
                 </div>
 
                 <div id="aviso_download" class="alert alert-info mb-0" role="alert" style="width: 85%; display: none;">
-                  Se você <strong>não tem o programa</strong>, por favor, clique no botão "Download" abaixo para baixar e instalar.
+                  Se você <b>não tem o programa</b>, por favor, clique no botão <b>"Download"</b> abaixo para baixar e instalar.
                 </div>
               </div>
 
@@ -419,11 +429,42 @@
       </div>
     </div>
 
-    <!-- MODAL AGRADECIMENTO (ENVIO FINALIZADO) -->
+    <!-- TOAST OU MODAL de BOAS-VINDAS (ENVIO FINALIZADO) -->
 
-  </div>
+    <!-- <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+      <div id="toast-BoasVindas" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="background-color: var(--bs-toast-bg);">
+        <div class="toast-body text-center">
+          <p><b>Seja Bem-Vindo ao Aferidor Desktop!</b> Gostaria de receber algumas dicas rápidas sobre como usar o sistema?</p>
+          <div class="mt-2 pt-2 d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" id="btnInicioTuor">Sim, por favor!</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="toast">Não, obrigado</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
 
+    <div class="modal fade" id=modalBoasVindas tabindex="-1" role="dialog" aria-labelledby="tituloModalBoasVindas" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" style="width: 900px;">
+        <div class="modal-content">
   
+          <div class="modal-body text-center">
+            <h1 class="fw-bold">Seja Bem-vindo ao Aferidor Desktop!</h1>
+            <!-- <p class="text-body-secondary">Um sistema desenvolvido para facilitar o controle de softwares e hardwares da empresa.</p> -->
+            <p class="mb-0 mt-3 fs-5">Gostaria de receber algumas dicas rápidas sobre como usar o sistema?</p>
+          </div>
+
+          <div class="mt-2 mb-4 d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-outline-primary" id="btnInicioTuor">Sim, por favor!</button>
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Não, obrigado</button>
+          </div>
+          
+          <div class="modal-footer justify-content-center">
+            <p>Para evitar ver essa mensagem novamente, clique <a href="#" id="naoMostrarMsgBoasVindas" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Você pode acessar o tour sempre que quiser clicando no ícone de ajuda (?)">aqui</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 

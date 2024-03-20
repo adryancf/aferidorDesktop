@@ -43,7 +43,7 @@ $(document).ready(function(){
             }
           },
           noResults: true,
-          maxResults: 5,
+          maxResults: 15,
         },
         resultItem: {
           highlight: true,
@@ -143,6 +143,21 @@ $(document).ready(function(){
   });
 
   //Tira o zero a esquerda do número da máquina
+  $("#numero").on('input', function() {
+    //So é permitido numeros 
+    //Abordagem com expressão regular -> if (!(/^\d+$/.test($(this).val()))) { (\d+ -> Corresponde a um ou mais dígitos (0-9))
+    if(isNaN($(this).val())){
+      $(this).addClass("is-invalid");
+      $(this).next('.invalid-feedback').text('Insira apenas números!');
+      erro_numero = true;
+    }
+    else{
+      $(this).removeClass("is-invalid");
+      $(this).next('.invalid-feedback').text('');
+    }
+
+  });
+
   $("#numero").on('blur', function() {
     //Tirar o zero a esquerda
     $(this).val($(this).val().replace(/^0+/, ''));
@@ -159,7 +174,7 @@ $("#formularioEnvio").submit(function(event) {
 
     // Cria um objeto JSON com os valores
     var array_infos = {
-      nome_funcionario: $("#fk_funcionario_text").val(),
+      nome_funcionario: $("#fk_funcionario_name").val(),
       fk_funcionario: $("#fk_funcionario").val(),
       email: $("#email").val(),
       numero: $("#numero").val(),
@@ -187,18 +202,33 @@ $("#formularioEnvio").submit(function(event) {
         Swal.fire({
           icon: 'success',
           title: 'Muito obrigado pela sua colaboração!',
-          html: `<p>Para melhorar o aferidor e todo o processo , pedimos que avalie a <b>sua experiência!</b></p>
-          <p class="mb-0">O departamento de TI agradece novamente a sua colaboração!</p>`,
-          confirmButtonText: '<i class="bi bi-star me-1"></i>Avaliar',
-          footer: 'Se o botão não funcionar <a href="https://forms.gle/WBv5YuokVoCiceKL6" target="_blank">Clique Aqui</a>'
-          
+          html: `<p>Para melhorar o aferidor e todo o processo , pedimos que avalie a <b>sua experiência!</b></p> 
+          <p class="mb-0">E para isso, <b>você será redirecionado</b> para um formulário de avaliação.</p>`,
+          showConfirmButton: false,
+          showCancelButton: true,
+          cancelButtonText: 'Não quero avaliar!',
+          cancelButtonColor: "#d33",
+          timer: 8000,
+          timerProgressBar: true,
+          width: 'auto'
         }).then((result)=>{
-          if(result.isConfirmed){
-            window.open('https://forms.gle/WBv5YuokVoCiceKL6', '_blank');
-          }
-          else{
-            recarregarPagina();
-          }
+          if(result.dismiss === Swal.DismissReason.cancel){
+            Swal.fire({
+              icon: 'success',
+              title: 'Perfeito!',
+              html: `<p>Esperamos que tenha tido uma ótima experiência com o nosso serviço!<p>
+              <h6 class="fw-bold">O departamento de TI agradece a sua colaboração!</h6>`,
+              showConfirmButton: false,
+              timer: 6000,
+              timerProgressBar: true,
+              footer: 'A página será atualizada em 6 segundos!'
+            }).then((result)=>{
+              recarregarPagina();
+            });
+
+          }else{
+            window.location.href = "https://forms.gle/WBv5YuokVoCiceKL6";
+          }    
         });
       },
       error: function(error) {

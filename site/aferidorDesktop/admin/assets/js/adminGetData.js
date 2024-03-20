@@ -670,7 +670,6 @@ $(document).ready(function () {
     //console.log("CLICANDO NO BOTAO ALTERNAR SW")
     $("#containerComparacaoHW").hide();
     $("#containerComparacaoSW").show();
-
     //Alterar Botao
     $("#alternarSW span").html("Ir para Hardware");
     $("#alternarSW i").toggleClass("bi-microsoft bi-gpu-card");
@@ -1340,7 +1339,7 @@ function atualizaDados() {
     //Obter setores
     $.ajax({
         type: "GET",
-        url: "../common_assets/php/searchSetor.php",
+        url: "../common_assets/php/getSetoresAdmin.php",
         dataType: "json",
         success: function(response) {
             //setores = response;
