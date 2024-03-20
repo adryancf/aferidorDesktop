@@ -138,6 +138,6 @@ class Ui_Principal(object):
     def retranslateUi(self, Principal):
         Principal.setWindowTitle(QCoreApplication.translate("Principal", u"Form", None))
         self.Titulo.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p align=\"center\"><span style=\" font-size:52pt; font-weight:600;\">AFERIDOR DESKTOP</span></p></body></html>", None))
-        self.textCentral.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p><span style=\" font-size:18pt;\">V\u00e1 at\u00e9 o site e inicie o processo de análise do sistema</span></p></body></html>", None))
+        self.textCentral.setText(QCoreApplication.translate("Principal", u"<html><head/><body><p align=\"center\"><span style=\" font-size:18pt;\">V\u00e1 at\u00e9 o site e inicie o processo de análise do sistema</span></p></body></html>", None))
     # retranslateUi
 

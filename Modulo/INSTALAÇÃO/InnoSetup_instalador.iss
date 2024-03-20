@@ -29,7 +29,7 @@ InfoAfterFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INS
 ; PrivilegesRequired=lowest
 OutputDir=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALAÇÃO\InnoSetup
 OutputBaseFilename=Instalador AferidorDesktop
-SetupIconFile=C:\Users\0394\Downloads\EsteioRetrorrefletancia_logo.ico
+SetupIconFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\favicon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -41,7 +41,9 @@ Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\EXE\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\output\aferidorDesktop\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\output\aferidorDesktop\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -56,8 +58,8 @@ Root: HKCR; Subkey: "aferidorDesktop\shell\open\command"; ValueType: string; Val
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
-[Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+;[Run]
+;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 
 
