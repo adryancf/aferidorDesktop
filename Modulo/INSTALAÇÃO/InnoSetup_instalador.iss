@@ -28,7 +28,7 @@ InfoAfterFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INS
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ; PrivilegesRequired=lowest
 OutputDir=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALAÇÃO\InnoSetup
-OutputBaseFilename=Instalador AferidorDesktop
+OutputBaseFilename=instalador_AferidorDesktop
 SetupIconFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\favicon.ico
 Compression=lzma
 SolidCompression=yes

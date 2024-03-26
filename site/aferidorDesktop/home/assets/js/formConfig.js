@@ -227,7 +227,7 @@ $("#formularioEnvio").submit(function(event) {
             });
 
           }else{
-            window.location.href = "https://forms.gle/WBv5YuokVoCiceKL6";
+            window.location.href = "https://forms.gle/ZuXx7JoXaZpEUDT36";
           }    
         });
       },

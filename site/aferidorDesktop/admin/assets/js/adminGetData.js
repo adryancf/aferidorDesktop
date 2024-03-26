@@ -42,32 +42,32 @@ function inicializarAutocompleteSoftware()
     },
     
     resultsList: {
-        element: (list, data) => {
-            if (!data.results.length) {
-                // Create "No Results" message element
-                const message = document.createElement("div");
-                // Add class to the created element
-                message.setAttribute("class", "no_result");
-                // Add message text content
-                message.innerHTML = `<span>Não foi encontrado nenhum resultado para: "${data.query}"</span>`;
-                // Append message element to the results list
-                list.prepend(message);
-            }
-        },
-        noResults: true,
-        maxResults: 10,
+      element: (list, data) => {
+          if (!data.results.length) {
+            // Create "No Results" message element
+            const message = document.createElement("div");
+            // Add class to the created element
+            message.setAttribute("class", "no_result");
+            // Add message text content
+            message.innerHTML = `<span>Não foi encontrado nenhum resultado para: "${data.query}"</span>`;
+            // Append message element to the results list
+            list.prepend(message);
+          }
+      },
+      noResults: true,
+      maxResults: 15,
     },
     resultItem: {
-        highlight: true,
+      highlight: true,
     },
     events: {
       input: {
-          selection: (event) => {
-              //console.log(event);
-              const selection = event.detail.selection.value;
-              autoCompleteJS.input.value = selection.label;
-              $('#id_software').val(selection.value);
-          }
+        selection: (event) => {
+          //console.log(event);
+          const selection = event.detail.selection.value;
+          autoCompleteJS.input.value = selection.label;
+          $('#id_software').val(selection.value);
+        }
       }
     }
   });
@@ -200,6 +200,8 @@ function verificarSetores(setorfuncionario, setorAferido)
   }
 }
 
+/* ------------------- MÉTODO DE FILTRAGEM DE SOFTWAREWS ------------------- */
+
 function filtrarSoftwares(softwareObtido, softwareAferidor) {
   /* ------------------- Explicação ------------------- 
     É CRIADO UM NOVO ARRAY COM OS SOFTWARES QUE TEM SIMALIRADE COM OS SOFTWARES AFERIDOS.
@@ -213,27 +215,35 @@ function filtrarSoftwares(softwareObtido, softwareAferidor) {
   });
 
 }
-
 //DIvidir software1 em palavras e verificar se pelo menos duas palavras estão contidas em software2
 function compararStrings(software1, software2) {
   const stopWordsSoftware = [
     "para", "com", "de", "e", "o", "os", "a", "as", "um", "uns", "uma", "umas",
-    "do", "da", "dos", "das", "em", "no", "na", "nos", "nas", "por", "é", "por", "sobre", "sob","-"
+    "do", "da", "dos", "das", "em", "no", "na", "nos", "nas", "por", "é", "por", "sobre", "sob","-", "in"
   ];
+
+  //Lista para ajudar identificar mais acertivamente os softwares licenciados
+  const sfw_licensiados = ["autocad", "photoshop", "arcgis", "dreamweaver", "acrobat"];
 
   const palavras = software1.trim().split(/\s+/).filter(palavra => !stopWordsSoftware.includes(palavra));
   let cont = 0;
-  palavras.forEach(palavra => {
-    if(software2.toLowerCase().includes(palavra.toLowerCase())){
+  for (const palavra of palavras) {
+    //Se a palavra estiver contida no array de softwares licenciados, defino que o software é importante e seto cont=2 para retornar true
+    if(sfw_licensiados.includes(palavra.toLowerCase())){
+      //console.log("Licenciado: " + software1);
+      cont=2;
+      break; //Se encontrar uma palavra licenciada, não precisa verificar as outras
+    }else if(software2.toLowerCase().includes(palavra.toLowerCase())){
       //console.log(software1 + "   [" + palavra + "]   " + " está contida em " + software2);
       cont++;
     }
-  });
+  }
 
   return (cont >= 2)
   
 }
-
+ 
+/* ------------------------------------------------------------------------ */
 $(document).ready(function () {
 
   inserirNomeUsuarioNav();
@@ -371,7 +381,9 @@ $(document).ready(function () {
 
       //EXIBE DINAMICAMENTE OS DADOS DA AFERIÇÃO
 
+      //Exibir todos os softwares obtidos -> SUBMODAL SOFTWARES (modalSoftwares)
       $("#modalSoftwares .modal-body").empty();
+      $("#tituloModalSoftware").text("Softwares instalados - [" + lista_softwares.length + "]")
       $("#modalSoftwares .modal-body").append(
           `
           <ul class="list-group">
@@ -379,7 +391,7 @@ $(document).ready(function () {
           </ul>`
       );
 
-
+      //Exibir os dados do registro da aferição -> MODAL DETALHES DO REGISTRO (modalRegistro)
       $("#modalRegistro input, select, textarea").val('');
       var elemento = $("#modalRegistro");
 
@@ -422,6 +434,7 @@ $(document).ready(function () {
       $("#modalRegistro").modal('show');
   });
 
+  //Uso apenas no modal de cadastro
   function inserirDadosHWModal(local){
     var dados = registros[$("#btnComparar").data("href")];
     local.find('[name="nome_funcionario"]').val(dados.nome_funcionario);
@@ -440,73 +453,115 @@ $(document).ready(function () {
 
   }  
 
+  //Insere os softwares na lista de softwares do modal
+  function inserirSoftwaresInstaladosNoCard(lista_softwares, card_destino){
+    if(lista_softwares){
+      lista_softwares.forEach(function(software) {       
+        let icone, elemento;
+        if(software.id == null){
+          icone = '<span class="badge text-bg-warning rounded-pill" style="background-color: #ffe189;!important">&#33;</span>';
+          elemento = $(card_destino + " #listaSoftwareProvaveis");
+        }else{
+          $(".alerta_listaVazia").hide();
+          icone = '<span class="badge text-bg-success rounded-pill">&#10003;</span>';
+          elemento = $(card_destino + " #listaSoftwareParaInserir");
+        }
+
+        let new_linha = `<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg software-item">
+          <span>
+            ${icone} 
+            <span id="nome"> ${software.nome}</span>                        
+          </span>
+          <div class="btn-group" id="btnSoftware" style="display: none;">
+            <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-file-earmark-plus-fill"></i>
+            </button> 
+
+            <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-trash-fill"></i>
+            </button>    
+          </div>                         
+        </li>`;
+
+        elemento.append(new_linha);
+      });
+    }
+    else{
+      console.log("Não há softwares para inserir");
+    }
+    
+
+  }
+
+  //Insere os softwares
+  function inserirSoftwaresInstalados(index_registro, cardCadastro){
+    let card = cardCadastro ? "#card_sfw_add" : "#card_sfw_maquina";
+    let collapse = cardCadastro ? "#collapseSoftwaresAdd" : "#collapseSoftwares";
+
+    let dados = registros[index_registro];
+    let lista_softwares = dados.softwares.split(", ");
+    let lista_softwares_filtrados;
+
+    //Esta condicional evita que a lista de softwares seja filtrada toda vez que o modal for aberto
+    if(dados.softwaresResumido == null || dados.softwaresResumido == ""){
+      var nomeSoftwaresCadastrados = softwaresCadastrados.map(software => software.nome);
+      lista_softwares_filtrados = filtrarSoftwares(lista_softwares, nomeSoftwaresCadastrados).map(software => ({ id: null, nome: software.trim() }));
+      dados.softwaresResumido = lista_softwares_filtrados;
+
+      //Enviar a lista de softwares para o BD
+      $.ajax({
+        url: "assets/php/atualizarDados.php",
+        type: "POST",
+        data: {softwares: JSON.stringify(lista_softwares_filtrados),
+              id: dados.id},              
+        success: function(response) {
+          console.log("atualizarDados.php | Requisição bem-sucedida:", response);
+        },
+        error: function(error) {
+          console.error("atualizarDados.php | Erro na requisição:", error);
+        },
+      });
+      
+
+    }
+    else{
+      lista_softwares_filtrados = dados.softwaresResumido;
+    }
+    
+    inserirSoftwaresInstaladosNoCard(lista_softwares_filtrados, card);
+
+    //Adciona o collapse com todos os softwares
+    $(collapse + " .card-body").append(
+      `
+      <ul class="list-group">
+          ${lista_softwares.map(software => `<li class="list-group-item">${software}</li>`).join('')}
+      </ul>`
+    );
+  }
+
   //Evento para abrir o modal de cadastro
   $('#btnModalCadastro').on('click', function() {
-    var dados = registros[$("#btnComparar").data("href")];
+    var index = $("#btnComparar").data("href");
+    var dados = registros[index];
           
     // Limpa os dados antigos
     $("#modalCadastro input, select").val('');
-
     inserirDadosHWModal($("#card_hw_add"));
-
     $("#card_hw_add label").addClass("mb-2");
  
 
     // --------------------------------- SOFTWARES --------------------------------- 
 
     //Zerar as listas
-    $("#card_sfw_add #listaSoftware").empty();
+    $("#card_sfw_add #listaSoftwareProvaveis").empty();
+    $("#card_sfw_add #listaSoftwareParaInserir").empty();
+
     $("#card_sfw_add .card-body").empty();
 
 
     if(dados.softwares != null){
       dados.sistema_operacional ? $("#card_sfw_add #so_add").val(dados.sistema_operacional) : $("#card_sfw_add #so_add").val("Não informado");
-
-      var lista_softwares_filtrados;
-      var lista_softwares = dados.softwares.split(", ");
-
-      //Esta condicional evita que a lista de softwares seja filtrada toda vez que o modal for aberto
-      if(dados.softwaresResumido == null){
-        var nomeSoftwaresCadastrados = softwaresCadastrados.map(software => software.nome);
-        lista_softwares_filtrados = filtrarSoftwares(lista_softwares, nomeSoftwaresCadastrados).map(software => ({ id: null, nome: software.trim() }));
-        dados.softwaresResumido = lista_softwares_filtrados;
-      }
-      else{
-        lista_softwares_filtrados = dados.softwaresResumido;
-      }
-
-      //Adciona os softwares no card (Programas instalados na Máquina)
-      var icone;
-      $("#card_sfw_add #listaSoftware").append(`
-          ${lista_softwares_filtrados.map(function(software) { 
-              icone = software.id == null ? '<span class="badge text-bg-warning rounded-pill">&#33;</span>' : '<span class="badge text-bg-success rounded-pill">&#10003;</span>';
-              
-              return (`<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
-                  <span>
-                    ${icone} 
-                    <span id="nome"> ${software.nome}</span>                        
-                  </span>
-                  <div class="btn-group" id="btnSoftware" style="display: none;">
-                    <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
-                      <i class="bi bi-file-earmark-plus-fill"></i>
-                    </button> 
-
-                    <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
-                      <i class="bi bi-trash-fill"></i>
-                    </button>    
-                  </div>                         
-                </li>`)
-          }).join('')}
-      `);
-      
-      //Adciona o collapse com todos os softwares
-      $("#collapseSoftwaresAdd .card-body").append(
-        `
-        <ul class="list-group">
-            ${lista_softwares.map(software => `<li class="list-group-item">${software}</li>`).join('')}
-        </ul>`
-      );
-
+      inserirSoftwaresInstalados(index, true);
     }          
   });
 
@@ -516,12 +571,10 @@ $(document).ready(function () {
       $("#containerComparacaoSW").hide();
       $("#containerComparacaoHW").show();
 
-      //Alterar Botao
-      $("#alternarHW").html("Ir para Software");
-      $("#alternarHW").attr("id", "alternarSW");
 
       // Inserir dinacamente os dados do registro e do banco de dados
-      var dados = registros[$("#btnComparar").data('href')];
+      let index = $("#btnComparar").data('href');
+      var dados = registros[index];
 
       //Se tiver uma maquina no aferidor ele exibe os dados
       if(dados.dadosMaquinaAferidor.length > 0) {
@@ -572,75 +625,15 @@ $(document).ready(function () {
           // --------------------------------- SOFTWARES --------------------------------- 
 
           //Zerar as listas
-          $("#card_sfw_maquina #listaSoftware").empty();
+          $("#card_sfw_maquina #listaSoftwareProvaveis").empty();
+          $("#card_sfw_maquina #listaSoftwareParaInserir").empty();
           $("#card_sfw_aferidor #listaSoftware").empty();
           $("#collapseSoftwares .card-body").empty();
 
 
           if(dados.softwares != null){
             dados.sistema_operacional ? $("#card_sfw_maquina #so_new").val(dados.sistema_operacional) : $("#card_sfw_maquina #so_new").val("Não informado");
-
-            var lista_softwares_filtrados;
-            var lista_softwares = dados.softwares.split(", ");
-
-            //Esta condicional evita que a lista de softwares seja filtrada toda vez que o modal for aberto
-            if(dados.softwaresResumido == null){
-              var nomeSoftwaresCadastrados = softwaresCadastrados.map(software => software.nome);
-              lista_softwares_filtrados = filtrarSoftwares(lista_softwares, nomeSoftwaresCadastrados).map(software => ({ id: null, nome: software.trim() }));
-              dados.softwaresResumido = lista_softwares_filtrados;
-
-              //Enviar a lista de softwares para o BD
-              $.ajax({
-                url: "assets/php/atualizarDados.php",
-                type: "POST",
-                data: {softwares: JSON.stringify(lista_softwares_filtrados),
-                      id: dados.id},              
-                success: function(response) {
-                  console.log("atualizarDados.php | Requisição bem-sucedida:", response);
-                },
-                error: function(error) {
-                  console.error("atualizarDados.php | Erro na requisição:", error);
-                },
-              });
-              
-
-            }
-            else{
-              //console.log("Softwares já salvos...");
-              lista_softwares_filtrados = dados.softwaresResumido;
-            }
-            
-            //Adciona os softwares no card (Programas instalados na Máquina)
-            $("#card_sfw_maquina #listaSoftware").append(`
-              ${lista_softwares_filtrados.map(function(software) { 
-                  icone = software.id == null ? '<span class="badge text-bg-warning rounded-pill">&#33;</span>' : '<span class="badge text-bg-success rounded-pill">&#10003;</span>';
-                  
-                  return (`<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
-                    <span>
-                      ${icone} 
-                      <span id="nome"> ${software.nome}</span>                        
-                    </span>
-                    <div class="btn-group" id="btnSoftware" style="display: none;">
-                      <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-file-earmark-plus-fill"></i>
-                      </button> 
-
-                      <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-trash-fill"></i>
-                      </button>    
-                    </div>                         
-                  </li>`)
-              }).join('')}
-            `);
-            
-            //Adciona o collapse com todos os softwares
-            $("#collapseSoftwares .card-body").append(
-              `
-              <ul class="list-group">
-                  ${lista_softwares.map(software => `<li class="list-group-item">${software}</li>`).join('')}
-              </ul>`
-            );
-
+            inserirSoftwaresInstalados(index, false);
           }
 
           //Adciona os softwares no card (Programas instalados no Aferidor)
@@ -970,6 +963,11 @@ $(document).ready(function () {
     console.log("fechando comparacao...");
     desejaSalvarAlteracoes(false);
 
+    //Isso garante a exibição do botao certo quando o modal de cadastro é aberto novamente
+    if($("#alternarHW").length){
+      $("#alternarHW").click();
+    }
+
   });
 
   $('#modalCadastro').on('hide.bs.modal', function () {
@@ -981,12 +979,12 @@ $(document).ready(function () {
   /* --------------------------------- EDITAR SOFTWARES --------------------------------- */
 
   //EFEITO PARA MOSTRAR OS BOTÕES QUANDO SE PASSA O MOUSE | Localização = Dentro de cada elemento da lista de softwares
-  $(document).on('mouseenter mouseleave', '#card_sfw_maquina #listaSoftware li, #card_sfw_add #listaSoftware li', function() {
+  $(document).on('mouseenter mouseleave', '.software-item', function() {
     
     elemento = verificarModalCadastroAberto() ? "#card_sfw_add" : "#card_sfw_maquina";
     
     // Garante que nenhum outro botão esteja visível antes de começar a animação
-    $(elemento).find('#listaSoftware li #btnSoftware').not($(this).find("#btnSoftware")).hide();
+    $(elemento).find('.software-item #btnSoftware').not($(this).find("#btnSoftware")).hide();
 
     //O toggle altera o estado do elemento (Se estiver visivel ele esconde, se estiver escondido ele mostra)  
     $(this).find("#btnSoftware").stop().animate({
@@ -1023,8 +1021,8 @@ $(document).ready(function () {
     var registro = registros[$("#btnComparar").data('href')];
 
     //Adcionar no array de registros
-
-    registro.softwaresResumido.push({id:id_software, nome:nome_software});
+    let software_add = {id:id_software, nome:nome_software};
+    registro.softwaresResumido.push(software_add);
     var lista_softwares_filtrados = registro.softwaresResumido;
 
     //Adcionar no BD
@@ -1053,29 +1051,33 @@ $(document).ready(function () {
       },
     });
 
-
-    //Verifica se é a tela de cadastro ou a tela de comparação
-    var lista_sfw = verificarModalCadastroAberto() ? "#card_sfw_add #listaSoftware" : "#card_sfw_maquina #listaSoftware";
+    //Faço isso pois na função inserirSoftwaresInstaladosNoCard, eu passo um array de softwares
+    let sfwModoArray = [];
+    sfwModoArray.push(software_add);
+    inserirSoftwaresInstaladosNoCard(sfwModoArray, verificarModalCadastroAberto() ? "#card_sfw_add" : "#card_sfw_maquina")
     
-    //Adiciona o software na lista
-    $(lista_sfw).append(`
-      <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg">
-        <span>
-          <span class="badge text-bg-success rounded-pill">&#10003;</span> 
-          <span id="nome">${nome_software}</span>                          
-        </span>
-        <div class="btn-group" id="btnSoftware" style="display: none;">
-          <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-file-earmark-plus-fill"></i>
-          </button> 
+    // MODO ANTIGO (O OUTRO MODO É MELHOR POIS ENCAPSULA O CÓDIGO)
+    // var lista_sfw = verificarModalCadastroAberto() ? "#card_sfw_add" : "#card_sfw_maquina";
+    
+    // //Adiciona o software na lista
+    // $(lista_sfw).append(`
+    //   <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center lh-lg software-item">
+    //     <span>
+    //       <span class="badge text-bg-success rounded-pill">&#10003;</span> 
+    //       <span id="nome">${nome_software}</span>                          
+    //     </span>
+    //     <div class="btn-group" id="btnSoftware" style="display: none;">
+    //       <button type="button" id="btnSoftwareSearch" class="btn btn-outline-secondary btn-sm">
+    //         <i class="bi bi-file-earmark-plus-fill"></i>
+    //       </button> 
 
-          <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-trash-fill"></i>
-          </button>    
-        </div>                         
-      </li>`
+    //       <button type="button" id="btnSofwareRemove" class="btn btn-outline-secondary btn-sm">
+    //         <i class="bi bi-trash-fill"></i>
+    //       </button>    
+    //     </div>                         
+    //   </li>`
 
-    );
+    // );
 
     //console.log("Adicionando software: ", nome_software, " com id: ", id_software);
 
@@ -1089,15 +1091,19 @@ $(document).ready(function () {
     let registro = registros[$("#btnComparar").data('href')];
     
     let nome = $(this).closest('li').find('span#nome')[0].innerText;
-    let index_software = registro.softwaresResumido.findIndex(sfw => (sfw.nome == nome));
+    let index_software = registro.softwaresResumido.findIndex(sfw => {
+      //REMOVER ESPAÇOS E DEIXAR TUDO EM MINUSCULO PARA COMPARAÇÃO
+      let nomes_sfw = sfw.nome.toLowerCase().replace(/\s/g, "").trim();
+      let nome_comparacao = nome.toLowerCase().replace(/\s/g, "").trim();
+
+      return (nomes_sfw == nome_comparacao);
+    });
     
-    //console.log("Removendo: ", nome, " com index: ", index_software, " do array de softwares.")
+    console.log("Removendo: ", nome, " com index: ", index_software, " do array de softwares.")
 
     registro.softwaresResumido.splice(index_software, 1);
 
-    //Remove do BD
-
-    //Adcionar no BD
+    //Atualizar no BD
     $.ajax({
       url: "assets/php/atualizarDados.php",
       type: "POST",
@@ -1126,7 +1132,7 @@ $(document).ready(function () {
     //Remover o elemento da lista
     $(this).closest('li').remove();      
 
-    //console.log("Resultado = ", registro.softwaresResumido);
+    console.log("Resultado = ", registro.softwaresResumido);
 
   });
 

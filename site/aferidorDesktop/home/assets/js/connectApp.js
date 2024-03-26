@@ -282,17 +282,16 @@ $("#btnDonwload").click(function() {
   $("#modalInicio").modal("hide");
 
   // Executar o download
-  var url = "../download/Instalador_AferidorDesktop.exe";
+  var url = "../download/instalador_AferidorDesktop.exe";
   var link = $("<a>").attr('href', url).appendTo('body');
   link[0].click();
 
   link.remove();
 
   Swal.fire({
-    title: "Seu aplicativo já está sendo baixado!",
+    title: "Seu aplicativo já está sendo baixado! Leia atentamente as instruções abaixo.",
     html: `
     <div class="mx-4">
-      <span>Após concluir o download, abra o instalador e prossiga com a instalação. Ao finalizar, <b>atualize o site e inicie novamente</b>.</span>
       
       <div class="justify-content-center d-flex my-4 gap-2 fs-6">
         <div class="alert alert-warning shadow d-flex align-items-center col-6">
@@ -304,6 +303,8 @@ $("#btnDonwload").click(function() {
         </div>
       </div>
 
+      <h5 class="mt-3">Após concluir o download, abra o instalador e prossiga com a instalação. Ao finalizar, <b>atualize o site e inicie novamente</b>.</h5>
+
       <span class="fw-bold mb-0 mt-5">Em caso de dúvidas, clique no Saiba Mais para ter acesso a um passo a passo completo.</span>
     </div>`,
     showDenyButton: true,
@@ -312,7 +313,7 @@ $("#btnDonwload").click(function() {
     denyButtonColor: "gray",
     confirmButtonColor: "navy",
     icon: "success",
-    footer: 'Caso o donwload não inicie, <a href="../download/downloadBckp/Instalador_AferidorDesktop.exe">Clique aqui</a>',
+    footer: 'Caso o donwload não inicie, <a href="../download/downloadBckp/instalador_AferidorDesktop">Clique aqui</a>',
     width: "80%"
   }).then((result)=> {
     if(result.isDenied){
