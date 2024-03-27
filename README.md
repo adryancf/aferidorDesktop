@@ -1,4 +1,28 @@
 # aferidorDesktop
-Um aplicativo que faz a auditoria automática na máquina do usuário, obtendo os dados de hardware e software em tempo real. 
+O AferidorDesktop é uma ferramenta desenvolvida para simplificar e otimizar o processo de inventário de máquinas e softwares em ambientes corporativos. Ao substituir o processo manual, que exigia visitas individuais a cada máquina, esta ferramenta permite a obtenção rápida e precisa de dados, com a premissa de que o próprio colaborador ou usuário da máquina possa realizar a coleta e enviá-la para o departamento responsável.
 
-Contamos com uma aplicação web focada na interação com o usuário e no envio dos dados para nosso servidor. Ainda sim, está sendo desenvolvida uma págima para administrador, com o objetivo de agrupar as aferições enviadas e aprovar a inserção das novas informações no sistema.
+Para melhor entedimento, abaixo estão listadas as principais features da ferramenta:
+  * Interface WEB integrada: Intuitiva e integrada ao software de obtenção de dados.
+  * Controle total da aplicação: Através da interface principal, os usuários têm controle completo sobre todas as etapas do processo, desde a abertura do aplicativo até a obtenção dos dados necessários.
+  * Visualização instantânea dos dados: Os dados coletados são exibidos instantaneamente na página, oferecendo aos usuários uma visão imediata e atualizada do status do inventário.
+  * Formulário de envio completo: Permite o envio de dados coletados junto com informações relevantes sobre o colaborador associado a máquina.
+  * Interface de administrador abrangente: Reúne todos os dados recebidos, fornecendo uma visão detalhada de todo o processo. Além disso, oferece a capacidade de atualizar ou cadastrar informações sobre o hardware diretamente.
+  * Comparação com dados anteriores:  Na interface de administrador, é possível realiza a comparação dos dados coletados com registros anteriores da mesma máquina, facilitando a identificação de alterações ou discrepâncias ao longo do tempo.
+  
+Com essas funcionalidades, o AferidorDesktop simplifica todo o processo de aferição de hardwares e softwares, aumentando tanto a periodicidade quanto a confiabilidade dos dados obtidos.
+
+# Stacks e integrações
+A ferramenta é composta por duas aplicações web: uma principal e outra para o usuário final. O front-end foi desenvolvido utilizando Bootstrap 5.3, enquanto o back-end é predominantemente em JavaScript. A integração com o banco de dados e o sistema já utilizado pela empresa foi realizada por meio de scripts PHP.
+
+O aplicativo responsável pela obtenção dos dados foi criado em Python, utilizando WebSockets para integração com a página web. Para a interface gráfica, foi utilizado PySide2/QT. Além disso, o aplicativo utiliza o módulo subprocess para a execução de comandos do [WMIC](#hardware---wmic) via CMD e PowerShell, permitindo assim a obtenção dos dados de hardware e software de forma eficiente e precisa.
+
+## Hardware - WMIC
+O WMIC (Windows Management Instrumentation Command-line) é uma ferramenta de linha de comando no sistema operacional Windows que possibilita o acesso de várias características do sistema, incluindo hardware, software e configurações do sistema operacional. É por meio dessa ferramenta que o aferidor obtém os dados de hardware da máquina de forma automatizada.
+Exemplo de implementação com o powershell:
+```
+#Informações sobre a placa-mãe
+command = 'wmic path Win32_BaseBoard get Manufacturer /format:value'
+result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+```
+
+> Referências: [Sintaxe](https://learn.microsoft.com/pt-br/windows-server/administration/windows-commands/wmic) | [Classes do WMI](https://learn.microsoft.com/pt-br/windows/win32/cimwin32prov/computer-system-hardware-classes) | [Formas de obter os dados](https://learn.microsoft.com/pt-br/windows/win32/wmisdk/wmi-tasks--computer-hardware)
