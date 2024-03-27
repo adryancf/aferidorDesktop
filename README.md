@@ -18,11 +18,12 @@ O aplicativo responsável pela obtenção dos dados foi criado em Python, utiliz
 
 ## Hardware - WMIC
 O WMIC (Windows Management Instrumentation Command-line) é uma ferramenta de linha de comando no sistema operacional Windows que possibilita o acesso de várias características do sistema, incluindo hardware, software e configurações do sistema operacional. É por meio dessa ferramenta que o aferidor obtém os dados de hardware da máquina de forma automatizada.
-Exemplo de implementação com o powershell:
+
+Exemplo de obtenção de dados sobre a placa-mãe (Marca e Nome) pelo CMD:
 ```
-#Informações sobre a placa-mãe
-command = 'wmic path Win32_BaseBoard get Manufacturer /format:value'
-result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+C:\Users\*>wmic path Win32_BaseBoard get Manufacturer, Product /format:value
+Manufacturer=ASRock
+Product=H61M-VS
 ```
 
 > Referências: [Sintaxe](https://learn.microsoft.com/pt-br/windows-server/administration/windows-commands/wmic) | [Classes do WMI](https://learn.microsoft.com/pt-br/windows/win32/cimwin32prov/computer-system-hardware-classes) | [Formas de obter os dados](https://learn.microsoft.com/pt-br/windows/win32/wmisdk/wmi-tasks--computer-hardware)
