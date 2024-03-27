@@ -16,7 +16,7 @@ A ferramenta é composta por duas aplicações web: uma principal e outra para o
 
 O aplicativo responsável pela obtenção dos dados foi criado em Python, utilizando WebSockets para integração com a página web. Para a interface gráfica, foi utilizado PySide2/QT. Além disso, o aplicativo utiliza o módulo subprocess para a execução de comandos do [WMIC](#hardware---wmic) via CMD e PowerShell, permitindo assim a obtenção dos dados de hardware e software de forma eficiente e precisa.
 
-## Hardware - WMIC
+### Hardware - WMIC
 O WMIC (Windows Management Instrumentation Command-line) é uma ferramenta de linha de comando no sistema operacional Windows que possibilita o acesso de várias características do sistema, incluindo hardware, software e configurações do sistema operacional. É por meio dessa ferramenta que o aferidor obtém os dados de hardware da máquina de forma automatizada.
 
 Exemplo de obtenção de dados sobre a placa-mãe (Marca e Nome) pelo CMD:
@@ -27,3 +27,11 @@ Product=H61M-VS
 ```
 
 > Referências: [Sintaxe](https://learn.microsoft.com/pt-br/windows-server/administration/windows-commands/wmic) | [Classes do WMI](https://learn.microsoft.com/pt-br/windows/win32/cimwin32prov/computer-system-hardware-classes) | [Formas de obter os dados](https://learn.microsoft.com/pt-br/windows/win32/wmisdk/wmi-tasks--computer-hardware)
+
+### Software - Acesso pelo registro
+A obtenção dos softwares instalados é realizada acessando os registros específicos e filtrando-os com base na variável SystemComponent, resultando em um conjunto de dados semelhante ao que é visto no Programas e Recursos do Windows. Embora seja possível obter informações através do WMIC, isso se limita aos softwares instalados via MSI, sendo esta a maneira mais completa e precisa de obter esses dados.
+
+```
+PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -and $Product.SystemComponent -ne 1){$Product.DisplayName}}}
+```
+> Referências: [Explicação mais detalhada do comando](https://superuser.com/questions/1603763/how-can-i-run-a-single-command-to-show-all-installed-applications-in-windows-10)
