@@ -35,3 +35,16 @@ A obtenção dos softwares instalados é realizada acessando os registros espec�
 PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -and $Product.SystemComponent -ne 1){$Product.DisplayName}}}
 ```
 > Referências: [Explicação mais detalhada do comando](https://superuser.com/questions/1603763/how-can-i-run-a-single-command-to-show-all-installed-applications-in-windows-10)
+
+
+# Localização dos elementos
+- `Modulo/GUI/main.py`: O arquivo principal do programa, e aonde é importada a interface gráfica.
+- `Modulo/GUI/tela_inicial.py`: Este arquivo contém o código da interface da tela inicial do aplicativo. Ele é gerado a partir do arquivo `Modulo/ui/Principal.ui`, que foi criado utilizando o QT Designer.
+- `Modulo/GUI/modulo.py`: Arquivo aonde é realizada a análise e obtenção dos dados através da função **scan_system()**.
+- `Modulo/GUI/servidorWebSocket.py`: Este arquivo contém a definição do servidor WebSocket, incluindo as principais funções para o funcionamento do servidor, como:
+  - Definição das funções de execução com base nas mensagens recebidas dos clientes. (scan_system(), encerrar_app_cliente()).
+  - Envio de mensagens para os clientes.
+  - Desconexão de todos os clientes conectados e encerramento do servidor. (Função acionada ao fechar a janela do APP ou a página WEB, estando os dois conectados).
+- `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
+
+
