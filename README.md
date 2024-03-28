@@ -131,10 +131,16 @@ Com base nisso, ao digitar **`aferidordesktop://open`** no navegador, o sistema 
 
 ###EXE
 O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-exe)[https://pypi.org/project/auto-py-to-exe/] seguindo esta configuração: 
- - Script Location: `Modulo/GUI/main.py`
- - Onefile: One Directory (Cria o EXE + um diretório com todos os arquivos)
- - Console Window: `Window Based (hide the console)`
- - Icon: `Modulo/GUI/favicon.ico`
+ - **Script Location**: `Modulo/GUI/main.py`
+ - **Onefile**: `One Directory` (Cria o EXE + um diretório com todos os arquivos)
+ - **Console Window**: `Window Based (hide the console)`
+ - **Icon**: `Modulo/GUI/favicon.ico`
+ - **Additional Files**: `Modulo/GUI/modulo_ScanSystem.py`, `Modulo/GUI/servidorWebSocket.py`, `Modulo/GUI/tela_inicial.py`
+ - **Advanced** -> **Windows specific options** -> **--version-file**: `Modulo/GUI/file_version.txt` (Arquivo com os dados de versão)
+ - **Advanced** -> **Windows specific options** -> **--uac-admin**: `Enable` (Incializar como administrador)
+ - **Settings** -> **Output Directory**: `Modulo/GUI/output`
+
+O `Modulo/GUI/file_version.txt` é gerado pelo `Modulo/GUI/version.yml` utilizando a biblioteca 
 
 - `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
 - `Modulo/INSTALL/InnoSetup_instalador.iss`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
