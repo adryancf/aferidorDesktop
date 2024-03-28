@@ -41,10 +41,10 @@ PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVer
 > Nesta seção, o objetivo é listar os arquivos mais significativos para facilitar a compreensão do código e auxiliar em futuras manutenções. 
 
 ## Código Fonte
-#### Main - (`Modulo/GUI/main.py`)
+### Main - (`Modulo/GUI/main.py`)
 O arquivo principal do programa. Aqui é importada a interface gráfica e criada a janela através da classe `Main(QWidget, Ui_Principal)`. Além disso, define-se uma função para iniciar o servidor WebSocket assim que o aplicativo é aberto (`iniciar_servidor`) e outra para encerrá-lo quando o aplicativo é fechado (`closeEvent`).
 
-##### Thread (WebSocket)
+#### Thread (WebSocket)
 É essencial iniciar o servidor WebSocket em uma thread separada para garantir sua execução simultânea com a interface gráfica e outras funcionalidades do aplicativo. Isso se deve ao fato de que o servidor precisa estar constantemente aguardando e respondendo a conexões de clientes, enquanto a GUI precisa ser responsiva e interativa para o usuário.
 
 Para alcançar esse objetivo, é utilizado a biblioteca [asyncio](https://docs.python.org/pt-br/3/library/asyncio.html) para lidar com operações assíncronas, como as operações de rede. Essa biblioteca, quando executada em uma thread separada, requer um loop de eventos responsável por gerenciar a execução de tarefas. Deste modo, a função `iniciar_servidor` é passada como parâmetro durante a criação da thread.
@@ -66,7 +66,7 @@ self.servidor = ServidorWebSocket("localhost", 8181, self)
 self.thread_servidor = threading.Thread(target=self.iniciar_servidor)
 self.thread_servidor.start()
 ```
-##### Singleton
+#### Singleton
 Para garantir que apenas uma instância do programa vai ser executada, é adotado o padrão de projeto Singleton empregando a biblioteca [tendo](https://pythonhosted.org/tendo/), facilitando e simplificando a implementação dessa funcionalidade.
 
 ```
@@ -79,8 +79,12 @@ Para garantir que apenas uma instância do programa vai ser executada, é adotad
    sys.exit(1)
 ```
 
+### Servidor WebSocket (`Modulo/GUI/servidorWebSocket.py`)
+Este arquivo contém a definição do servidor WebSocket e suas principais funções. Ele é responsável por gerenciar todas as mensagens recebidas e, com base no conteúdo da mensagem, tomar uma ação correspondente. 
 
+O servidor WebSocket desempenha um papel crítico no controle da abertura, início do escaneamento e encerramento do aplicativo. Isso ocorre porque todo o controle é conduzido pelo website conectado a ele, por meio de mensagens recebidas, como "scan_system", que inicia o escaneamento, e "close_app", que é enviada quando o usuário recarrega a página estando conectado ao servidor. Esse design tem como objetivo evitar a alternância entre plataformas, simplificando todo o processo de interação e garantindo uma experiência contínua para o usuário.
 
+### Módulo (`Modulo/GUI/servidorWebSocket.py`)
 
 
 - `Modulo/GUI/tela_inicial.py`: Este arquivo contém o código da interface da tela inicial do aplicativo. Ele é gerado a partir do arquivo `Modulo/ui/Principal.ui`, que foi criado utilizando o QT Designer.
