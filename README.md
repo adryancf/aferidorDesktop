@@ -38,7 +38,7 @@ PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVer
 
 
 # Localização dos elementos
-- `Modulo/GUI/main.py`: O arquivo principal do programa, e aonde é importada a interface gráfica.
+- `Modulo/GUI/main.py`: O arquivo principal do programa, onde a interface gráfica é importada .
 - `Modulo/GUI/tela_inicial.py`: Este arquivo contém o código da interface da tela inicial do aplicativo. Ele é gerado a partir do arquivo `Modulo/ui/Principal.ui`, que foi criado utilizando o QT Designer.
 - `Modulo/GUI/modulo.py`: Arquivo aonde é realizada a análise e obtenção dos dados através da função **scan_system()**.
 - `Modulo/GUI/servidorWebSocket.py`: Este arquivo contém a definição do servidor WebSocket, incluindo as principais funções para o funcionamento do servidor, como:
