@@ -11,7 +11,7 @@ import asyncio
 from tendo import singleton
 
 # Arquivos adicionais
-import modulo
+import modulo_ScanSystem
 from servidorWebSocket import ServidorWebSocket
 
 class Main(QWidget, Ui_Principal):

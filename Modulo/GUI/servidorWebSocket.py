@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-import modulo
+import modulo_ScanSystem
 
 class ServidorWebSocket:
 
@@ -30,7 +30,7 @@ class ServidorWebSocket:
           self.main.barra_progresso.setVisible(True)
 
           #Analise
-          result = modulo.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
+          result = modulo_ScanSystem.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
           print(result)
           #self.main.resultado(result)
 
