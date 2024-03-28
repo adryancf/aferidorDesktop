@@ -77,7 +77,6 @@ def scan_system(barra_progresso, websocket_server, loop = None):
 
     '''
     Links Uteis
-    https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes
     https://learn.microsoft.com/pt-br/windows/win32/cimwin32prov/computer-system-hardware-classes
     https://learn.microsoft.com/pt-br/windows/win32/wmisdk/wmi-tasks--computer-hardware
     '''

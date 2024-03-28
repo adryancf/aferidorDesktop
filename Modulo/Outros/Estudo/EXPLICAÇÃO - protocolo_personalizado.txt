@@ -1,0 +1,22 @@
+CRIANDO UM PROTOCOLO PERSONALIZADO NO WINDOWS PARA ABRIR O APP
+
+-> REGISTRAR O PROTOCOLO PERSONALIZADO NOS REGISTROS DO WINDOWS, SEGUINDO ESTA ESTRUTURA:
+
+HKEY_CLASSES_ROOT
+   myapp
+      (Default) = "URL:myapp"
+      URL Protocol = ""
+  DefaultIcon
+     (Default) = "c:\myapp.exe",0
+  shell
+     open
+        command
+           (Default) = "c:\myapp.exe" "%1"
+
+
+----- Substituindo o myapp pelo nome do aplicativo -----
+
+%1 é um marcador de posição, quando alguém clica em um link myapp://algum-parametro, o sistema operacional executa:
+
+"C:\Caminho\Para\Seu\Aplicativo\seu_app.exe" "myapp://algum-parametro"
+
