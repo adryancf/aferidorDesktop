@@ -2,12 +2,12 @@
 O AferidorDesktop é uma ferramenta desenvolvida para simplificar e otimizar o processo de inventário de máquinas e softwares em ambientes corporativos. Ao substituir o processo manual, que exigia visitas individuais a cada máquina, esta ferramenta permite a obtenção rápida e precisa de dados, com a premissa de que o próprio colaborador ou usuário da máquina possa realizar a coleta e enviá-la para o departamento responsável.
 
 Para melhor entedimento, abaixo estão listadas as principais features da ferramenta:
-  * Interface WEB integrada: Intuitiva e integrada ao software de obtenção de dados.
-  * Controle total da aplicação: Através da interface principal, os usuários têm controle completo sobre todas as etapas do processo, desde a abertura do aplicativo até a obtenção dos dados necessários.
-  * Visualização instantânea dos dados: Os dados coletados são exibidos instantaneamente na página, oferecendo aos usuários uma visão imediata e atualizada do status do inventário.
-  * Formulário de envio completo: Permite o envio de dados coletados junto com informações relevantes sobre o colaborador associado a máquina.
-  * Interface de administrador abrangente: Reúne todos os dados recebidos, fornecendo uma visão detalhada de todo o processo. Além disso, oferece a capacidade de atualizar ou cadastrar informações sobre o hardware diretamente.
-  * Comparação com dados anteriores:  Na interface de administrador, é possível realiza a comparação dos dados coletados com registros anteriores da mesma máquina, facilitando a identificação de alterações ou discrepâncias ao longo do tempo.
+  * **Interface WEB integrada**: Intuitiva e integrada ao software de obtenção de dados.
+  * **Controle total da aplicação**: Através da interface principal, os usuários têm controle completo sobre todas as etapas do processo, desde a [abertura]() do aplicativo até a obtenção dos dados necessários.
+  * **Visualização instantânea dos dados**: Os dados coletados são exibidos instantaneamente na página, oferecendo aos usuários uma visão imediata e atualizada do status do inventário.
+  * **Formulário de envio completo**: Permite o envio de dados coletados junto com informações relevantes sobre o colaborador associado a máquina.
+  * **Interface de administrador abrangente**: Reúne todos os dados recebidos, fornecendo uma visão detalhada de todo o processo. Além disso, oferece a capacidade de atualizar ou cadastrar informações sobre o hardware diretamente.
+  * **Comparação com dados anteriores**:  Na interface de administrador, é possível realiza a comparação dos dados coletados com registros anteriores da mesma máquina, facilitando a identificação de alterações ou discrepâncias ao longo do tempo.
   
 Com essas funcionalidades, o AferidorDesktop simplifica todo o processo de aferição de hardwares e softwares, aumentando tanto a periodicidade quanto a confiabilidade dos dados obtidos.
 
@@ -107,7 +107,35 @@ A função recebe como parâmetro a referência da barra de progresso exibida pe
 
 No caso de ocorrer algum erro durante o processo, os detalhes do erro são registrados em um arquivo de log separado (`C:\Users\*\Documents\AferidorDesktop\ERROR_AferidorDesktop.txt`). Esta abordagem visa fornecer uma maneira eficaz de acompanhar o progresso, organizar e compartilhar os dados coletados, além de registrar quaisquer problemas que possam surgir para fins de diagnóstico e resolução.
 
-## Instalador
+## Instalador e EXE
+O aferidorDesktop é compilado em um arquivo executável (EXE) e inclui um instalador para simplificar sua distribuição. Além disso, o instalador facilita a configuração dos Protocolos Personalizados ou [Esquemas de URI](https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa767914(v=vs.85)), permitindo que a aplicação web solicite a [abertura do programa](https://stackoverflow.com/questions/32445017/start-an-application-from-a-url-and-get-data/32445139#32445139) de forma automática. 
+
+### Protocolos Personalizados
+Os Protocolos Personalizados possibilitam a abertura de aplicativos ou arquivos por meio de URLs, permitindo invocar o programa através de uma página web. Eles são criados por meio do registro do Windows, permitindo a associação de uma URL específica a um aplicativo instalado no sistema:
+
+```
+HKEY_CLASSES_ROOT/
+   aferidorDesktop/
+       (Default)              = "URL:aferidorDesktop"
+       URL Protocol           = ""
+       DefaultIcon
+           (Default)          = "aferidorDesktop.exe,1"
+       shell
+           open
+               command
+                    (Default) = "C:\Program Files (x86)\AferidorDesktop\aferidorDesktop.exe" "%1"
+
+```
+
+Com base nisso, ao digitar **`aferidordesktop://open`** no navegador, o sistema é aberto. Como a inserção desse registro no Windows é necessária, é preciso ter um instalador para realizar esse processo. Esse instalador é responsável por configurar o registro do sistema operacional de forma adequada, associando o protocolo personalizado `aferidordesktop://` com o aplicativo correspondente, garantindo que ele seja acionado corretamente quando a URL específica é acessada pelo usuário.
+
+###EXE
+O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-exe)[https://pypi.org/project/auto-py-to-exe/] seguindo esta configuração: 
+ - Script Location: `Modulo/GUI/main.py`
+ - Onefile: One Directory (Cria o EXE + um diretório com todos os arquivos)
+ - Console Window: `Window Based (hide the console)`
+ - Icon: `Modulo/GUI/favicon.ico`
+
 - `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
 - `Modulo/INSTALL/InnoSetup_instalador.iss`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
 
