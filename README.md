@@ -41,8 +41,24 @@ PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVer
 > Nesta seção, o objetivo é listar os arquivos mais significativos para facilitar a compreensão do código e auxiliar em futuras manutenções. 
 
 ## Código Fonte
-### Main - (`Modulo/GUI/main.py`)
-O arquivo principal do programa. Aqui é importada a interface gráfica e criada a janela através da classe `Main(QWidget, Ui_Principal)`. Além disso, define-se uma função para iniciar o servidor WebSocket assim que o aplicativo é aberto (`iniciar_servidor`) e outra para encerrá-lo quando o aplicativo é fechado (`closeEvent`).
+### Main (`Modulo/GUI/main.py`)
+O arquivo principal do programa desempenha várias funções essenciais. Ele importa a interface gráfica, cria a janela principal da aplicação e define funções para iniciar e encerrar o servidor WebSocket. Além disso, também controla a execução do aplicativo, coordenando o fluxo de funcionamento e interação com o usuário.
+
+#### Interface Gráfica
+Toda a estrutura e aparência da interface foram desenvolvidas utilizando o QT Designer, que gera um arquivo .ui (`Modulo/ui/Principal.ui`). Para integrar este arquivo ao projeto, é necessário convertê-lo para Python (`Modulo/GUI/tela_inicial.py`) usando o comando abaixo. Certifique-se de que o PySide2 esteja instalado e que o arquivo Principal.ui esteja na raiz do projeto:
+
+```
+pyside2-uic Principal.ui -o tela_inicial.py
+```
+
+Sendo assim, para alterar algo na interface gráfica é necessário:
+ - Abrir o Principal.ui no QT Designer
+ - Salvar ou exportar para um novo arquivo as modificações
+ - Converter este .ui para um arquivo .py
+ - Verificar o nome da classe que está no arquivo convertido e que contêm todos os dados da GUI
+ - Incluir este arquivo no main.py: `from nova_tela_convertida import classe_do_arquivo_convertido`
+ - Incluir todos os elementos que a sua interface utilizará (`from PySide2.QtWidgets import QApplication, QWidget, QMessageBox, QProgressDialog`)
+
 
 #### Thread (WebSocket)
 É essencial iniciar o servidor WebSocket em uma thread separada para garantir sua execução simultânea com a interface gráfica e outras funcionalidades do aplicativo. Isso se deve ao fato de que o servidor precisa estar constantemente aguardando e respondendo a conexões de clientes, enquanto a GUI precisa ser responsiva e interativa para o usuário.
@@ -84,15 +100,15 @@ Este arquivo contém a definição do servidor WebSocket e suas principais funç
 
 O servidor WebSocket desempenha um papel crítico no controle da abertura, início do escaneamento e encerramento do aplicativo. Isso ocorre porque todo o controle é conduzido pelo website conectado a ele, por meio de mensagens recebidas, como "scan_system", que inicia o escaneamento, e "close_app", que é enviada quando o usuário recarrega a página estando conectado ao servidor. Esse design tem como objetivo evitar a alternância entre plataformas, simplificando todo o processo de interação e garantindo uma experiência contínua para o usuário.
 
-### Módulo (`Modulo/GUI/servidorWebSocket.py`)
+### Módulo para obtenção dos dados (`Modulo/GUI/modulo_ScanSystem.py`)
+Aqui é definido a função que extrai os dados importantes de hardware e software da máquina que está executando a aplicação. Ele faz isso através da execução de comandos no CMD e Powershell utilizando o [WMIC](#hardware---wmic), processo este explicado e exemplificado detalhadamente no tópico [Stacks e integrações](#stacks-e-integrações).
 
+A função recebe como parâmetro a referência da barra de progresso exibida pela interface e a atualiza conforme o progresso do processo. Após a conclusão, os dados são organizados em formato JSON e enviados separadamente para o website. Além disso, os dados são salvos em um arquivo de log, localizado em C:\Users\*\Documents\AferidorDesktop.
 
-- `Modulo/GUI/tela_inicial.py`: Este arquivo contém o código da interface da tela inicial do aplicativo. Ele é gerado a partir do arquivo `Modulo/ui/Principal.ui`, que foi criado utilizando o QT Designer.
-- `Modulo/GUI/modulo_ScanSystem.py`: Arquivo aonde é realizada a análise e obtenção dos dados através da função **scan_system()**.
-- `Modulo/GUI/servidorWebSocket.py`: Este arquivo contém a definição do servidor WebSocket e as suas principais funções
-- `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
+No caso de ocorrer algum erro durante o processo, os detalhes do erro são registrados em um arquivo de log separado (`C:\Users\*\Documents\AferidorDesktop\ERROR_AferidorDesktop.txt`). Esta abordagem visa fornecer uma maneira eficaz de acompanhar o progresso, organizar e compartilhar os dados coletados, além de registrar quaisquer problemas que possam surgir para fins de diagnóstico e resolução.
 
 ## Instalador
+- `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
 - `Modulo/INSTALL/InnoSetup_instalador.iss`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
 
 
