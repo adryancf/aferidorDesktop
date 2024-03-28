@@ -37,14 +37,62 @@ PS C:\Users\*>foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVer
 > Referências: [Explicação mais detalhada do comando](https://superuser.com/questions/1603763/how-can-i-run-a-single-command-to-show-all-installed-applications-in-windows-10)
 
 
-# Localização dos elementos
-- `Modulo/GUI/main.py`: O arquivo principal do programa, onde a interface gráfica é importada .
+# Arquivos Importantes
+> Nesta seção, o objetivo é listar os arquivos mais significativos para facilitar a compreensão do código e auxiliar em futuras manutenções. 
+
+## Código Fonte
+#### Main - (`Modulo/GUI/main.py`)
+O arquivo principal do programa. Aqui é importada a interface gráfica e criada a janela através da classe `Main(QWidget, Ui_Principal)`. Além disso, define-se uma função para iniciar o servidor WebSocket assim que o aplicativo é aberto (`iniciar_servidor`) e outra para encerrá-lo quando o aplicativo é fechado (`closeEvent`).
+
+##### Thread (WebSocket)
+É essencial iniciar o servidor WebSocket em uma thread separada para garantir sua execução simultânea com a interface gráfica e outras funcionalidades do aplicativo. Isso se deve ao fato de que o servidor precisa estar constantemente aguardando e respondendo a conexões de clientes, enquanto a GUI precisa ser responsiva e interativa para o usuário.
+
+Para alcançar esse objetivo, é utilizado a biblioteca [asyncio](https://docs.python.org/pt-br/3/library/asyncio.html) para lidar com operações assíncronas, como as operações de rede. Essa biblioteca, quando executada em uma thread separada, requer um loop de eventos responsável por gerenciar a execução de tarefas. Deste modo, a função `iniciar_servidor` é passada como parâmetro durante a criação da thread.
+
+```
+def iniciar_servidor(self):
+  # Inicializar o loop de eventos
+  self.loop_websocket = asyncio.new_event_loop()
+  asyncio.set_event_loop(self.loop_websocket)
+
+  try:
+    self.loop_websocket.run_until_complete(self.servidor.iniciar_servidor())
+  finally:
+    self.loop_websocket.close()
+```
+
+```
+self.servidor = ServidorWebSocket("localhost", 8181, self)
+self.thread_servidor = threading.Thread(target=self.iniciar_servidor)
+self.thread_servidor.start()
+```
+##### Singleton
+Para garantir que apenas uma instância do programa vai ser executada, é adotado o padrão de projeto Singleton empregando a biblioteca [tendo](https://pythonhosted.org/tendo/), facilitando e simplificando a implementação dessa funcionalidade.
+
+```
+# Garantir que apenas uma instância do programa seja executada
+ try:
+   me = singleton.SingleInstance()
+ except singleton.SingleInstanceException:
+   print(f"Não pode ser aberto duas instâncias do aferidorDesktop.")
+   exibir_mensagem_erro()
+   sys.exit(1)
+```
+
+
+
+
+
 - `Modulo/GUI/tela_inicial.py`: Este arquivo contém o código da interface da tela inicial do aplicativo. Ele é gerado a partir do arquivo `Modulo/ui/Principal.ui`, que foi criado utilizando o QT Designer.
-- `Modulo/GUI/modulo.py`: Arquivo aonde é realizada a análise e obtenção dos dados através da função **scan_system()**.
-- `Modulo/GUI/servidorWebSocket.py`: Este arquivo contém a definição do servidor WebSocket, incluindo as principais funções para o funcionamento do servidor, como:
-  - Definição das funções de execução com base nas mensagens recebidas dos clientes. (scan_system(), encerrar_app_cliente()).
-  - Envio de mensagens para os clientes.
-  - Desconexão de todos os clientes conectados e encerramento do servidor. (Função acionada ao fechar a janela do APP ou a página WEB, estando os dois conectados).
+- `Modulo/GUI/modulo_ScanSystem.py`: Arquivo aonde é realizada a análise e obtenção dos dados através da função **scan_system()**.
+- `Modulo/GUI/servidorWebSocket.py`: Este arquivo contém a definição do servidor WebSocket e as suas principais funções
 - `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
+
+## Instalador
+- `Modulo/INSTALL/InnoSetup_instalador.iss`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
+
+
+## Aplicação WEB
+
 
 
