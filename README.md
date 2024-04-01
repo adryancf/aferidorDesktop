@@ -129,7 +129,7 @@ HKEY_CLASSES_ROOT/
 
 Com base nisso, ao digitar **`aferidordesktop://open`** no navegador, o sistema é aberto. Como a inserção desse registro no Windows é necessária, é preciso ter um instalador para realizar esse processo. Esse instalador é responsável por configurar o registro do sistema operacional de forma adequada, associando o protocolo personalizado `aferidordesktop://` com o aplicativo correspondente, garantindo que ele seja acionado corretamente quando a URL específica é acessada pelo usuário.
 
-###EXE
+### EXE
 O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-exe)[https://pypi.org/project/auto-py-to-exe/] seguindo esta configuração: 
  - **Script Location**: `Modulo/GUI/main.py`
  - **Onefile**: `One Directory` (Cria o EXE + um diretório com todos os arquivos)
@@ -140,11 +140,26 @@ O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-
  - **Advanced** -> **Windows specific options** -> **--uac-admin**: `Enable` (Incializar como administrador)
  - **Settings** -> **Output Directory**: `Modulo/GUI/output`
 
-O `Modulo/GUI/file_version.txt` é gerado pelo `Modulo/GUI/version.yml` utilizando a biblioteca 
+**Para criar uma versão portable, com apenas o EXE, em **Onefile** selecione `One File`.**
 
-- `Modulo/GUI/file_version.txt`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
-- `Modulo/INSTALL/InnoSetup_instalador.iss`: Arquivo que indica a versão do software, após ser comprimido em um EXE.
+O `Modulo/GUI/file_version.txt` é gerado pelo `Modulo/GUI/version.yml` utilizando a biblioteca [pyinstaller-versionfile](https://pypi.org/project/pyinstaller-versionfile/). Ele tem a função de informar alguns dados como versão do arquivo, a empresa, etx.
 
+### Instalador
+Com o EXE criado, basta gerar o instalador através do programa **Inno Setup** seguindo este passo a passo:
+
+1. Certifique-se de ter o Inno Setup instalado em seu sistema.
+2. Abra o arquivo Modulo/INSTALL/InnoSetup_instalador.iss no Inno Setup.
+3. Verifique se as pastas incluídas no instalador estão configuradas corretamente no seção [Files].
+4. Após verificar tudo, clique em "Run" ou pressione F9.
+5. Aguarde até que a compilação seja concluída.
+7. Após a compilação, o instalador será iniciado automaticamente; feche-o.
+8. Localize o novo arquivo do instalador. O diretório padrão é: Modulo\INSTALL\InnoSetup.
+9. Copie o novo arquivo do instalador para a pasta INTRANET:\sistemas\paginas\programas\aferidorDesktop\download.
+10. Agora, o novo instalador estará disponível para download no site do Aferidor Desktop.
+
+Sempre que fizer uma atualização para o Aferidor Desktop, os usuários podem simplesmente executar o novo instalador. Não é necessário excluir a versão anterior do programa. O instalador substitui automaticamente os arquivos antigos pelos novos, garantindo que o programa seja atualizado sem a necessidade de intervenção manual.
+
+**Mas para que isso ocorra, crie um novo EXE e um novo instalador seguindo os passo a passos ilustrados acima.**
 
 ## Aplicação WEB
 
