@@ -129,7 +129,7 @@ HKEY_CLASSES_ROOT/
 
 Com base nisso, ao digitar **`aferidordesktop://open`** no navegador, o sistema é aberto. Como a inserção desse registro no Windows é necessária, é preciso ter um instalador para realizar esse processo. Esse instalador é responsável por configurar o registro do sistema operacional de forma adequada, associando o protocolo personalizado `aferidordesktop://` com o aplicativo correspondente, garantindo que ele seja acionado corretamente quando a URL específica é acessada pelo usuário.
 
-### EXE
+### Arquivo Executável (EXE)
 O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-exe)[https://pypi.org/project/auto-py-to-exe/] seguindo esta configuração: 
  - **Script Location**: `Modulo/GUI/main.py`
  - **Onefile**: `One Directory` (Cria o EXE + um diretório com todos os arquivos)
@@ -162,6 +162,9 @@ Sempre que fizer uma atualização para o Aferidor Desktop, os usuários podem s
 **Mas para que isso ocorra, crie um novo EXE e um novo instalador seguindo os passo a passos ilustrados acima.**
 
 ## Aplicação WEB
+
+
+
 
 
 
