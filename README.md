@@ -98,7 +98,34 @@ Para garantir que apenas uma instância do programa vai ser executada, é adotad
 ### Servidor WebSocket (`Modulo/GUI/servidorWebSocket.py`)
 Este arquivo contém a definição do servidor WebSocket e suas principais funções. Ele é responsável por gerenciar todas as mensagens recebidas e, com base no conteúdo da mensagem, tomar uma ação correspondente. 
 
-O servidor WebSocket desempenha um papel crítico no controle da abertura, início do escaneamento e encerramento do aplicativo. Isso ocorre porque todo o controle é conduzido pelo website conectado a ele, por meio de mensagens recebidas, como "scan_system", que inicia o escaneamento, e "close_app", que é enviada quando o usuário recarrega a página estando conectado ao servidor. Esse design tem como objetivo evitar a alternância entre plataformas, simplificando todo o processo de interação e garantindo uma experiência contínua para o usuário.
+O servidor WebSocket desempenha um papel crítico no controle da abertura, início do escaneamento e encerramento do aplicativo. Isso ocorre porque todo o controle é conduzido pelo website conectado a ele, por meio de mensagens recebidas, como "scan_system", que inicia o escaneamento, e "close_app", que é enviada quando o usuário recarrega a página estando conectado ao servidor. 
+
+```
+      while True:
+        #A execução fica parada nesta linha até receber uma mensagem do cliente
+        msg = await websocket.recv()
+        print(f"Recebido do cliente {endereco_cliente}: {msg}")
+
+        if msg == "scan_system":
+
+          #Atualiza a interface
+          self.main.textCentral.setText("Analisando a máquina...")
+          self.main.barra_progresso.setValue(0)
+          self.main.barra_progresso.setVisible(True)
+
+          #Analise
+          result = modulo_ScanSystem.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
+          print(result)
+
+          #Envia a mensagem de resultado para o usuario
+          self.main.barra_progresso.setVisible(False)
+          self.main.textCentral.setText(result)
+        
+        elif msg == "close_app":
+          self.main.encerrar_app_cliente()
+```
+
+Esse design tem como objetivo evitar a alternância entre plataformas, simplificando todo o processo de interação e garantindo uma experiência contínua para o usuário.
 
 ### Módulo para obtenção dos dados (`Modulo/GUI/modulo_ScanSystem.py`)
 Aqui é definido a função que extrai os dados importantes de hardware e software da máquina que está executando a aplicação. Ele faz isso através da execução de comandos no CMD e Powershell utilizando o [WMIC](#hardware---wmic), processo este explicado e exemplificado detalhadamente no tópico [Stacks e integrações](#stacks-e-integrações).
@@ -142,7 +169,7 @@ O programa é compilado em um arquivo executável (EXE) através do (auto-py-to-
 
 **Para criar uma versão portable, com apenas o EXE, em **Onefile** selecione `One File`.**
 
-O `Modulo/GUI/file_version.txt` é gerado pelo `Modulo/GUI/version.yml` utilizando a biblioteca [pyinstaller-versionfile](https://pypi.org/project/pyinstaller-versionfile/). Ele tem a função de informar alguns dados como versão do arquivo, a empresa, etx.
+O `Modulo/GUI/file_version.txt` é gerado pelo `Modulo/GUI/version.yml` utilizando a biblioteca [pyinstaller-versionfile](https://pypi.org/project/pyinstaller-versionfile/). Ele tem a função de informar alguns dados como versão do arquivo, empresa, descrição, etc.
 
 ### Instalador
 Com o EXE criado, basta gerar o instalador através do programa **Inno Setup** seguindo este passo a passo:
@@ -157,9 +184,11 @@ Com o EXE criado, basta gerar o instalador através do programa **Inno Setup** s
 9. Copie o novo arquivo do instalador para a pasta INTRANET:\sistemas\paginas\programas\aferidorDesktop\download.
 10. Agora, o novo instalador estará disponível para download no site do Aferidor Desktop.
 
+### Atualizações no código
+
 Sempre que fizer uma atualização para o Aferidor Desktop, os usuários podem simplesmente executar o novo instalador. Não é necessário excluir a versão anterior do programa. O instalador substitui automaticamente os arquivos antigos pelos novos, garantindo que o programa seja atualizado sem a necessidade de intervenção manual.
 
-**Mas para que isso ocorra, crie um novo EXE e um novo instalador seguindo os passo a passos ilustrados acima.**
+**Entretanto, para que isso seja possível, é necessário a criação de um novo arquivo executável (EXE) e um novo instalador, incorporando as modificações e atualizações nos arquivos. Este processo deve ser executado seguindo o passo a passo ilustrado [anteriormente](#instalador).**
 
 ## Aplicação WEB
 
