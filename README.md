@@ -190,7 +190,8 @@ Sempre que fizer uma atualização para o Aferidor Desktop, os usuários podem s
 
 **Entretanto, para que isso seja possível, é necessário a criação de um novo arquivo executável (EXE) e um novo instalador, incorporando as modificações e atualizações nos arquivos. Este processo deve ser executado seguindo o passo a passo ilustrado [anteriormente](#instalador).**
 
-## Aplicação WEB
+# Aplicação WEB
+Como ja adiantando anteriormente, o sistema é composto por duas páginas, uma para o usuário final, mais intuitiva e dinamica, contando com recursos simples, tutorial detalhado e tour guiado. E ainda, uma página de administrador aonde se tem uma visualização de todos os dados enviados pelos usuários, separados por setores, assim como, menu de comparações entre os dados recebidos e os já presente no banco, menu de cadastro
 
 
 
