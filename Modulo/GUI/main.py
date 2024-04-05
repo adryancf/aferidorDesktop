@@ -18,6 +18,8 @@ class Main(QWidget, Ui_Principal):
   def __init__(self) -> None:
     super(Main, self).__init__()
     self.setupUi(self)
+
+    #Definção da janela
     self.setWindowTitle("Aferidor Desktop")
     self.setFixedSize(800,190)
     self.setWindowIcon(QIcon('favicon.ico'))
@@ -35,7 +37,6 @@ class Main(QWidget, Ui_Principal):
     font.setPointSize(12)
     msg_box.setFont(font)
     msg_box.setIcon(QMessageBox.Information)
-    #msg_box.exec_()
       
   def iniciar_servidor(self):
     # Inicializar o loop de eventos para rodar o websocket
@@ -47,10 +48,12 @@ class Main(QWidget, Ui_Principal):
     finally:
       self.loop_websocket.close()
 
+  # Função para fechar a janela do programa 
   def encerrar_app_cliente(self):
     print("Encerrando programa por meio de uma mensagem do cliente...")
     self.close()
 
+  # Função que é acionada quando a janela é fechada
   def closeEvent(self, event):
     # Encerrar o servidor WebSocket quando a janela fechar
     if(self.loop_websocket.is_running()):

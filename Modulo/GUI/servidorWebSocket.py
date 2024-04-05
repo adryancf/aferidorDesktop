@@ -32,7 +32,6 @@ class ServidorWebSocket:
           #Analise
           result = modulo_ScanSystem.scan_system(self.main.barra_progresso, self, self.main.loop_websocket)
           print(result)
-          #self.main.resultado(result)
 
           #Envia a mensagem de resultado para o usuario
           self.main.barra_progresso.setVisible(False)

@@ -26,10 +26,11 @@
   <script src="https://cdn.jsdelivr.net/npm/intro.js@7.2/intro.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="../common_assets/includes/autoComplete.js-10.2.7/dist/autoComplete.min.js"></script>
-  
   <!-- Eu defini as funções para manipulacões de cookies no ../common_assets/js/function.js porem, essa biblioteca fornece mais compatibilidade com uma variedade de navegadores -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 
+  <script src="../common_assets/js/functions.js"></script>
+  
   <div class="container h-100">
 
     <!-- BADGE (STATUS CONEXAO) -->
@@ -93,7 +94,7 @@
 
       <ul class="dropdown-menu">
         <li><button class="dropdown-item" data-bs-target="#modalAjuda" data-bs-toggle="modal"><i class="bi bi-book me-2"></i>Como usar?</button></li>
-        <li><button class="dropdown-item" onclick="$('#btnDonwload').click()"><i class="bi bi-download me-2"></i>Baixe o App</button></li>
+        <li><button class="dropdown-item" id="btnDownloadIconeAjuda"><i class="bi bi-download me-2"></i>Baixe o App</button></li>
         <li><a class="dropdown-item" href="https://forms.gle/ZuXx7JoXaZpEUDT36"><i class="bi bi-lightbulb me-2"></i>Sugestões</a></li>
         <li><button class="dropdown-item" id="refazerTuorInicio"><i class="bi bi-play-circle me-2"></i>Tuor de Boas-Vindas</button></li>
         <li><hr class="dropdown-divider"></li>
@@ -391,7 +392,7 @@
 
               <div class="justify-content-center d-flex my-4">
                 <div id="aviso_conexao" class="alert alert-warning mb-0" role="alert" style="width: 85%;">
-                  Se <b>não aparecer a mensagem</b> solicitando a abertura ou o programa <b>não iniciar automaticamente</b> , por favor, verifique se o programa está instaldo. Caso não, clique no botão "Download" para baixar o programa.
+                  Se <b>não aparecer a mensagem</b> solicitando a abertura ou o programa <b>não iniciar automaticamente</b> , por favor, verifique se o programa está instalado. Caso não, clique no botão "Download" para baixar o programa.
                 </div>
 
                 <div id="sucesso_conexao" class="alert alert-success mb-0" role="alert" style="width: 75%; display: none;">
@@ -467,7 +468,6 @@
 
 </body>
 
-<script src="../common_assets/js/functions.js"></script>
 <script src="assets/js/connectApp.js"></script>
 <script src="assets/js/tabelaDadosCliente.js"></script>
 <script src="assets/js/formConfig.js"></script>

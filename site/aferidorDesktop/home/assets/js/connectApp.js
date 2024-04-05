@@ -76,6 +76,7 @@ function showOffline() {
   $("#btnDonwload").show();
 }
 
+//So executo essa função quando quero recarregar a pagina com o app aberto
 function recarregarPagina(){
   fecharApp = true;
   location.reload();
@@ -266,6 +267,45 @@ $("#abrirApp").click(function() {
     cliqueInicio = false;
   }
 
+});
+
+$("#btnDownloadIconeAjuda").click(function(){
+  Swal.fire({
+    title: "Qual arquivo você deseja baixar?",
+    confirmButtonText: "Instalador",
+    showDenyButton: true,
+    denyButtonText: "Executável (portátil)",
+    footer: "O executável portátil não requer instalação e pode ser executado diretamente.",
+    customClass: {
+      confirmButton: 'btn btn-primary',
+      denyButton: 'btn btn-outline-secondary',
+      popup: 'width-auto'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $("#btnDonwload").click();
+    } else if (result.isDenied) {
+      // Executar o download
+      var url = "../download/executavel_AferidorDesktop.exe";
+      var link = $("<a>").attr('href', url).appendTo('body');
+      link[0].click();
+      link.remove();
+      
+      Swal.fire({
+        title: "O aferidorDesktop já está sendo baixado!.",
+        text: "Para usar essa versão, basta executar o arquivo baixado, recarregar o site e clicar em 'Comece já'.",
+        icon: "success",
+        confirmButtonText: "Entendi! Recarregar página"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //$("#modalInicio").modal("show");
+          location.reload();
+        }
+      });
+
+    }
+
+  })
 });
 
 $("#btnDonwload").click(function() {

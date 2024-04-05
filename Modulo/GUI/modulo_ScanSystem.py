@@ -152,7 +152,7 @@ def scan_system(barra_progresso, websocket_server, loop = None):
     so = extract_value(so_full) if so_full else "Sistema Operacional não foi identificado"
     nome_maquina = extract_value(nome_maquina_full) if nome_maquina_full else "O nome da máquina não foi identificado"
 
-    #Tipo de dispostivo
+    #Tipo de dispostivo (Notebook, Desktop, etc)
     #https://learn.microsoft.com/pt-br/windows/win32/cimwin32prov/win32-systemenclosure
 
     tipo = run_command('wmic path Win32_SystemEnclosure get chassisTypes /format:value')
@@ -335,15 +335,21 @@ def scan_system(barra_progresso, websocket_server, loop = None):
     #Comando que percorre os 4 registros e filtra apenas os registros que possuem a variavel SystemComponente != 1, ou seja, vai exibir apenas os programas instalados pelo usuario
     #foreach ($UKey in 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*','HKLM:\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*','HKCU:\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -and $Product.SystemComponent -ne 1){$Product.DisplayName}}}
     resumido = run_powershell_command("foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -and $Product.SystemComponent -ne 1){$Product.DisplayName}}}")
+    print(f"Consulta sfw resumidos powershell: {resumido}")
     lista_resumido = lista_softwares(resumido)
+    print(f"Listando sfw resumidos: {lista_resumido}")
     lista_resumido_json = json.dumps(lista_resumido)
+    print(f"Json sfw resumidos: {lista_resumido_json}")
     atualizar_barra_progresso(80)
 
     # ******************************************** ETAPA 9 ******************************************** #
 
     completo = run_powershell_command("foreach ($UKey in 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Wow6432node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\*'){foreach ($Product in (Get-ItemProperty $UKey -ErrorAction SilentlyContinue)){if($Product.DisplayName -ne 1){$Product.DisplayName}}}")
+    print(f"Consulta sfw completos powershell: {resumido}")
     lista_completa = lista_softwares(completo, True)
+    print(f"Listando sfw resumidos: {lista_resumido}")
     lista_completa_json = json.dumps(lista_completa)
+    print(f"Json sfw resumidos: {lista_completa_json}")
     atualizar_barra_progresso(90)
 
 
