@@ -1,5 +1,5 @@
 <?php
-require_once("../../../includes/funcionarios.class.php");
+require_once("../includes/funcionarios.class.php");
 $funcionarios = new Funcionarios();
 $q = strtolower($_GET["q"]);
 

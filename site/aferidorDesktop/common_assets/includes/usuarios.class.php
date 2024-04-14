@@ -72,7 +72,7 @@ class Usuarios{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_error($conexao->conecta) . " :N&atilde;o foi possivel $msg este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+				echo(mysqli_error($conexao->conecta) . " :N&atilde;o foi possivel $msg este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 				$conexao->fecharConexao();
 			}else{
 				echo("Item $msg com sucesso<br />");
@@ -98,7 +98,7 @@ class Usuarios{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+				echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 			}else{
 				echo("Servico excluido com sucesso");
 			}
@@ -148,7 +148,7 @@ class Usuarios{
 			}		
 			$sql = "UPDATE $this->tabela SET 
 						$values
-						WHERE $this->id = '".$dados_["$this->id"]."'";// $sql - caso edição
+						WHERE $this->id = '".$dados_["$this->id"]."'";// $sql - caso ediï¿½ï¿½o
 			//echo($sql);
 			$msg = " Modificado ";
 			$conexao = new ConBD;
@@ -167,9 +167,9 @@ class Usuarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
-			$row = mysql_fetch_object($stmt);
+			$row = mysqli_fetch_object($stmt);
 			foreach($row as $chave=>$valor){
 				$dados[$chave] = $valor;
 			}
@@ -181,11 +181,11 @@ class Usuarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			$select = '<select id="fk_usuario" style="width:90%">
 	<option value="" >Selecione</option>';
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				$select .= '<option value="'.$row->id_usuario.'" >'.$row->descricao . " - " .$row->nome . '</option>';
 			}
 			return $select;
@@ -196,7 +196,7 @@ class Usuarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			if($edicao == 1)
 				$edicao = 'disabled="disabled"';
@@ -204,7 +204,7 @@ class Usuarios{
 				$edicao = '';
 			$dados = '<select id="fk_usuario" '.$edicao.'>';
 			$selecionado  = '';
-			while ($row = mysql_fetch_object($stmt)){
+			while ($row = mysqli_fetch_object($stmt)){
 				if($id_usuario == $row->id_usuario)
 					$selecionado  = 'selected="selected"';
 				else

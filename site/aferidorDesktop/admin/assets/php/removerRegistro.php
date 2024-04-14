@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../../includes/functions.inc.php');
-require_once('../../../../includes/conexao.class.php');
+require_once('../../../common_assets/includes/functions.inc.php');
+require_once('../../../common_assets/includes/conexao.class.php');
 
 
 // Verifica se a requisição é do tipo POST
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   if(!$stmt){
     header('HTTP/1.1 500 Internal Server Error');
-    echo (mysql_error($conexao->conecta));
+    echo (mysqli_error($conexao->conecta));
   }
   else{
     header('HTTP/1.1 200 OK');

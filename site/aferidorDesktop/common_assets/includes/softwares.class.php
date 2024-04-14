@@ -66,7 +66,7 @@ class Softwares{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
+				echo(mysqli_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
 				Tente novamente mais tarde ou contate o administrador do sistema.");
 				$conexao->fecharConexao();
 			}else{
@@ -92,7 +92,7 @@ class Softwares{
 		#Retorna a mensagem correspondente.
 		if(!$stmt){
 			#Numero do erro juntamente com uma mensagem explicativa.
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
 			echo("Software excluído com sucesso");
@@ -149,10 +149,10 @@ class Softwares{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
-			$row = mysql_fetch_object($stmt);
+			$row = mysqli_fetch_object($stmt);
 			foreach($row as $chave=>$valor){
 				$dados[$chave] = $valor;
 			}
@@ -166,11 +166,11 @@ class Softwares{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
 			$i = 0;
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				$i++;
 			}
 			return $i;
@@ -181,12 +181,12 @@ class Softwares{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
 			$select = '<select id="fk_software" name="fk_software" style="width:90%">
 	<option value="" >Selecione</option>';
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				if($id_software == $row->id_software)
 					$selecionado  = 'selected="selected"';
 				else

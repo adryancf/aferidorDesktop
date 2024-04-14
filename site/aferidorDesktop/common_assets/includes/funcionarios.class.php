@@ -13,7 +13,7 @@
 require_once("conexao.class.php");
 require_once("functions.inc.php");
 class Funcionarios{
-	private $tabela = "padrao.funcionarios";
+	private $tabela = "funcionarios";
 	private $id = "id_funcionario";
 	
 	public function funcionarios(){	
@@ -29,10 +29,10 @@ class Funcionarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			$items = array();
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				$items[$row->matricula."-".$row->nome_funcionario]=$row->id_funcionario;
 			}
 			return $items;
@@ -45,10 +45,10 @@ class Funcionarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			$items = array();
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				//$items[$row->matricula."-".$row->nome_funcionario]=$row->id_funcionario;
         $items[$row->matricula . "-" . $row->nome_funcionario] = array(
           'id_funcionario' => $row->id_funcionario,
@@ -108,7 +108,7 @@ class Funcionarios{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
+				echo(mysqli_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
 				Tente novamente mais tarde ou contate o administrador do sistema.");
 				$conexao->fecharConexao();
 			}else{
@@ -134,7 +134,7 @@ class Funcionarios{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+				echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 				Tente novamente mais tarde ou contate o administrador do sistema.");
 			}else{
 				echo("Funcionário excluído com sucesso");
@@ -193,10 +193,10 @@ class Funcionarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
-			$row = mysql_fetch_object($stmt);
+			$row = mysqli_fetch_object($stmt);
 			foreach($row as $chave=>$valor){
 				$dados[$chave] = $valor;
 			}
@@ -208,12 +208,12 @@ class Funcionarios{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
 				$select = '<select id="fk_funcionario" name="fk_funcionario" style="width:90%">
 				<option value="" >Selecione</option>';
-				while($row = mysql_fetch_object($stmt)){
+				while($row = mysqli_fetch_object($stmt)){
 					if($id_funcionario == $row->id_funcionario)
 						$selecionado  = 'selected="selected"';
 					else

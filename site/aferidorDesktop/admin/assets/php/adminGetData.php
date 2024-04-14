@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../../includes/functions.inc.php');
-require_once('../../../../includes/conexao.class.php');
+require_once('../../../common_assets/includes/functions.inc.php');
+require_once('../../../common_assets/includes/conexao.class.php');
 
 function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor, 
     $sql = "SELECT id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor FROM softwares_instalados WHERE fk_hardware = '$fk_hardware'";
@@ -16,7 +16,7 @@ function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, d
     }
     else{
         $softwares = array();
-        while ($row = mysql_fetch_object($stmt)) {
+        while ($row = mysqli_fetch_object($stmt)) {
             $softwares[] = $row;
         }
         return $softwares;
@@ -24,7 +24,7 @@ function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, d
 }
 
 function obterSetorFuncionario($id_funcionario){
-  $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM padrao.funcionarios AS f INNER JOIN padrao.setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
+  $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM funcionarios AS f INNER JOIN setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
     
   $conexao = new ConBD;
   $stmt = $conexao->processa($sql, 0);
@@ -32,12 +32,12 @@ function obterSetorFuncionario($id_funcionario){
     return;
   }
   else{
-    return mysql_fetch_object($stmt);
+    return mysqli_fetch_object($stmt);
   }
 }
 
 function obterDadosMaquina($numero){
-    $sql = "SELECT * FROM hardwares_novo WHERE numero = '$numero'";
+    $sql = "SELECT * FROM hardwares WHERE numero = '$numero'";
     $conexao = new ConBD;
     $stmt = $conexao->processa($sql, 0);
     if(!$stmt){
@@ -45,7 +45,7 @@ function obterDadosMaquina($numero){
     }
     else{
         $pcs = array();
-        while ($row = mysql_fetch_object($stmt)) {
+        while ($row = mysqli_fetch_object($stmt)) {
 
             //Obtendo os softwares instalados
             $row->softwares = obterSotwaresInstalados($row->id_hardware);
@@ -75,13 +75,13 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if(!$stmt){
         header('HTTP/1.1 500 Internal Server Error');
-        echo (mysql_error($conexao->conecta));
+        echo (mysqli_error($conexao->conecta));
     }
     else{
         header('HTTP/1.1 200 OK');
         $registros = array();
         
-        while ($row = mysql_fetch_object($stmt)) {
+        while ($row = mysqli_fetch_object($stmt)) {
             $row->dadosMaquinaAferidor = obterDadosMaquina($row->numero);
             $row->fk_setor_funcionario = obterSetorFuncionario($row->fk_funcionario)->fk_setor;
 

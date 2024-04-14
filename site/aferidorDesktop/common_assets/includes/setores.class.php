@@ -13,7 +13,7 @@
 require_once("conexao.class.php");
 require_once("functions.inc.php");
 class Setores{
-	private $tabela = "padrao.setores";
+	private $tabela = "setores";
 	private $id = "id_setor";
 	
 	public function setores(){	
@@ -21,24 +21,40 @@ class Setores{
 	/*
 		Funcao para cadastrar um novo setor.
 		Tem como parametro um array com os dados do funcionrio.
-		Retorna uma mensagem indicando se o setor foi inserido ou ocorreu um erro.
+		Retorna uma mensagem indicando se o setor foi inserido ou ocorreu um erro.	
 	*/
 
 	public function array_(){
-		$sql = "Select * from $this->tabela order by cc asc";
+		$sql = "Select * from $this->tabela order by nome_setor asc";
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			$items = array();
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				$items[$row->cc."-".$row->nome_setor]=$row->id_setor;
 			}
 			return $items;
 		}
 	}
-  
+
+  public function array_aferidorDesktop(){
+		$sql = "Select * from $this->tabela order by cc asc";
+		$conexao = new ConBD;
+		$stmt = $conexao->processa($sql,0);
+		if(!$stmt){
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+		}else{
+			$items = array();
+			while($row = mysqli_fetch_object($stmt)){
+				$items[$row->nome_setor . " [" . $row->cc . "]"]=$row->id_setor;
+			}
+			return $items;
+		}
+	}
+
+
 	public function cadastrar($dados_){		
 		#inicializacao das variaveis de controle
 		# $msg contem a mensagem de erro
@@ -82,7 +98,7 @@ class Setores{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
+				echo(mysqli_error($conexao->conecta) . " :Não foi possível $msg este item devido a um erro.<br>
 				Tente novamente mais tarde ou contate o administrador do sistema.");
 				$conexao->fecharConexao();
 			}else{
@@ -108,7 +124,7 @@ class Setores{
 			#Retorna a mensagem correspondente.
 			if(!$stmt){
 				#Numero do erro juntamente com uma mensagem explicativa.
-				echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+				echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 				Tente novamente mais tarde ou contate o administrador do sistema.");
 			}else{
 				echo("Servico excluido com sucesso");
@@ -163,10 +179,10 @@ class Setores{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
-			$row = mysql_fetch_object($stmt);
+			$row = mysqli_fetch_object($stmt);
 			foreach($row as $chave=>$valor){
 				$dados[$chave] = $valor;
 			}
@@ -179,12 +195,12 @@ class Setores{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
+			echo(mysqli_errno($conexao->conecta) . " : Não foi possível selecionar este item devido a um erro.<br>
 			Tente novamente mais tarde ou contate o administrador do sistema.");
 		}else{
 			$select = '<select id="fk_setor" name="fk_setor" style="width:90%">
 	<option value="" >Selecione</option>';
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				if($id_setor == $row->id_setor)
 					$selecionado  = 'selected="selected"';
 				else
@@ -201,11 +217,11 @@ class Setores{
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($sql,0);
 		if(!$stmt){
-			echo(mysql_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
+			echo(mysqli_errno($conexao->conecta) . " : N&atilde;o foi possivel Selecionar este item devido a um erro.<br />Tente novamente mais tarde, ou contate o administrador do sistema.");
 		}else{
 			$select = '<select id="fk_setor2" name="fk_setor2" style="width:90%">
 	<option value="" >Selecione</option>';
-			while($row = mysql_fetch_object($stmt)){
+			while($row = mysqli_fetch_object($stmt)){
 				if($id_setor == $row->id_setor)
 					$selecionado  = 'selected="selected"';
 				else

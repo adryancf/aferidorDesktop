@@ -4,11 +4,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../../includes/functions.inc.php');
-require_once('../../../../includes/conexao.class.php');
+require_once('../../../common_assets/includes/functions.inc.php');
+require_once('../../../common_assets/includes/conexao.class.php');
 
 function obterSetorFuncionario($id_funcionario){
-  $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM padrao.funcionarios AS f INNER JOIN padrao.setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
+  $sql = "SELECT f.fk_setor, f.nome_funcionario, s.nome_setor, s.cc FROM funcionarios AS f INNER JOIN setores AS s ON f.fk_setor = s.id_setor WHERE id_funcionario = '$id_funcionario'";
     
   $conexao = new ConBD;
   $stmt = $conexao->processa($sql, 0);
@@ -16,12 +16,12 @@ function obterSetorFuncionario($id_funcionario){
     return;
   }
   else{
-    return mysql_fetch_object($stmt);
+    return mysqli_fetch_object($stmt);
   }
 }
 
 function obterNomeUsuario($fk_usuario){
-  $sql = "SELECT nome_usuario FROM aferidordelicensas.usuarios WHERE id_usuario = '$fk_usuario'";
+  $sql = "SELECT nome_usuario FROM usuarios WHERE id_usuario = '$fk_usuario'";
     
   $conexao = new ConBD;
   $stmt = $conexao->processa($sql, 0);
@@ -29,8 +29,8 @@ function obterNomeUsuario($fk_usuario){
     return;
   }
   else{
-    if(mysql_num_rows($stmt) > 0)
-      return mysql_fetch_object($stmt)->nome_usuario;
+    if(mysqli_num_rows($stmt) > 0)
+      return mysqli_fetch_object($stmt)->nome_usuario;
     else
       return;
   }
@@ -48,13 +48,13 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if(!$stmt){
         header('HTTP/1.1 500 Internal Server Error');
-        echo (mysql_error($conexao->conecta));
+        echo (mysqli_error($conexao->conecta));
     }
     else{
         header('HTTP/1.1 200 OK');
         $registros = array();
         
-        while ($row = mysql_fetch_object($stmt)) {
+        while ($row = mysqli_fetch_object($stmt)) {
             $row->fk_setor_funcionario = obterSetorFuncionario($row->fk_funcionario)->fk_setor;
             $row->nome_usuario = obterNomeUsuario($row->fk_usuario);
 

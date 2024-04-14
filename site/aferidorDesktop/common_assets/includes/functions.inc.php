@@ -1,13 +1,15 @@
 <?php
 require_once("usuarios.class.php");
 require_once("funcionarios.class.php");
-require_once("problemasconhecidos.class.php");
+//require_once("problemasconhecidos.class.php");
 require_once("setores.class.php");
-function problemaConhecido($id){
-	$problemaconhecido = new Problemasconhecidos();
-	$dados = $problemaconhecido->listar($id);
-	return $dados["nome_problemasconhecido"];
-}
+
+// function problemaConhecido($id){
+// 	$problemaconhecido = new Problemasconhecidos();
+// 	$dados = $problemaconhecido->listar($id);
+// 	return $dados["nome_problemasconhecido"];
+// }
+
 function nomeFuncionario($id){
 	$funcionario = new Funcionarios();
 	$dados = $funcionario->listar($id);

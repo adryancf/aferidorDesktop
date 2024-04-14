@@ -12,7 +12,7 @@ $("form").submit(function(event) {
     url: "assets/php/login.php",
     data: string_envio,
     success: function(data) {
-      console.log(data);
+      console.log("token_acesso = ", data);
 
       sessionStorage.setItem("token", data);
 
