@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../common_assets/includes/functions.inc.php');
-require_once('../../../common_assets/includes/conexao.class.php');
+// require_once('../../../common_assets/php/classes/functions.inc.php');
+require_once('../../../common_assets/php/classes/conexao.class.php');
 
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {

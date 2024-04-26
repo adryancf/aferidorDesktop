@@ -4,8 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../../common_assets/includes/functions.inc.php');
-require_once('../../../common_assets/includes/conexao.class.php');
+require_once('../../../common_assets/php/classes/conexao.class.php');
 
 function obterSotwaresInstalados($fk_hardware){//id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor, 
     $sql = "SELECT id_softwarefunc, id_software, data_instalacao, nome as nome_software, n_licencas, fk_setor FROM softwares_instalados WHERE fk_hardware = '$fk_hardware'";

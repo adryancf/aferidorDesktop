@@ -217,7 +217,8 @@ function filtrarSoftwares(softwareObtido, softwareAferidor) {
 }
 //DIvidir software1 em palavras e verificar se pelo menos duas palavras estão contidas em software2
 function compararStrings(software1, software2) {
-  const stopWordsSoftware = [
+  //Conjunto de palavras que não são importantes para a comparação
+  const palavrasIrrelevantes = [
     "para", "com", "de", "e", "o", "os", "a", "as", "um", "uns", "uma", "umas",
     "do", "da", "dos", "das", "em", "no", "na", "nos", "nas", "por", "é", "por", "sobre", "sob","-", "in"
   ];
@@ -225,21 +226,30 @@ function compararStrings(software1, software2) {
   //Lista para ajudar identificar mais acertivamente os softwares licenciados
   const sfw_licensiados = ["autocad", "photoshop", "arcgis", "dreamweaver", "acrobat"];
 
-  const palavras = software1.trim().split(/\s+/).filter(palavra => !stopWordsSoftware.includes(palavra));
-  let cont = 0;
+  //Lista de palavras que desqualificam o software. Se tiver uma dessas palavras, sabemos que não é importante
+  //Tem o objetivo de evitar que softwares como "Update for Microsoft Office 2007 suites (KB2965286) 32-Bit Edition" apareçam na lista
+  const palavrasDesqualificadoras = ["update", "atualizaâ€¡Ã†o"];
+
+  //Divide o software1 em palavras e remove as palavras irrelevantes
+  const palavras = software1.trim().split(/\s+/).filter(palavra => !palavrasIrrelevantes.includes(palavra));
+  let palavrasCorrespondentes = 0;
+
   for (const palavra of palavras) {
-    //Se a palavra estiver contida no array de softwares licenciados, defino que o software é importante e seto cont=2 para retornar true
     if(sfw_licensiados.includes(palavra.toLowerCase())){
       //console.log("Licenciado: " + software1);
-      cont=2;
-      break; //Se encontrar uma palavra licenciada, não precisa verificar as outras
-    }else if(software2.toLowerCase().includes(palavra.toLowerCase())){
+      //Se encontrar uma palavra licenciada, não precisa verificar as outras, o sfw é importante
+      return true;
+    }else if(palavrasDesqualificadoras.includes(palavra.toLowerCase())){
+      //Se a palavra for alguma das palavras desqualificadoras, indica que o software não é importante
+      return false;      
+    }
+    else if(software2.toLowerCase().includes(palavra.toLowerCase())){
       //console.log(software1 + "   [" + palavra + "]   " + " está contida em " + software2);
-      cont++;
+      palavrasCorrespondentes++;
     }
   }
 
-  return (cont >= 2)
+  return (palavrasCorrespondentes >= 2)
   
 }
  
@@ -1211,6 +1221,8 @@ $(document).ready(function () {
     var registro = registros[$("#btnComparar").data('href')];
     var tipoEnvio;
 
+    // ********** DECLARAÇÃO DAS FUNÇÕES ********** //
+
     function ajaxPost(url, data) {
       return new Promise(function(resolve, reject) {
         $.ajax({
@@ -1228,11 +1240,10 @@ $(document).ready(function () {
       });
     }
     
-    //Atualiza ou Cadastra hardware
     function hardwareInstalarAtualizar(item_registro) {
       var dados_hw = $("#btnEnviarModal").data('dadosHWTemporario');
       
-      //Se fir edição
+      //Se for edição
       if(item_registro.dadosMaquinaAferidor.length){
         tipoEnvio = "update";
         dados_hw['id_hardware'] = item_registro.dadosMaquinaAferidor[0].id_hardware;
@@ -1247,7 +1258,7 @@ $(document).ready(function () {
       dados_hw['data_atualizacao'] = data;
       dados_hw['numero'] = item_registro.numero;
     
-      return ajaxPost('../../includes/hardwares/cadastrar_aferidorDesktop.php', dados_hw);
+      return ajaxPost('assets/php/registrarOuAtualizarHardware.php', dados_hw);
     }
     
     function instalarSoftwares(item_registro, id_hardware) {
@@ -1261,9 +1272,12 @@ $(document).ready(function () {
         }
       }).filter(Boolean);
     
-      return ajaxPost('../../includes/softwaresfunc/cadastrar_aferidorDesktop.php', dados_sw);
+      return ajaxPost('assets/php/instalarSoftwareEmDefinitivo.php', dados_sw);
     }
    
+    // ********** INICIO DO PROCESSAMENTO ********** //
+
+    //Registra/atualiza o hardware, instala os softwares e modifica o banco de dados do aferidorDesktop (modificando o registro para enviado, e registrando o usuário que enviou)
     hardwareInstalarAtualizar(registro)
       .then(function(id) {
         console.log(id);
