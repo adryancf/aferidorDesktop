@@ -8,10 +8,10 @@ require_once('../../../common_assets/php/classes/login.class.php');
 
 if(!empty($_POST))	{
 	$usuario = $_POST["usuario"];
-	$senha = $_POST["senha"];
+	$novaSenha = $_POST["senha"];
 
 	$login = new Login();
-	$retorno = $login->logar_aferidorDesktop($usuario,$senha);
+	$retorno = $login->redefinirSenha($usuario,$novaSenha);
 
   if (strpos($retorno, "ERRO") !== false) {
     header('HTTP/1.0 400');
