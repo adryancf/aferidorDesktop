@@ -3,9 +3,9 @@
 
 #define MyAppName "AferidorDesktop"
 #define MyAppVersion "1.0"
-#define MyAppPublisher "ESTEIO"
+#define MyAppPublisher "ESTEIO S.A."
 #define MyAppURL "https://www.esteio.com.br/"
-#define MyAppExeName "AferidorDesktop.exe"
+#define MyAppExeName "aferidorDesktop.exe"
 #define MyAppAssocName MyAppName + ""
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
@@ -24,12 +24,14 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 ChangesAssociations=no
 DisableProgramGroupPage=yes
-InfoAfterFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALAÇÃO\README.txt
+InfoAfterFile=C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\INSTALL\README.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ; PrivilegesRequired=lowest
-OutputDir=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\INSTALAÇÃO\InnoSetup
-OutputBaseFilename=instalador_AferidorDesktop
-SetupIconFile=C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\favicon.ico
+OutputDir=C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\INSTALL\InnoSetup
+OutputBaseFilename=Instalador_AferidorDesktop2
+SetupIconFile=C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\GUI\favicon.ico
+UninstallDisplayIcon=C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\GUI\favicon.ico
+UninstallDisplayName={#MyAppName}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -41,8 +43,9 @@ Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\output\aferidorDesktop\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\0394\Desktop\Sistema_Auditoria\aferidorDesktop\Modulo\GUI\output\aferidorDesktop\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+Source: "C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\GUI\output\exePath(UTILIZADO)\aferidorDesktop\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Adryan\Desktop\Adryan\Trabalho\aferidorDesktop\1.Programa Desktop\GUI\output\exePath(UTILIZADO)\aferidorDesktop\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
