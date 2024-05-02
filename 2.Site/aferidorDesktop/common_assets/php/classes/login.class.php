@@ -8,7 +8,7 @@ class Login{
 	public function Login(){
 	}
 	public function logar($login,$senha){
-		$consulta = "select * from usuarios where login = '$login' and senha = '".md5($senha . "71500" . $login)."'";
+		$consulta = "select * from usuarios where login = '$login' and senha = '".md5($senha . "2012" . $login)."'";
 		
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($consulta,1);
@@ -34,7 +34,7 @@ class Login{
   //Este token é utilizado para verificar se a sessão está iniciada e se o cliente pode acessar a página. Além de conter informações do usuário.
   //Parecido com o $_session, mas quero usar algo do JavaScript. 
   public function logar_aferidorDesktop($login,$senha){
-    $consulta = "select * from usuarios where login = '$login' and senha = '".md5($senha . "71500" . $login)."'";
+    $consulta = "select * from usuarios where login = '$login' and senha = '".md5($senha . "2012" . $login)."'";
 		$conexao = new ConBD;
 		$stmt = $conexao->processa($consulta,1);
 
@@ -75,7 +75,7 @@ class Login{
 			if ($row = mysqli_fetch_object($stmt)) {
 
 				// Redefinir senha
-				$novaSenhaCriptografada = md5($senhaNova . "71500" . $login);
+				$novaSenhaCriptografada = md5($senhaNova . "2012" . $login);
 				$atualizarSenha = "UPDATE usuarios SET senha = '$novaSenhaCriptografada' WHERE login = '$login'";
 				$stmtAtualizacao = $conexao->processa($atualizarSenha, 1);
 	
@@ -85,7 +85,7 @@ class Login{
 					return "Senha redefinida com sucesso!";
 				}
 			} else {
-				return "ERRO: Usuario ou senha incorretos.";
+				return "ERRO: Usuario não encontrado!";
 			}
 		}
 	}
