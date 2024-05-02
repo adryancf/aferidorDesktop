@@ -75,6 +75,8 @@ $(document).ready(function () {
       elemento.find('[name="nome_funcionario"]').val(registro.nome_funcionario);
       elemento.find('[name="email"]').val(registro.email);
       elemento.find('[name="obs"]').val(registro.obs);
+      elemento.find('[name="data_afericao"]').val(registro.data_hora_cadastro);
+      elemento.find('[name="data_envio"]').val(registro.data_hora_modificacao);
       elemento.find('[name="numero"]').val(registro.numero);
       elemento.find('[name="nome_maquina"]').val(registro.nome_maquina);
       elemento.find('[name="tipo"]').val(tipo[registro.tipo]);

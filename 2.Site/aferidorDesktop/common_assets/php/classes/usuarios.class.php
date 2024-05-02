@@ -52,7 +52,7 @@ class Usuarios{
 					}elseif(substr_count($chave,"conf_senha") > 0){
 					}elseif(substr_count($chave,"senha") > 0){
 						$indices .= $ligacao.$chave;
-						$values .= $ligacao."'".md5($dados_['senha'] . "71500" . $dados_['login'])."'";
+						$values .= $ligacao."'".md5($dados_['senha'] . "2012" . $dados_['login'])."'";
 					}else{
 						$indices .= $ligacao.$chave;
 						$values .= $ligacao."'".$valor."'";
@@ -135,7 +135,7 @@ class Usuarios{
 						if(!empty($valor)){
 							$values .= $ligacao."
 ";
-							$values .= $chave ." = '".md5($dados_['senha'] . "71500" . $dados_['login'])."'";
+							$values .= $chave ." = '".md5($dados_['senha'] . "2012" . $dados_['login'])."'";
 							$ligacao = ",";
 						}
 					}else{

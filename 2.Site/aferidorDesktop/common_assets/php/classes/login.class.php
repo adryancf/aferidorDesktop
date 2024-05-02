@@ -35,33 +35,33 @@ class Login{
   //Parecido com o $_session, mas quero usar algo do JavaScript. 
   public function logar_aferidorDesktop($login,$senha){
     $consulta = "select * from usuarios where login = '$login' and senha = '".md5($senha . "2012" . $login)."'";
-		$conexao = new ConBD;
-		$stmt = $conexao->processa($consulta,1);
+	$conexao = new ConBD;
+	$stmt = $conexao->processa($consulta,1);
 
-		if(!$stmt){
-			#Numero do erro juntamente com uma mensagem explicativa.
-			//RETORNAR UM ERRO
-      return ("ERRO | Não foi possível logar devido a um erro: " . mysqli_error($conexao->conecta));
+	if(!$stmt){
+		#Numero do erro juntamente com uma mensagem explicativa.
+		//RETORNAR UM ERRO
+    	return ("ERRO | Não foi possível logar devido a um erro: " . mysqli_error($conexao->conecta));
 
-		}
+	}
     else{
-			if($row = mysqli_fetch_object($stmt)){
-				//CRIA O TOKEN
-        $key = "71500";
-        $header = base64_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
-        $payload = base64_encode(json_encode(array('usuario_id' => $row->id_usuario, 'nome_usuario' => $row->nome_usuario, 'login' => $row->login)));
-        $signature = base64_encode(hash_hmac('sha256',"$header.$payload", $key, true));
+		if($row = mysqli_fetch_object($stmt)){
 
-        $token = "$header.$payload.$signature";
+			//CRIA O TOKEN
+			$key = "2012";
+			$header = base64_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
+			$payload = base64_encode(json_encode(array('usuario_id' => $row->id_usuario, 'nome_usuario' => $row->nome_usuario, 'login' => $row->login)));
+			$signature = base64_encode(hash_hmac('sha256',"$header.$payload", $key, true));
 
-				return $token;
-			}else{
-				return "ERRO | Usuario ou senha incorretos.";
-			}
+        	$token = "$header.$payload.$signature";
+
+			return $token;
+		}else{
+			return "ERRO | Usuario ou senha incorretos.";
 		}
+	}
 
   }
-
 
   public function redefinirSenha($login, $senhaNova) {
 		$consulta = "SELECT * FROM usuarios WHERE login = '$login'";
