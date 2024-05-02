@@ -61,6 +61,7 @@ Através dessa sequência simples e direta, desde o acesso à página principal 
 Como mencionado anteriormente, o sistema se divide em duas áreas distintas de uso: uma destinada aos usuários comuns e outra voltada para os administradores. Com o intuito de tornar essa distinção mais tangível, foram criados vídeos simulando o uso em ambas as frentes, proporcionando uma demonstração prática do sistema em funcionamento, oferecendo uma visão clara de como ele é utilizado em cenários reais.
 
 ## Uso - Colaborador
+Video - https://youtu.be/LaUF-hVae7A
 
 ## Uso - Administrador
 
