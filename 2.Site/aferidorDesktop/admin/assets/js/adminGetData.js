@@ -818,7 +818,9 @@ $(document).ready(function () {
               console.log("Campo não encontrado = ", campo);
             }
             //Altera a tabela de exibição resumida (Nome ou numero da maquina)
-            $("tbody tr[data-href='"+ index + "'] td#"+ campo).html(alteracoes[campo]);   
+            //$("tbody tr[data-href='"+ index + "'] td#"+ campo).html(alteracoes[campo]);   
+            $("tbody tr[data-href='" + index + "'] td[name='"+ campo + "']").html(alteracoes[campo]);
+
           }
 
           //alteracoes.index = index;
@@ -933,8 +935,7 @@ $(document).ready(function () {
     if(isNomeFuncionario){
       alteracoes["fk_funcionario"] = $("#new_fk_funcionario").val();
       $("#new_fk_funcionario").addClass(compararCamposModalComparacao("#new_fk_funcionario", $("#new_fk_funcionario").val(), $("#old_fk_funcionario").val()));
-
-      //alterar setor do funcionario
+      //Evita a comparação entre o nome do funcionario
 
     }else if(nome == "fk_setor"){
       verificarSetores(registros[$("#btnComparar").data("href")].fk_setor_funcionario, novo_valor);

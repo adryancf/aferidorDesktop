@@ -33,13 +33,14 @@ class Funcionarios{
 		}else{
 			$items = array();
 			while($row = mysqli_fetch_object($stmt)){
-				$items[$row->matricula."-".$row->nome_funcionario]=$row->id_funcionario;
+				//$items[$row->nome_funcionario." [".$row->matricula."]"]=$row->id_funcionario;
+				$items[$row->nome_funcionario]=$row->id_funcionario;
 			}
 			return $items;
 		}
 	}
 
-  public function array_setor(){
+  	public function array_setor(){
 		$sql = "SELECT * from $this->tabela INNER JOIN padrao.setores AS s ON $this->tabela.fk_setor = s.id_setor WHERE status_funcionario = 'Ativo' order by nome_funcionario asc";
     
 		$conexao = new ConBD;
