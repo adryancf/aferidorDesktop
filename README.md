@@ -46,7 +46,7 @@ Através dessa sequência simples e direta, desde o acesso à página principal 
 
 ## Funcionalidades
 
->**Para saber mais, com imagens e explicações detalhadas, clique sobre o tópico desejado ou acessa a sessão [Visão Geral](https://github.com/adryancf/aferidorDesktop/wiki/Vis%C3%A3o-Geral) da documentação oficial do aferidorDesktop.**
+>Para saber mais, com imagens e explicações detalhadas, clique sobre o tópico desejado ou acessa a sessão [Visão Geral](https://github.com/adryancf/aferidorDesktop/wiki/Vis%C3%A3o-Geral) da documentação oficial do aferidorDesktop.
 
   * [**Interface WEB integrada**](https://github.com/adryancf/aferidorDesktop/wiki/Vis%C3%A3o-Geral#detalhando-o-programa): Intuitiva e integrada ao software de obtenção de dados.
   * [**Controle total da aplicação**](https://github.com/adryancf/aferidorDesktop/wiki/Vis%C3%A3o-Geral#controle-total-da-aplica%C3%A7%C3%A3o): Através da interface principal, os usuários têm controle completo sobre todas as etapas do processo, desde a abertura do aplicativo até a obtenção dos dados necessários.
@@ -61,10 +61,15 @@ Através dessa sequência simples e direta, desde o acesso à página principal 
 Como mencionado anteriormente, o sistema se divide em duas áreas distintas de uso: uma destinada aos usuários comuns e outra voltada para os administradores. Com o intuito de tornar essa distinção mais tangível, foram criados vídeos simulando o uso em ambas as frentes, proporcionando uma demonstração prática do sistema em funcionamento, oferecendo uma visão clara de como ele é utilizado em cenários reais.
 
 ## Uso - Colaborador
-Video - https://youtu.be/LaUF-hVae7A
+
+#### Video Completo - https://youtu.be/LaUF-hVae7A
+
+![image](https://github.com/adryancf/aferidorDesktop/assets/70554459/1aa6d5fb-2358-459f-b8a3-b96e138a91e7)
+
 
 ## Uso - Administrador
-Video - https://youtu.be/mos7QN9APfk
+
+#### Video Completo - https://youtu.be/mos7QN9APfk
 
 # Links
 
