@@ -64,6 +64,7 @@ Como mencionado anteriormente, o sistema se divide em duas áreas distintas de u
 Video - https://youtu.be/LaUF-hVae7A
 
 ## Uso - Administrador
+Video - https://youtu.be/mos7QN9APfk
 
 # Links
 
