@@ -9,7 +9,7 @@ A seguir, há uma visão geral das funcionalidades oferecidas pelo programa, jun
 
 Nosso objetivo foi tornar o processo o mais simples e fluido possível, adotando passos rápidos e intuitivos para garantir acessibilidade a todos os públicos, inclusive aqueles com pouca familiaridade com a tecnologia.
 
-![Fluxograma de Processos](https://github.com/adryancf/aferidorDesktop/blob/main/3.Manuais%20e%20Fluxogramas/FLUXOGRAMA/Processo%20de%20aferi%C3%A7%C3%A3o%20simplificado%20(aferidorDesktop).jpeg)
+![Fluxograma de Processos](3.Manuais%20e%20Fluxogramas/FLUXOGRAMA/Processo%20de%20aferição%20simplificado%20(aferidorDesktop).jpeg)
 
 ### Resumo do Processo:
 
@@ -64,12 +64,13 @@ Como mencionado anteriormente, o sistema se divide em duas áreas distintas de u
 
 #### Video Completo - https://youtu.be/LaUF-hVae7A
 
-![image](https://github.com/adryancf/aferidorDesktop/assets/70554459/1aa6d5fb-2358-459f-b8a3-b96e138a91e7)
-
+![image](4.Assets/IMG/Home/Home.png)
 
 ## Uso - Administrador
 
 #### Video Completo - https://youtu.be/mos7QN9APfk
+
+![image](4.Assets/IMG/Admin/Admin_ResumoAferições.png)
 
 # Links
 
