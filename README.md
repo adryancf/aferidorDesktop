@@ -3,7 +3,9 @@ O **aferidorDesktop** é uma ferramenta desenvolvida para simplificar e otimizar
 
 O sistema consiste em um programa Python instalado no computador do usuário e uma interface web que se conecta a esse programa, coordenando todas as etapas, desde a obtenção dos dados até o envio. 
 
-A seguir, há uma visão geral das funcionalidades oferecidas pelo programa, juntamente com uma descrição do processo de aferição facilitado por ele.
+A seguir, há uma [visão geral](https://github.com/adryancf/aferidorDesktop/wiki/Vis%C3%A3o-Geral) das funcionalidades oferecidas pelo programa, juntamente com uma descrição do processo de aferição facilitado por ele.
+
+**Obs.** Para testar a ferramenta completa siga os passos descritos em [Configuração do Ambiente](https://github.com/adryancf/aferidorDesktop/wiki/Configura%C3%A7%C3%A3o-do-Ambiente) na nossa Wiki.
 
 ## Como funciona o processo de aferição no aferidorDesktop?
 
